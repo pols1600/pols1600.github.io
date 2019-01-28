@@ -1,0 +1,125 @@
+---
+title: "Week 02 - More Introduction to R"
+subtitle: "Writing Scripts and Reading Data Files <html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Your Name"
+date: "2099/12/12"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Course website
+
+* Brief recap
+
+* Questions about swirl
+
+* Create and run R scripts
+
+* Read `.csv` datasets
+
+* Homework: install RMarkdown and write your first document
+]
+---
+
+# Course website
+
+.font150[
+* The course website has a new address:
+
+* <http://pols1600.github.io>
+
+* Syllabus, lecture slides, R scripts, assignments, datasets
+
+]
+
+---
+class: inverse, center, middle
+
+# Brief recap
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+
+# Brief recap
+
+.font150[
+* Last week you learned how to:
+
+  - Install R and RStudio
+    
+  - Do arithmetic operations in R
+
+  - Manipulate vectors
+
+  - install packages from CRAN
+
+  - Use `swirl()`
+  
+  - Do the course exercises
+]
+---
+
+# R code
+
+```{r, highlight.output=c(3,9:12)}
+fit = lm(dist ~ 1 + speed, data = cars)
+summary(fit)
+```
+
+---
+
+background-image: url(sp.jpg)
+
+class: clear
+---
+
+class: inverse, center, middle
+
+# And That's All, Folks!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 

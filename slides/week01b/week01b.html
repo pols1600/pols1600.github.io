@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 01 - Introduction to R</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week01b_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week01b_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week01b_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 01 - Introduction to R
+## Basic functionalities
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 25th January 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Why R?
+
+* Installing R and RStudio
+
+* Basic functions
+
+* How to use `swirl()`
+
+* Chapter 1 review
+
+* Questions
+]
+
+---
+class: inverse, center, middle
+
+# Why R?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Why R?
+
+.center[![:scale 90%](stats01.png)]
+---
+
+# Why R?
+
+.center[![:scale 90%](stats02.png)]
+---
+
+# Why R?
+
+.center[![:scale 90%](nyt01.png)]
+---
+
+# Why R?
+
+.center[![:scale 90%](nyt02.png)]
+---
+
+# Why R?
+
+.center[![:scale 100%](rprog.png)]
+---
+
+# Why R?
+
+.center[![:scale 100%](cran.png)]
+---
+
+# Why R?
+
+.center[![:scale 90%](rjobs.png)]
+---
+
+# Why R?
+
+.center[![:scale 100%](pbf.png)]
+
+.center[![:scale 100%](cbr.png)]
+---
+
+class: inverse, center, middle
+
+# Installing R and RStudio
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Installing R and RStudio
+
+.font150[
+* &lt;https://cran.r-project.org/&gt;
+
+* &lt;https://www.rstudio.com/products/rstudio/download/&gt;
+
+]
+
+---
+
+# Arithmetic Operations
+
+
+```r
+2 + 2
+```
+
+```
+## [1] 4
+```
+
+```r
+10 - 8
+```
+
+```
+## [1] 2
+```
+
+```r
+5^2
+```
+
+```
+## [1] 25
+```
+
+```r
+sqrt(81)
+```
+
+```
+## [1] 9
+```
+
+```r
+2/3
+```
+
+```
+## [1] 0.6666667
+```
+---
+
+# Objects
+
+
+```r
+x &lt;- 5 # arrow (&lt;-) is the assignment operator in R 
+y &lt;- 16
+x + y
+```
+
+```
+## [1] 21
+```
+
+```r
+sqrt(x*y)
+```
+
+```
+## [1] 8.944272
+```
+---
+
+# Relational operations
+
+
+```r
+x &gt; y
+```
+
+```
+## [1] FALSE
+```
+
+```r
+x &lt;= 5
+```
+
+```
+## [1] TRUE
+```
+
+```r
+y == 16
+```
+
+```
+## [1] TRUE
+```
+
+```r
+x != 5
+```
+
+```
+## [1] FALSE
+```
+---
+
+# Vectors
+
+
+```r
+world.pop &lt;- c(2525779, 3026003, 3691173, 4449049, 5320817, 6127700, 6916183)
+pop.first &lt;- c(2525779, 3026003, 3691173) 
+pop.second &lt;- c(4449049, 5320817, 6127700, 6916183)
+pop.all &lt;- c(pop.first, pop.second) 
+pop.all
+```
+
+```
+## [1] 2525779 3026003 3691173 4449049 5320817 6127700 6916183
+```
+
+```r
+class &lt;- "POLS 1600" # you can add characters too
+class
+```
+
+```
+## [1] "POLS 1600"
+```
+---
+
+# Functions
+
+
+```r
+mean(world.pop) #function name, parentheses, object
+```
+
+```
+## [1] 4579529
+```
+
+```r
+min(world.pop)
+```
+
+```
+## [1] 2525779
+```
+
+```r
+max(world.pop)
+```
+
+```
+## [1] 6916183
+```
+
+```r
+median(world.pop)
+```
+
+```
+## [1] 4449049
+```
+
+```r
+summary(world.pop)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 2525779 3358588 4449049 4579529 5724258 6916183
+```
+---
+
+# Selecting observations
+
+
+```r
+world.pop[2]
+```
+
+```
+## [1] 3026003
+```
+
+```r
+world.pop[c(1,2)] # c() for combine. 
+```
+
+```
+## [1] 2525779 3026003
+```
+---
+
+# Data frames
+
+
+```r
+year &lt;- seq(from = 1950, to = 2010, by = 10)
+pop &lt;- data.frame(year, world.pop) # add variables
+summary(pop)
+```
+
+```
+##       year        world.pop      
+##  Min.   :1950   Min.   :2525779  
+##  1st Qu.:1965   1st Qu.:3358588  
+##  Median :1980   Median :4449049  
+##  Mean   :1980   Mean   :4579529  
+##  3rd Qu.:1995   3rd Qu.:5724258  
+##  Max.   :2010   Max.   :6916183
+```
+
+```r
+dim(pop) # row, column
+```
+
+```
+## [1] 7 2
+```
+
+```r
+pop$world.pop # access one column
+```
+
+```
+## [1] 2525779 3026003 3691173 4449049 5320817 6127700 6916183
+```
+---
+
+# Read data files
+
+
+```r
+*df &lt;- read.csv("/Users/politicaltheory/Documents/github/pols1600/files/datasets/turnout.csv")
+dim(df)
+```
+
+```
+## [1] 14  9
+```
+
+```r
+summary(df)
+```
+
+```
+##       year           VEP              VAP             total       
+##  Min.   :1980   Min.   :159635   Min.   :164445   Min.   : 64991  
+##  1st Qu.:1986   1st Qu.:171192   1st Qu.:178930   1st Qu.: 73179  
+##  Median :1993   Median :181140   Median :193018   Median : 89055  
+##  Mean   :1993   Mean   :182640   Mean   :194226   Mean   : 89778  
+##  3rd Qu.:2000   3rd Qu.:193353   3rd Qu.:209296   3rd Qu.:102370  
+##  Max.   :2008   Max.   :213314   Max.   :230872   Max.   :131304  
+##                                                                   
+##       ANES           felons         noncit         overseas   
+##  Min.   :47.00   Min.   : 802   Min.   : 5756   Min.   :1803  
+##  1st Qu.:57.00   1st Qu.:1424   1st Qu.: 8592   1st Qu.:2236  
+##  Median :70.50   Median :2312   Median :11972   Median :2458  
+##  Mean   :65.79   Mean   :2177   Mean   :12229   Mean   :2746  
+##  3rd Qu.:73.75   3rd Qu.:3042   3rd Qu.:15910   3rd Qu.:2937  
+##  Max.   :78.00   Max.   :3168   Max.   :19392   Max.   :4972  
+##                                                               
+##     osvoters  
+##  Min.   :263  
+##  1st Qu.:263  
+##  Median :263  
+##  Mean   :263  
+##  3rd Qu.:263  
+##  Max.   :263  
+##  NA's   :13
+```
+---
+
+# Read data files
+
+
+```r
+str(df) # structure, quick way to visualise data
+```
+
+```
+## 'data.frame':	14 obs. of  9 variables:
+##  $ year    : int  1980 1982 1984 1986 1988 1990 1992 1994 1996 1998 ...
+##  $ VEP     : int  159635 160467 167702 170396 173579 176629 179656 182623 186347 190420 ...
+##  $ VAP     : int  164445 166028 173995 177922 181955 186159 190778 195258 200016 205313 ...
+##  $ total   : int  86515 67616 92653 64991 91595 67859 104405 75106 96263 72537 ...
+##  $ ANES    : int  71 60 74 53 70 47 75 56 73 52 ...
+##  $ felons  : int  802 960 1165 1367 1594 1901 2183 2441 2586 2920 ...
+##  $ noncit  : int  5756 6641 7482 8362 9280 10239 11447 12497 13601 14988 ...
+##  $ overseas: int  1803 1982 2361 2216 2257 2659 2418 2229 2499 2937 ...
+##  $ osvoters: int  NA NA NA NA NA NA NA NA NA NA ...
+```
+---
+
+# Install and load packages
+
+
+```r
+install.packages("swirl")
+
+# Load packages
+library("swirl")
+
+# Install course on swirl. You have to do it just once.
+install.packages("devtools")
+install_course_github("kosukeimai", "qss-swirl")
+swirl()
+```
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Homework
+
+.font150[
+* Recommended: read QSS chapter 1 again, writing the code in R this time
+
+* Install `swirl()` and Kosuke's course and go through modules `INTRO1` and `INTRO2`
+]
+
+
+```r
+install.packages("swirl")
+
+# Load packages
+library("swirl")
+
+# Install Kosuke's course on swirl. 
+install.packages("devtools")
+install_course_github("kosukeimai", "qss-swirl")
+swirl() # type 1 and good luck :)
+```
+
+
+---
+class: inverse, center, middle
+
+# Have a great weekend!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
