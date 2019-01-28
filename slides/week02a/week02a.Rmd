@@ -287,7 +287,9 @@ Then press the `knit` buttom to see your document
 
 .font120[
 a <- seq(1:10)
+
 b <- a*a
+
 plot(a, b)
 ]
 
