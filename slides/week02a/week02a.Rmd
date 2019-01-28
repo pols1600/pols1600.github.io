@@ -100,7 +100,7 @@ install_course_github("kosukeimai", "qss-swirl")
 
   - Manipulate vectors
 
-  - install packages from CRAN
+  - Install packages from CRAN
 
   - Use `swirl()`
   
@@ -242,22 +242,21 @@ Image: `![](path/to/picture.jpg)`
 
 # RMarkdown
 
+.font150[
 Lists: 
+]
 
-`* unordered list` 
+.center[![:scale 80%](list.png)]
 
-`* item 2 `
-
-`    + sub-item 1 `
-
-`    + sub-item 2 `
-
-You need to add four spaces/one tab to write sub-items
+.font150[
+You need to add four spaces or one tab to write sub-items
+]
 
 ---
 
 # RMarkdown
 
+.font135[
 R code:
 
 ` ```{r}`
@@ -267,22 +266,27 @@ R code:
 ` ``` `
 
 Just click on the `insert` buttom to add code
+]
 
 .center[![:scale 100%](insert.png)]
 
+.font135[
 Then press the `knit` buttom to see your document
+]
 ---
 
 # Homework
 
-.font150[
+.font130[
 * Install LaTeX: <https://www.latex-project.org/get/> (it is a _big_ file, ~2Gb)
+
+* Download this pdf: <https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf>
 
 * Create a new RMarkdown document
 
 * If RStudio asks you to download some packages, click `yes`
 
-* Write a few paragraphs and add this code to the file
+* Write a few paragraphs and add this code to the file:
 ]
 
 .font120[
