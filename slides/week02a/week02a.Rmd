@@ -1,8 +1,8 @@
 ---
 title: "Week 02 - More Introduction to R"
 subtitle: "Writing Scripts and Reading Data Files <html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
-author: "Your Name"
-date: "2099/12/12"
+author: "Danilo Freire"
+date: "28th January 2019"
 output: 
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
@@ -21,6 +21,13 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+install.packages("swirl")
+library("swirl")
+install.packages("devtools")
+install_course_github("kosukeimai", "qss-swirl")
 ```
 
 <style>
@@ -55,7 +62,7 @@ options(htmltools.dir.version = FALSE)
 
 * Brief recap
 
-* Questions about swirl
+* Questions about `swirl()`
 
 * Create and run R scripts
 
@@ -74,14 +81,11 @@ options(htmltools.dir.version = FALSE)
 
 * Syllabus, lecture slides, R scripts, assignments, datasets
 
+* Updated syllabus at <https://cab.brown.edu/>
+
+* [danilo_freire@brown.edu](mailto:danilo_freire@brown.edu)
+
 ]
-
----
-class: inverse, center, middle
-
-# Brief recap
-
-<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
 
 ---
 
@@ -104,22 +108,203 @@ class: inverse, center, middle
 ]
 ---
 
-# R code
+# Brief recap
 
-```{r, highlight.output=c(3,9:12)}
-fit = lm(dist ~ 1 + speed, data = cars)
-summary(fit)
+```{r recap, cache=TRUE}
+(2^5)*3.5
+vec <- seq(from = 1, to = 100, by = 2)
+vec[c(5:10)]
+summary(vec)
+install.packages("congressbr")
+library("swirl")
+```
+
+```{r swirl, eval=FALSE}
+swirl()
+# R won't read this line
+```
+---
+
+# Swirl
+
+.font150[
+
+* Questions?
+]
+---
+
+# R scripts
+
+.font150[
+* Why should we write scripts?
+
+  - Save time: automate boring tasks
+
+  - Reproducibility
+
+  - Allow complex tasks to be performed in small steps
+
+  - Faster to run
+]
+---
+
+# R scripts
+
+.center[![:scale 110%](script.png)]
+---
+
+# Read data files
+
+.font150[
+* R can read files of many types and formats
+
+* Usually, data are either in `.csv` or `.Rdata` format
+
+* R can also read Excel spreadsheets with the [readxl package](https://readxl.tidyverse.org/)
+
+]
+---
+
+# Read csv files
+
+.center[
+.font200[
+name_object <- read.csv("data_path/file.csv")
+]
+]
+
+---
+# Read csv files
+
+```{r csv2}
+{{df <- read.csv("/Users/politicaltheory/Documents/github/pols1600.github.io/datasets/turnout.csv")}}
+summary(df)
+```
+---
+
+# Read csv files from the internet
+
+```{r csv3}
+{{df <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/turnout.csv")}}
+summary(df)
 ```
 
 ---
 
-background-image: url(sp.jpg)
+# Read csv files from the internet
 
-class: clear
+.font150[
+* In this course, you will be able to download all datasets directly from our website
+
+* Just go to <http://pols1600.github.io/datasets>, click with the left buttom over the name of the dataset, then copy the code to your R script
+
+]
+---
+
+# RMarkdown
+
+.font150[
+* We can use R to write documents and websites, too
+
+* RMarkdown is a very simple language to learn and use
+
+* You should submit your assignments and final project in RMarkdown format
+
+* Visit <https://rmarkdown.rstudio.com/lesson-1.html> for an introduction
+]
+---
+
+# RMarkdown
+
+.center[![:scale 110%](rmd.png)]
+---
+
+# RMarkdown basics
+
+.font120[
+Add `fontsize: 12pt` to the header (the section above `---`)
+
+Basic commands:
+
+`# Section`
+
+`## Subsection`
+
+Formatting: `*italics*` `**boldface**` 
+
+Weblink: `[POLS1600 website](http://pols1600.github.io)`
+
+Image: `![](path/to/picture.jpg)`
+
+
+]
+---
+
+# RMarkdown
+
+Lists: 
+
+`* unordered list` 
+
+`* item 2 `
+
+`    + sub-item 1 `
+
+`    + sub-item 2 `
+
+You need to add four spaces/one tab to write sub-items
+
+---
+
+# RMarkdown
+
+R code:
+
+` ```{r}`
+
+`library(swirl)`
+
+` ``` `
+
+Just click on the `insert` buttom to add code
+
+.center[![:scale 100%](insert.png)]
+
+Then press the `knit` buttom to see your document
+---
+
+# Homework
+
+.font150[
+* Install LaTeX: <https://www.latex-project.org/get/> (it is a _big_ file, ~2Gb)
+
+* Create a new RMarkdown document
+
+* If RStudio asks you to download some packages, click `yes`
+
+* Write a few paragraphs and add this code to the file
+]
+
+.font120[
+a <- seq(1:10)
+b <- a*a
+plot(a, b)
+]
+
+---
+
+# Homework
+
+.center[![:scale 85%](plot.png)]
+---
+
+# Homework
+
+.center[![:scale 65%](doc.png)]
 ---
 
 class: inverse, center, middle
 
-# And That's All, Folks!
+# See you on Wednesday!
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 

@@ -3,7 +3,7 @@
   <head>
     <title>Week 02 - More Introduction to R</title>
     <meta charset="utf-8">
-    <meta name="author" content="Your Name" />
+    <meta name="author" content="Danilo Freire" />
     <link href="week02a_files/remark-css/default.css" rel="stylesheet" />
     <link href="week02a_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="week02a_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
@@ -20,8 +20,8 @@ class: center, middle, inverse, title-slide
 </div>
 <hr color='#EB811B' size=1px width=800px>
 </html>
-### Your Name
-### 2099/12/12
+### Danilo Freire
+### 28th January 2019
 
 ---
 
@@ -60,7 +60,7 @@ class: center, middle, inverse, title-slide
 
 * Brief recap
 
-* Questions about swirl
+* Questions about `swirl()`
 
 * Create and run R scripts
 
@@ -79,14 +79,11 @@ class: center, middle, inverse, title-slide
 
 * Syllabus, lecture slides, R scripts, assignments, datasets
 
+* Updated syllabus at &lt;https://cab.brown.edu/&gt;
+
+* [danilo_freire@brown.edu](mailto:danilo_freire@brown.edu)
+
 ]
-
----
-class: inverse, center, middle
-
-# Brief recap
-
-&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
 
 ---
 
@@ -109,45 +106,293 @@ class: inverse, center, middle
 ]
 ---
 
-# R code
+# Brief recap
 
 
 ```r
-fit = lm(dist ~ 1 + speed, data = cars)
-summary(fit)
+(2^5)*3.5
+```
+
+```
+## [1] 112
+```
+
+```r
+vec &lt;- seq(from = 1, to = 100, by = 2)
+vec[c(5:10)]
+```
+
+```
+## [1]  9 11 13 15 17 19
+```
+
+```r
+summary(vec)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     1.0    25.5    50.0    50.0    74.5    99.0
+```
+
+```r
+install.packages("congressbr")
 ```
 
 ```
 ## 
-## Call:
-*## lm(formula = dist ~ 1 + speed, data = cars)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -29.069  -9.525  -2.272   9.215  43.201 
-## 
-*## Coefficients:
-*##             Estimate Std. Error t value Pr(&gt;|t|)    
-*## (Intercept) -17.5791     6.7584  -2.601   0.0123 *  
-*## speed         3.9324     0.4155   9.464 1.49e-12 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 15.38 on 48 degrees of freedom
-## Multiple R-squared:  0.6511,	Adjusted R-squared:  0.6438 
-## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12
+## The downloaded binary packages are in
+## 	/var/folders/nl/c_4v70mj40g0y7p_9vb6r68r0000gq/T//RtmpV1L5k9/downloaded_packages
+```
+
+```r
+library("swirl")
+```
+
+
+```r
+swirl()
+# R won't read this line
+```
+---
+
+# Swirl
+
+.font150[
+
+* Questions?
+]
+---
+
+# R scripts
+
+.font150[
+* Why should we write scripts?
+
+  - Save time: automate boring tasks
+
+  - Reproducibility
+
+  - Allow complex tasks to be performed in small steps
+
+  - Faster to run
+]
+---
+
+# R scripts
+
+.center[![:scale 110%](script.png)]
+---
+
+# Read data files
+
+.font150[
+* R can read files of many types and formats
+
+* Usually, data are either in `.csv` or `.Rdata` format
+
+* R can also read Excel spreadsheets with the [readxl package](https://readxl.tidyverse.org/)
+
+]
+---
+
+# Read csv files
+
+.center[
+.font200[
+name_object &lt;- read.csv("data_path/file.csv")
+]
+]
+
+---
+# Read csv files
+
+
+```r
+*df &lt;- read.csv("/Users/politicaltheory/Documents/github/pols1600.github.io/datasets/turnout.csv")
+summary(df)
+```
+
+```
+##       year           VEP              VAP             total       
+##  Min.   :1980   Min.   :159635   Min.   :164445   Min.   : 64991  
+##  1st Qu.:1986   1st Qu.:171192   1st Qu.:178930   1st Qu.: 73179  
+##  Median :1993   Median :181140   Median :193018   Median : 89055  
+##  Mean   :1993   Mean   :182640   Mean   :194226   Mean   : 89778  
+##  3rd Qu.:2000   3rd Qu.:193353   3rd Qu.:209296   3rd Qu.:102370  
+##  Max.   :2008   Max.   :213314   Max.   :230872   Max.   :131304  
+##                                                                   
+##       ANES           felons         noncit         overseas   
+##  Min.   :47.00   Min.   : 802   Min.   : 5756   Min.   :1803  
+##  1st Qu.:57.00   1st Qu.:1424   1st Qu.: 8592   1st Qu.:2236  
+##  Median :70.50   Median :2312   Median :11972   Median :2458  
+##  Mean   :65.79   Mean   :2177   Mean   :12229   Mean   :2746  
+##  3rd Qu.:73.75   3rd Qu.:3042   3rd Qu.:15910   3rd Qu.:2937  
+##  Max.   :78.00   Max.   :3168   Max.   :19392   Max.   :4972  
+##                                                               
+##     osvoters  
+##  Min.   :263  
+##  1st Qu.:263  
+##  Median :263  
+##  Mean   :263  
+##  3rd Qu.:263  
+##  Max.   :263  
+##  NA's   :13
+```
+---
+
+# Read csv files from the internet
+
+
+```r
+*df &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/turnout.csv")
+summary(df)
+```
+
+```
+##       year           VEP              VAP             total       
+##  Min.   :1980   Min.   :159635   Min.   :164445   Min.   : 64991  
+##  1st Qu.:1986   1st Qu.:171192   1st Qu.:178930   1st Qu.: 73179  
+##  Median :1993   Median :181140   Median :193018   Median : 89055  
+##  Mean   :1993   Mean   :182640   Mean   :194226   Mean   : 89778  
+##  3rd Qu.:2000   3rd Qu.:193353   3rd Qu.:209296   3rd Qu.:102370  
+##  Max.   :2008   Max.   :213314   Max.   :230872   Max.   :131304  
+##                                                                   
+##       ANES           felons         noncit         overseas   
+##  Min.   :47.00   Min.   : 802   Min.   : 5756   Min.   :1803  
+##  1st Qu.:57.00   1st Qu.:1424   1st Qu.: 8592   1st Qu.:2236  
+##  Median :70.50   Median :2312   Median :11972   Median :2458  
+##  Mean   :65.79   Mean   :2177   Mean   :12229   Mean   :2746  
+##  3rd Qu.:73.75   3rd Qu.:3042   3rd Qu.:15910   3rd Qu.:2937  
+##  Max.   :78.00   Max.   :3168   Max.   :19392   Max.   :4972  
+##                                                               
+##     osvoters  
+##  Min.   :263  
+##  1st Qu.:263  
+##  Median :263  
+##  Mean   :263  
+##  3rd Qu.:263  
+##  Max.   :263  
+##  NA's   :13
 ```
 
 ---
 
-background-image: url(sp.jpg)
+# Read csv files from the internet
 
-class: clear
+.font150[
+* In this course, you will be able to download all datasets directly from our website
+
+* Just go to &lt;http://pols1600.github.io/datasets&gt;, click with the left buttom over the name of the dataset, then copy the code to your R script
+
+]
+---
+
+# RMarkdown
+
+.font150[
+* We can use R to write documents and websites, too
+
+* RMarkdown is a very simple language to learn and use
+
+* You should submit your assignments and final project in RMarkdown format
+
+* Visit &lt;https://rmarkdown.rstudio.com/lesson-1.html&gt; for an introduction
+]
+---
+
+# RMarkdown
+
+.center[![:scale 110%](rmd.png)]
+---
+
+# RMarkdown basics
+
+.font120[
+Add `fontsize: 12pt` to the header (the section above `---`)
+
+Basic commands:
+
+`# Section`
+
+`## Subsection`
+
+Formatting: `*italics*` `**boldface**` 
+
+Weblink: `[POLS1600 website](http://pols1600.github.io)`
+
+Image: `![](path/to/picture.jpg)`
+
+
+]
+---
+
+# RMarkdown
+
+Lists: 
+
+`* unordered list` 
+
+`* item 2 `
+
+`    + sub-item 1 `
+
+`    + sub-item 2 `
+
+You need to add four spaces/one tab to write sub-items
+
+---
+
+# RMarkdown
+
+R code:
+
+` ```{r}`
+
+`library(swirl)`
+
+` ``` `
+
+Just click on the `insert` buttom to add code
+
+.center[![:scale 100%](insert.png)]
+
+Then press the `knit` buttom to see your document
+---
+
+# Homework
+
+.font150[
+* Install LaTeX: &lt;https://www.latex-project.org/get/&gt; (it is a _big_ file, ~2Gb)
+
+* Create a new RMarkdown document
+
+* If RStudio asks you to download some packages, click `yes`
+
+* Write a few paragraphs and add this code to the file
+]
+
+.font120[
+a &lt;- seq(1:10)
+b &lt;- a*a
+plot(a, b)
+]
+
+---
+
+# Homework
+
+.center[![:scale 85%](plot.png)]
+---
+
+# Homework
+
+.center[![:scale 65%](doc.png)]
 ---
 
 class: inverse, center, middle
 
-# And That's All, Folks!
+# See you on Wednesday!
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
     </textarea>
