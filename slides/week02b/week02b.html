@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 02 - Introduction to Causality</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week02b_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week02b_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week02b_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 02 - Introduction to Causality
+## How do we know if X causes Y?
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 30th January 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Course website
+
+* Brief recap
+
+* Questions about `swirl()`
+
+* Create and run R scripts
+
+* Read `.csv` datasets
+
+* Homework: install RMarkdown and write your first document
+]
+---
+
+# Today's Agenda
+
+.font150[
+* Questions about RMarkdown?
+
+* What is causal inference?
+
+* Correlation vs causation
+
+* Treatment effects and potential outcomes
+
+* Randomised Controlled Trials
+]
+
+---
+
+# Brief Recap
+
+.font150[
+* Last week you learned how to:
+
+  - Load `.csv` files 
+  
+  - Download datasets from the internet
+  
+  - Create and run `.R` scripts 
+  
+  - Create `.Rmd` documents (different extension!)
+  
+  - Print a pdf with your results
+]
+---
+
+# RMarkdown
+
+.font150[
+* Questions?
+]
+
+.center[![:scale 60%](doc.png)]
+---
+class: inverse, center, middle
+
+# Causal Inference
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+
+---
+
+# Causal Inference
+
+.font150[
+* What is causal inference?
+]
+--
+
+.font150[
+* Causal: relationship where one factor causes the other
+]
+--
+.font150[
+* Inference: our ability to derive conclusion from facts and observations
+]
+--
+
+.font150[
+* _Causal inference is a tentative to estimate a causal connection between two variables based on an observed effect_
+]
+---
+
+# Causal Inference
+
+.center[![:scale 110%](candidate.png)]
+
+---
+
+# Causal Inference
+
+.center[![:scale 110%](germany.png)]
+
+---
+
+# Causal Inference
+
+.center[![:scale 80%](democracy.png)]
+--
+
+.font150[Which question is harder to answer?]
+---
+
+# Causal Inference
+
+.center[![:scale 80%](cpi.png)]
+---
+
+# Does X cause Y?
+
+.font150[
+* Does _X_ occur at the same time as _Y_?
+
+* If _X_ goes up or down, does _Y_ also go up or down?
+
+* If _X_ is happens, does _Y_ also happen?
+]
+--
+
+.font150[* _Are X and Y causally related because of that?_]
+--
+
+.font150[**NO**]
+---
+
+# Does X cause Y?
+
+.center[![:scale 100%](eng.png)]
+---
+
+# Does X cause Y?
+
+.center[![:scale 100%](kentucky.png)]
+---
+
+# Causal Inference - Notation
+
+.font150[
+* Treatment variable = _T_
+
+* Two potential outcomes = _Y_ when _T = 0_ and _Y_ when _T = 1_
+]
+--
+
+.font150[
+* Example
+
+  - Treatment: getting a university degree
+  
+  - Potential outcome: salary with a university degree _(Y when T = 1)_ versus salary without a university degree _(Y when T = 0)_
+]
+---
+
+# Causal Inference - Notation
+
+.font150[
+* The causal effect of the treatment _T_ is the difference in _Y_ with and without _T_
+  
+* _Y(T = 1) - Y(T = 0)_ or `\(Y_{1} - Y_{0}\)`
+]
+
+.center[![:scale 100%](causal01.png)]
+--
+
+.font150[
+* Why is that a problem?
+]
+
+---
+
+# Fundamental Problem of Causal Inference
+
+.font150[
+* _We can never observe Y where T = 1 and T = 0 at the same time_
+
+* We only observe _one_ outcome at a time, that's why it is called the _potential_ outcomes framework
+]
+---
+
+# Fundamental Problem of Causal Inference
+
+
+.center[![:scale 60%](causal02.png)]
+
+.center[[Holland, Paul (1986), p. 947](https://www.jstor.org/stable/2289064)]
+---
+
+# Sample Average Treatment Effect
+
+.font150[
+* Solution: we estimate the _average causal effect_ in the groups that received and did not receive the treatment
+
+* We call it the _Sample Average Treatment Effect_, or SATE
+]
+
+.center[![:scale 100%](sate.png)]
+
+.font150[
+* But is that enough?
+]
+--
+
+.font150[
+* _Not quite_
+]
+
+---
+
+# Randomisation
+
+.font150[
+* The best solution to the problem of selection bias is _randomisation_
+
+* If the researcher randomised the treatment, she can be sure that it is unrelated to any observable characteristic
+
+* We also assume randomised treatment is uncorrelated with any _unobservable_ characteristic too
+
+* Randomised Controlled Trials (RCTs): the researcher creates treatment and control groups
+
+* If all other characteristics are equivalent on average between the two groups, _the difference between them is caused by the treatment effect_
+]
+---
+
+# Randomisation
+
+.center[![:scale 85%](rct.png)]
+---
+
+# Internal versus External Validity
+
+.font150[
+* RCTs have very strong internal validity, that is, there is very little chance the result is derived from causes other than the treatment
+
+* However, they do not generalise well. Why? 
+]
+--
+
+.font150[
+* Samples may not reflect the whole population of interest
+]
+
+---
+
+# Homework
+
+.font150[
+* Watch these three videos: &lt;https://youtu.be/vtSCZcKXw1w&gt;, &lt;https://youtu.be/9j_HWkrSxzI&gt; and &lt;https://youtu.be/S5TVIPknDI4&gt; (they're short)
+
+* Start `swirl()` CAUSALITY1
+]
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
