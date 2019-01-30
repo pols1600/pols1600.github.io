@@ -134,7 +134,7 @@ class: inverse, center, middle
 --
 
 .font150[
-* _Causal inference is a tentative to estimate a causal connection between two variables based on an observed effect_
+* _Causal inference is an attempt to estimate a causal connection between two variables based on an observed effect_
 ]
 ---
 
