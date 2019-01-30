@@ -288,7 +288,7 @@ class: inverse, center, middle
 .font150[
 * RCTs have very strong internal validity, that is, there is very little chance the result is derived from causes other than the treatment
 
-* However, they do not generalise well. Why? 
+* However, they may not generalise well. Why? 
 ]
 --
 
@@ -301,7 +301,11 @@ class: inverse, center, middle
 # Homework
 
 .font150[
-* Watch these three videos: <https://youtu.be/vtSCZcKXw1w>, <https://youtu.be/9j_HWkrSxzI> and <https://youtu.be/S5TVIPknDI4> (they're short)
+* Watch these three videos (they're all short): 
+  - <https://youtu.be/vtSCZcKXw1w>
+  - <https://youtu.be/9j_HWkrSxzI> 
+  - <https://youtu.be/S5TVIPknDI4> 
+  
 
 * Start `swirl()` CAUSALITY1
 ]
