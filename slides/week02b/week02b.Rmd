@@ -268,7 +268,7 @@ class: inverse, center, middle
 .font130[
 * The best solution to the problem of selection bias is _randomisation_
 
-* If the researcher randomised the treatment, she can be sure that it is unrelated to any observable characteristic
+* If the researcher randomises the treatment, she can be sure that it is unrelated to any observable characteristic
 
 * We also assume randomised treatment is uncorrelated with any _unobservable_ characteristic too
 
@@ -313,6 +313,6 @@ class: inverse, center, middle
 
 class: inverse, center, middle
 
-# See you on Wednesday!
+# See you on Friday!
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
