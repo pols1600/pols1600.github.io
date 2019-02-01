@@ -169,24 +169,11 @@ The `result` variable is a 10 category factor variable describing the result of 
 
 * Does successful leader assassination cause democratization? Does successful leader assassination lead countries to war?  Answer these questions by analyzing the data.  Be sure to state your assumptions and provide a brief interpretation of the results.]
 ---
+class: inverse, center, middle
 
+# Questions?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
 
 ---
 
