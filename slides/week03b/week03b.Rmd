@@ -320,6 +320,12 @@ NJdiff - PAdiff
 
 ---
 
+# Animation of DiD
+
+.center[![:scale 60%](did.gif)]
+
+---
+
 class: inverse, center, middle
 
 # Questions?
