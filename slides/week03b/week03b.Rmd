@@ -135,7 +135,7 @@ tapply(social$primary2006, social$messages, mean)[-2] -
 
 ---
 
-# Observational studies 
+# Observational Studies 
 
 .font150[
 * Why is it harder to make causal inference with observational data? 
@@ -153,7 +153,7 @@ tapply(social$primary2006, social$messages, mean)[-2] -
 
 ---
 
-# Examples of confounders:
+# Examples of Confounders:
 
 .font150[
 * Are incumbents more likely to win elections?
@@ -187,7 +187,7 @@ tapply(social$primary2006, social$messages, mean)[-2] -
 
 ---
 
-# Differences-in-differences (DiD)
+# Differences-in-Differences (DiD)
 
 .font150[
 * Compare trends before and after the treatment across the same units
@@ -214,7 +214,7 @@ tapply(social$primary2006, social$messages, mean)[-2] -
 
 * Economists believe the effect is positive: higher wages lead to higher unemployment
 
-* Difficult to randomise mininum wage legislation
+* Difficult to randomise minimum wage legislation
 
 * In 1992, NJ minimum wage increased from $4.25 to $5.05...
 
@@ -233,7 +233,7 @@ tapply(social$primary2006, social$messages, mean)[-2] -
 
 ---
 
-# Mininum Wage and Unemployment
+# Minimum Wage and Unemployment
 
 ```{r dd}
 minwage <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/minwage.csv")
@@ -242,7 +242,7 @@ str(minwage)
 
 ---
 
-# Mininum Wage and Unemployment
+# Minimum Wage and Unemployment
 
 ```{r dd2}
 # Subset the data into NJ and PA
@@ -260,7 +260,7 @@ mean(minwagePA$wageAfter < 5.05) # PA after
 
 ---
 
-# Mininum Wage and Unemployment
+# Minimum Wage and Unemployment
 
 ```{r dd4, highlight.output=1}
 # Are the NJ and PA Restaurants Comparable?
