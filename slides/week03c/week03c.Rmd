@@ -59,11 +59,11 @@ options(repos = r)
 
 * Standard deviation
 
-* Barplots
-
 * Leader assassination DiD 
 
 * Interval and external validity
+
+* Replication crisis
 ]
 
 ---
@@ -185,7 +185,7 @@ diff.pol.succ - diff.pol.unsucc
 # Leader Assassination DD
 
 ```{r tidy=FALSE}
-# create variable for warbefore warafter
+# create variable for warbefore and warafter
 leaders$warbefore <- ifelse(leaders$interwarbefore == 1 |
                               leaders$civilwarbefore == 1, 1, 0)
 leaders$warafter <- ifelse(leaders$interwarafter == 1 |
@@ -205,9 +205,83 @@ diff.war.succ - diff.war.unsucc # difference in differences
 Using the difference-in-difference approach, we find very little difference in the contries' polity score and in the proportion of countries engaged in war. Leader assassination does not seem to cause countries to democratise or engage in war.]
 ---
 
+# Internal and External Validity
+
+.font150[
+* Because of randomisation, we know that RCTs have strong _internal validity_
+
+* .orange[Internal validity]: the degree to which we can attribute the results to the treatment and not to other factors
+
+* However, observational studies have greater _external validity_
+
+* .orange[External validity]: the extent to which the results can be generalised 
+]
+
+---
+
+# Replication Crisis
+
+
+.center[![:scale 100%](rep01.png)]
+
+Website: <https://theconversation.com/you-cant-characterize-human-nature-if-studies-overlook-85-percent-of-people-on-earth-106670>
+
+---
+
+# Replication Crisis
+
+.center[![:scale 100%](rep02.png)]
+
+---
+
+# Replication Crisis
+
+.center[![:scale 100%](rep03.png)]
+
+---
+
+# What Should We Do?
+
+.font150[
+* .orange[Replications:] see whether the same results hold under different conditions
+
+* .orange[Field experiments:] conduct experiments in realistic settings
+
+* .orange[Larger sample sizes:] large samples tend to be more representative of the underlying population
+
+* .orange[Open methods and open data:] share your code and datasets so other can verify them
+
+* .orange[Preregistration:] stating your hypotheses _before_ running the experiment
+
+]
+---
+
+# We're Getting Better
+
+.center[![:scale 100%](rep04.png)]
+
+---
+
+# Wrap-up
+
+.font150[
+* Not all experiments are true, many don't replicate
+
+* If possible, preregister your hypotheses and make your data and code available (RMarkdown can help!)
+
+* Replicate your and other people's work
+
+* Is science wrong? _No_, but there are many wrong findings maskerading as science
+
+* Keep those things in mind while reading a study that seems to good to be true: _it most likely is_]
+
+---
+
 # Homework
 
 .font150[
+* John Oliver on the replication crisis: <https://youtu.be/0Rnq1NpHdmw>
+
 * `CAUSALITY02`
 ]
 
@@ -215,6 +289,6 @@ Using the difference-in-difference approach, we find very little difference in t
 
 class: inverse, center, middle
 
-# See you on Friday!
+# See you next week!
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
