@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 03 - Observational Studies</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week03c_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week03c_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week03c_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 03 - Observational Studies
+## Descriptive Statistics for a Single Variable
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 8th February 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Quantiles
+
+* Standard deviation
+
+* Barplots
+
+* Leader assassination DiD 
+
+* Interval and external validity
+]
+
+---
+
+# Quantiles
+
+.font150[
+* Sometimes it is useful to look at the distribution of a given variable
+
+* We can split a variable in many ways:
+	- Quartiles
+	- Quantiles
+	- Percentiles
+
+* Which quantile is the median?
+]
+---
+
+# Quantiles
+
+.font150[
+* What is the median of {2, 5, 6, 10}?
+
+* What is the median of {1, 2, 3, 4, 20}?
+
+* Interquartile range (IQR): the difference between the 75th and the 25th percentile    
+]
+
+---
+
+# Standard Deviation
+
+.font150[
+* Average distance of each data point to the mean
+
+* `\(SD = (\sqrt{\frac{1}{n} \sum^{N}_{i = 1} (x_{i} - \bar{x})^{2}})\)`
+]
+--
+
+.font150[
+* where `\(\bar{x}\)` indicates the sample mean, that is, `\(\bar{x} = \frac{1}{n} \sum^{N}_{i = 1} x_{i}\)`, and `\(n\)` is the sample size 
+
+* Almost all data entries are located within 2 or 3 standard deviations from the mean
+]
+---
+
+# R Examples
+
+
+
+
+```r
+median(leaders$age)
+```
+
+```
+## [1] 52.5
+```
+
+```r
+IQR(leaders$age)
+```
+
+```
+## [1] 16.75
+```
+
+```r
+quantile(leaders$age)
+```
+
+```
+##    0%   25%   50%   75%  100% 
+## 18.00 45.00 52.50 61.75 81.00
+```
+
+```r
+quantile(leaders$age, probs = seq(0, 1, by = 0.1)) # deciles
+```
+
+```
+##   0%  10%  20%  30%  40%  50%  60%  70%  80%  90% 100% 
+## 18.0 39.0 43.0 47.0 50.0 52.5 57.0 60.0 64.0 70.0 81.0
+```
+
+```r
+quantile(leaders$age, probs = c(.34, .55, .93)) # 34th, 55th, 93th percentiles
+```
+
+```
+## 34% 55% 93% 
+##  48  55  71
+```
+---
+
+# R Examples
+
+
+```r
+mean(leaders$age)
+```
+
+```
+## [1] 53.524
+```
+
+```r
+sd(leaders$age)
+```
+
+```
+## [1] 12.03982
+```
+
+```r
+summary(leaders$age)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   18.00   45.00   52.50   53.52   61.75   81.00
+```
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+
+---
+
+# Leader Assassination DD
+
+.font150[
+* **Question 5**
+
+* Does successful leader assassination cause democratization? Does successful leader assassination lead countries to war?  Answer these questions by analyzing the data.  Be sure to state your assumptions and provide a brief interpretation of the results.]
+---
+
+# Leader Assassination DD
+
+
+```r
+str(leaders)
+```
+
+```
+## 'data.frame':	250 obs. of  11 variables:
+##  $ year          : int  1929 1933 1934 1924 1931 1968 1992 1908 1916 1929 ...
+##  $ country       : Factor w/ 88 levels "Afghanistan",..: 1 1 1 2 2 3 3 4 4 4 ...
+##  $ leadername    : Factor w/ 196 levels "Abdullah Al-Hussein",..: 72 128 77 196 196 27 26 6 46 92 ...
+##  $ age           : int  39 53 50 29 36 41 73 48 76 77 ...
+##  $ politybefore  : num  -6 -6 -6 0 -9 -9 -2 1 2 2 ...
+##  $ polityafter   : num  -6 -7.33 -8 -9 -9 ...
+##  $ interwarbefore: int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ interwarafter : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ civilwarbefore: int  1 0 0 0 0 0 0 0 0 0 ...
+##  $ civilwarafter : int  0 0 0 0 0 0 1 0 0 0 ...
+##  $ result        : Factor w/ 10 levels "dies between a day and a week",..: 6 3 9 10 6 10 3 7 6 6 ...
+```
+
+```r
+# create success variable
+leaders$success &lt;- ifelse(leaders$result == "dies between a day and a week" |
+                            leaders$result == "dies between a week and a month" |
+                            leaders$result == "dies within a day after the attack" |
+                            leaders$result == "dies, timing unknown",1, 0)
+```
+---
+
+# Leader Assassination DD
+
+
+```r
+# polity score before and after assassination attempt
+diff.pol.succ &lt;- mean(leaders$polityafter[leaders$success == 1]) - 
+                   mean(leaders$politybefore[leaders$success == 1]) # successful 
+
+diff.pol.succ
+```
+
+```
+## [1] -0.05864198
+```
+
+```r
+diff.pol.unsucc &lt;- mean(leaders$polityafter[leaders$success == 0]) - 
+                     mean(leaders$politybefore[leaders$success == 0]) # unsuccessful
+
+diff.pol.unsucc
+```
+
+```
+## [1] -0.1513605
+```
+
+```r
+## difference in differences
+diff.pol.succ - diff.pol.unsucc
+```
+
+```
+## [1] 0.09271857
+```
+---
+
+# Leader Assassination DD
+
+
+```r
+# create variable for warbefore warafter
+leaders$warbefore &lt;- ifelse(leaders$interwarbefore == 1 |
+                              leaders$civilwarbefore == 1, 1, 0)
+leaders$warafter &lt;- ifelse(leaders$interwarafter == 1 |
+                             leaders$civilwarafter == 1, 1, 0)
+
+## compare war before to war after among successful and unsuccessful
+diff.war.succ &lt;- mean(leaders$warafter[leaders$success == 1]) - 
+                   mean(leaders$warbefore[leaders$success == 1])
+
+diff.war.unsucc &lt;- mean(leaders$warafter[leaders$success == 0]) - 
+                     mean(leaders$warbefore[leaders$success == 0])
+
+diff.war.succ - diff.war.unsucc # difference in differences
+```
+
+```
+## [1] -0.07161754
+```
+
+.font130[
+Using the difference-in-difference approach, we find very little difference in the contries' polity score and in the proportion of countries engaged in war. Leader assassination does not seem to cause countries to democratise or engage in war.]
+---
+
+# Homework
+
+.font150[
+* `CAUSALITY02`
+]
+
+---
+
+class: inverse, center, middle
+
+# See you on Friday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
