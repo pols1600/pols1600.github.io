@@ -61,7 +61,7 @@ options(repos = r)
 
 * Leader assassination DiD 
 
-* Interval and external validity
+* Internal and external validity
 
 * Replication crisis
 ]
@@ -230,13 +230,17 @@ Website: <https://theconversation.com/you-cant-characterize-human-nature-if-stud
 
 # Replication Crisis
 
-.center[![:scale 100%](rep02.png)]
+.center[![:scale 85%](rep02.png)]
+
+Website: <https://www.theatlantic.com/science/archive/2018/11/psychologys-replication-crisis-real/576223>
 
 ---
 
 # Replication Crisis
 
 .center[![:scale 100%](rep03.png)]
+
+Website: <https://theconversation.com/you-cant-characterize-human-nature-if-studies-overlook-85-percent-of-people-on-earth-106670>
 
 ---
 
@@ -260,6 +264,8 @@ Website: <https://theconversation.com/you-cant-characterize-human-nature-if-stud
 
 .center[![:scale 100%](rep04.png)]
 
+Website: <https://www.vox.com/science-and-health/2018/8/27/17761466/psychology-replication-crisis-nature-social-science>
+
 ---
 
 # Wrap-up
@@ -281,6 +287,8 @@ Website: <https://theconversation.com/you-cant-characterize-human-nature-if-stud
 
 .font150[
 * John Oliver on the replication crisis: <https://youtu.be/0Rnq1NpHdmw>
+
+* BBC podcast on the same problem: <https://pca.st/n5b3>
 
 * `CAUSALITY02`
 ]
