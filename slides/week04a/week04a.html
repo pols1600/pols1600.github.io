@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 04 - Observational Studies</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week04a_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week04a_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week04a_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 04 - Observational Studies
+## Changing Minds on Gay Marriage
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 11th February 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Brief evaluation of chapters 1 and 2
+
+* "Changing Minds on Gay Marriage"
+
+* Replication Crisis part 2
+
+* But first...
+]
+
+---
+class: inverse, center, middle
+
+# Congratulations to all of you!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# What you have learned so far
+
+.font150[
+* Import data with `read.csv`
+
+* Summarise your data in `R`
+
+* `dim`, `summary`, `str`, `head`, `tail`
+
+* `tapply`, `table`, `subset`
+
+* `median`, `quantiles`, `sd`
+]
+---
+
+# What you have learned so far
+
+
+```r
+resume &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
+dim(resume)
+```
+
+```
+## [1] 4870    4
+```
+
+```r
+str(resume)
+```
+
+```
+## 'data.frame':	4870 obs. of  4 variables:
+##  $ firstname: Factor w/ 36 levels "Aisha","Allison",..: 2 21 22 23 7 15 17 20 23 36 ...
+##  $ sex      : Factor w/ 2 levels "female","male": 1 1 1 1 1 2 1 1 1 2 ...
+##  $ race     : Factor w/ 2 levels "black","white": 2 2 1 1 2 2 2 1 1 1 ...
+##  $ call     : int  0 0 0 0 0 0 0 0 0 0 ...
+```
+
+```r
+unique(resume$firstname)
+```
+
+```
+##  [1] Allison  Kristen  Lakisha  Latonya  Carrie   Jay      Jill    
+##  [8] Kenya    Tyrone   Aisha    Geoffrey Matthew  Tamika   Leroy   
+## [15] Todd     Greg     Keisha   Brad     Laurie   Meredith Anne    
+## [22] Emily    Latoya   Ebony    Brendan  Hakim    Jamal    Neil    
+## [29] Tremayne Brett    Darnell  Sarah    Jermaine Tanisha  Rasheed 
+## [36] Kareem  
+## 36 Levels: Aisha Allison Anne Brad Brendan Brett Carrie Darnell ... Tyrone
+```
+---
+
+# What you have learned so far
+
+
+```r
+summary(resume)
+```
+
+```
+##    firstname        sex          race           call        
+##  Tamika : 256   female:3746   black:2435   Min.   :0.00000  
+##  Anne   : 242   male  :1124   white:2435   1st Qu.:0.00000  
+##  Allison: 232                              Median :0.00000  
+##  Latonya: 230                              Mean   :0.08049  
+##  Emily  : 227                              3rd Qu.:0.00000  
+##  Latoya : 226                              Max.   :1.00000  
+##  (Other):3457
+```
+
+---
+
+# What you have learned so far
+
+
+```r
+tapply(resume$call, resume$race, mean)
+```
+
+```
+##      black      white 
+## 0.06447639 0.09650924
+```
+
+```r
+tapply(resume$call, resume$firstname, length)
+```
+
+```
+##    Aisha  Allison     Anne     Brad  Brendan    Brett   Carrie  Darnell 
+##      180      232      242       63       65       59      168       42 
+##    Ebony    Emily Geoffrey     Greg    Hakim    Jamal      Jay Jermaine 
+##      208      227       59       51       55       61       67       52 
+##     Jill   Kareem   Keisha    Kenya  Kristen  Lakisha  Latonya   Latoya 
+##      203       64      183      196      213      200      230      226 
+##   Laurie    Leroy  Matthew Meredith     Neil  Rasheed    Sarah   Tamika 
+##      195       64       67      187       76       67      193      256 
+##  Tanisha     Todd Tremayne   Tyrone 
+##      207       68       69       75
+```
+---
+
+# What you have learned so far
+
+
+```r
+table(resume$firstname)
+```
+
+```
+## 
+##    Aisha  Allison     Anne     Brad  Brendan    Brett   Carrie  Darnell 
+##      180      232      242       63       65       59      168       42 
+##    Ebony    Emily Geoffrey     Greg    Hakim    Jamal      Jay Jermaine 
+##      208      227       59       51       55       61       67       52 
+##     Jill   Kareem   Keisha    Kenya  Kristen  Lakisha  Latonya   Latoya 
+##      203       64      183      196      213      200      230      226 
+##   Laurie    Leroy  Matthew Meredith     Neil  Rasheed    Sarah   Tamika 
+##      195       64       67      187       76       67      193      256 
+##  Tanisha     Todd Tremayne   Tyrone 
+##      207       68       69       75
+```
+
+```r
+table(sex = resume$sex, call = resume$call)
+```
+
+```
+##         call
+## sex         0    1
+##   female 3437  309
+##   male   1041   83
+```
+---
+
+# What you have learned so far
+
+
+```r
+black_female &lt;- subset(resume, race == "black" &amp; sex == "female")
+head(black_female)
+```
+
+```
+##    firstname    sex  race call
+## 3    Lakisha female black    0
+## 4    Latonya female black    0
+## 8      Kenya female black    0
+## 9    Latonya female black    0
+## 11     Aisha female black    0
+## 13     Aisha female black    0
+```
+
+```r
+all_females &lt;- subset(resume, race == "black" | race == "white" &amp; sex == "female")
+tail(all_females)
+```
+
+```
+##      firstname    sex  race call
+## 4864      Jill female white    0
+## 4865   Lakisha female black    0
+## 4866    Tamika female black    0
+## 4867     Ebony female black    0
+## 4869   Latonya female black    0
+## 4870    Laurie female white    0
+```
+---
+
+# What you have learned so far
+
+
+```r
+minwage &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/minwage.csv")
+mean(minwage$fullBefore)
+```
+
+```
+## [1] 8.47486
+```
+
+```r
+median(minwage$fullBefore)
+```
+
+```
+## [1] 6
+```
+
+```r
+sd(minwage$fullBefore)
+```
+
+```
+## [1] 8.700071
+```
+
+```r
+quantile(minwage$fullBefore, probs = c(0, .25, .5, .75, .99)) # 25th, 75th, 99th
+```
+
+```
+##     0%    25%    50%    75%    99% 
+##  0.000  2.125  6.000 12.000 38.575
+```
+
+```r
+IQR(minwage$fullBefore)
+```
+
+```
+## [1] 9.875
+```
+---
+
+# What you have learned so far
+
+.font150[
+* Randomised control trials and observational studies. What are the pros and cons of each study?
+]
+--
+
+.font150[
+* Randomisation creates balance, have higher interal validity but lower external validity
+
+* Observational studies are prone to selection bias, have confounding variables, lower internal validity, higher external validity
+]
+--
+
+.font150[
+* Replication crisis: not all experiments are reliable. Why?
+]
+--
+
+.font150[
+* Low sample size, unrepresentative samples
+]
+---
+
+class: inverse, center, middle
+
+# Questions about chapters 1 and 2
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* In this exercise, we analyse the data from two experiments in which households were canvassed for support on gay marriage.
+
+* This exercise is based on: LaCour, M. J., and D. P. Green. 2014. “[When Contact Changes Minds: An Experiment on Transmission of Support for Gay Equality.](http://dx.doi.org/10.1126/science.1256151)” *Science* 346(6215): 1366–69.
+]
+
+---
+
+# Changing Minds on Gay Marriage
+
+.center[![:scale 100%](lacour.png)]
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* Canvassers were given a script leading to conversations that averaged about twenty minutes. A distinctive feature of this study is that gay and straight canvassers were randomly assigned to households and canvassers revealed whether they were straight or gay in the course of the conversation. The experiment aims to test the 'contact hypothesis,' which contends that out-group hostility (towards gays in this case) diminishes when people from different groups interact with one another.
+]
+
+
+---
+
+# Changing Minds on Gay Marriage
+
+.font110[
+*  -------------------- ----------------------------------------------------------
+ Name                 Description
+ -------------------- ----------------------------------------------------------
+ `study`              Study (1 or 2) 
+ 
+ `treatment`          Treatment assignment: `No contact`, 
+                      `Same-Sex Marriage Script by Gay Canvasser`,
+                      `Same-Sex Marriage Script by Straight Canvasser`,
+                      `Recycling Script by Gay Canvasser`, and
+                      `Recycling Script by Straight Canvasser`
+ 
+ `wave`               Survey wave (1-7). Note that Study 2 lacks wave 5 and 6.
+ 
+ `ssm`                Support for gay marriage (1 to 5).  
+                      Higher scores indicate more support.
+ -------------------------------------------------------------------------------
+]
+
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* Each observation of this data set is a respondent giving a response to a five-point survey item on same-sex marriage.  There are two different studies in this data set, involving interviews during 7 different time periods (i.e. 7 waves).  In both studies, the first wave consists of the interview before the canvassing treatment occurs. 
+
+* Use the [gay.csv](https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/gay.csv) data set.
+]
+
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* **Question 1**
+
+* Using the baseline interview wave before the treatment is administered (wave == 1), examine whether randomization was properly conducted. Base your analysis on the three groups of Study 1: 
+  - 'Same-Sex Marriage Script by Gay Canvasser'
+  - 'Same-Sex Marriage Script by Straight Canvasser'
+  - 'No Contact.'
+  
+* Briefly comment on the results.
+]
+
+---
+
+# Changing Minds on Gay Marriage
+
+
+```r
+gay &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/gay.csv")
+
+# Study 1
+w1_gay &lt;- subset(gay, wave == 1 &amp; study == 1 &amp; 
+                 treatment == "Same-Sex Marriage Script by Gay Canvasser")
+w1_straight &lt;- subset(gay, wave == 1 &amp; study == 1 &amp; 
+                 treatment == "Same-Sex Marriage Script by Straight Canvasser")
+w1_none &lt;- subset(gay, wave == 1 &amp; study == 1 &amp; treatment == "No Contact")
+
+mean(w1_gay$ssm)
+```
+
+```
+## [1] 3.025195
+```
+
+```r
+mean(w1_straight$ssm)
+```
+
+```
+## [1] 3.09971
+```
+
+```r
+mean(w1_none$ssm)
+```
+
+```
+## [1] 3.042764
+```
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* The results show that before treatment, all three treatment groups show similar levels of baseline support for gay marriage on average. Thus, the randomization appears to have been done correctly.
+]
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* **Question 2**
+
+* The second wave of survey was implemented two months after the canvassing.  Using Study 1, estimate the average treatment effects of gay and straight canvassers on support for same-sex marriage, separately (wave == 2).  Give a brief interpretation of the results.
+]
+
+---
+
+# Changing Minds on Gay Marriage
+
+
+```r
+# Study 1
+w2_gay &lt;- subset(gay, wave == 2 &amp; study == 1 &amp; 
+                 treatment == "Same-Sex Marriage Script by Gay Canvasser")
+w2_straight &lt;- subset(gay, wave == 2 &amp; study == 1 &amp; 
+                 treatment == "Same-Sex Marriage Script by Straight Canvasser")
+w2_none &lt;- subset(gay, wave == 2 &amp; study == 1 &amp; treatment == "No Contact")
+
+# ATE for gay canvassers
+mean(w2_gay$ssm) - mean(w2_none$ssm)
+```
+
+```
+## [1] 0.09987463
+```
+
+```r
+# ATE for straight canvassers
+mean(w2_straight$ssm) - mean(w2_none$ssm)
+```
+
+```
+## [1] 0.122248
+```
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* Approval of gay marriage increased on average by  0.1 for gay canvassers and by 0.122 for straight  canvassers.
+]
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* **Question 3**
+
+* Again using study 1, please check if the results persist in wave 7 of the study.  Give a brief interpretation of the results.
+]
+
+---
+
+# Changing Minds on Gay Marriage
+
+
+```r
+# Study 1
+w7_gay &lt;- subset(gay, wave == 7 &amp; study == 1 &amp; 
+                 treatment == "Same-Sex Marriage Script by Gay Canvasser")
+w7_straight &lt;- subset(gay, wave == 7 &amp; study == 1 &amp; 
+                 treatment == "Same-Sex Marriage Script by Straight Canvasser")
+w7_none &lt;- subset(gay, wave == 7 &amp; study == 1 &amp; treatment == "No Contact")
+
+# ATE for gay canvassers
+mean(w7_gay$ssm) - mean(w7_none$ssm)
+```
+
+```
+## [1] 0.05936835
+```
+
+```r
+# ATE for straight canvassers
+mean(w7_straight$ssm) - mean(w7_none$ssm)
+```
+
+```
+## [1] -0.04253721
+```
+---
+
+# Changing Minds on Gay Marriage
+
+.font150[
+* Approval of gay marriage increased on average by  0.059 for gay canvassers and by -0.043 for straight  canvassers. The results show that the effect for gay canvassers is persistent over time.
+]
+---
+
+class: inverse, center, middle
+
+# Is it?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Green and Lacour
+
+.center[![:scale 100%](lacour.png)]
+---
+
+# Changing Minds on Gay Marriage
+
+.center[![:scale 100%](google.png)]
+---
+
+# Busted!
+
+.center[![:scale 100%](busted.png)]
+---
+
+# RMarkdown
+
+.center[![:scale 100%](qqplot.png)]
+---
+
+# Retraction
+
+.center[![:scale 100%](science.png)]
+---
+
+# Homework
+
+.font150[
+* QSS 3.1-3.3
+
+* Start `MEASUREMENT01`
+
+* Read more about the Lacour case
+]
+
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
