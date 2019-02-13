@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 04 - Measurement</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week04b_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week04b_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week04b_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 04 - Measurement
+## Missing Observations and Data Visualisation
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 13th February 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Tables: `table()` and `prop.table()` 
+
+* Missing data in R: `is.na()` and `na.omit()`
+
+* Visualising data: `barplot()` and `hist()`
+]
+
+---
+
+# Tables in R
+
+.font130[
+* We have learned how to use the `table()` command in R
+
+* Example:
+]
+
+.code120[
+
+```r
+afghan &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/measurement/afghan.csv")
+names(afghan)
+```
+
+```
+##  [1] "province"            "district"            "village.id"         
+##  [4] "age"                 "educ.years"          "employed"           
+##  [7] "income"              "violent.exp.ISAF"    "violent.exp.taliban"
+## [10] "list.group"          "list.response"
+```
+
+```r
+table(ISAF = afghan$violent.exp.ISAF,
+      Taliban = afghan$violent.exp.taliban)
+```
+
+```
+##     Taliban
+## ISAF    0    1
+##    0 1330  354
+##    1  475  526
+```
+]
+---
+
+# Tables in R: prop.table()
+
+.font130[
+* We can also use `prop.table()` to see the proportion of cases in each cell
+
+* We have to include `table()` within parentheses too:
+]
+
+.code120[
+
+```r
+prop.table(table(ISAF = afghan$violent.exp.ISAF,
+                 Taliban = afghan$violent.exp.taliban))
+```
+
+```
+##     Taliban
+## ISAF         0         1
+##    0 0.4953445 0.1318436
+##    1 0.1769088 0.1959032
+```
+]
+---
+# Tables in R
+
+.font130[
+* Since we're already using nested functions, we can also use `round()` to round the values in each cell
+
+* Notice the `, 2` in the code below. It indicates that we will round the numbers up to two significant digits
+]
+
+.code120[
+
+```r
+round(prop.table(table(ISAF = afghan$violent.exp.ISAF,
+                       Taliban = afghan$violent.exp.taliban)), 2)
+```
+
+```
+##     Taliban
+## ISAF    0    1
+##    0 0.50 0.13
+##    1 0.18 0.20
+```
+]
+
+.font150[
+* The table is now much easier to read and it conveys the same information
+]
+---
+
+# Tables in R: prop.table()
+
+.code120[
+
+```r
+round(prop.table(table(ISAF = afghan$violent.exp.ISAF,
+                       Taliban = afghan$violent.exp.taliban)), 2)
+```
+
+```
+##     Taliban
+## ISAF    0    1
+##    0 0.50 0.13
+##    1 0.18 0.20
+```
+]
+
+.font150[
+* What's the percentage of people that have been victimised by the Taliban?
+
+* And by both the Taliban and ISAF?
+]
+---
+
+# Tables in R: prop.table()
+
+.font150[
+* Another example, now with 3 significant digits and multiplied by 100
+]
+
+.code120[
+
+```r
+round(prop.table(table(Employed = afghan$employed,
+                       Income = afghan$income)), 3) * 100
+```
+
+```
+##         Income
+## Employed 10,001-20,000 2,001-10,000 20,001-30,000 less than 2,000
+##        0           7.6         20.4           1.4            10.2
+##        1          16.1         34.2           2.2             7.4
+##         Income
+## Employed over 30,000
+##        0         0.2
+##        1         0.3
+```
+]
+---
+
+# Missing Data
+
+.font150[
+* Not all individuals answer to surveys
+
+* Two types of non-response:
+  - Individual non-response
+  - Item non-response
+  
+* Both tend to bias the results
+
+* So it is very important that we know where (and think about why) we see gaps in our data
+]
+---
+
+# Missing Data
+
+.font150[
+* R has a special code for missing data, `NA`
+
+* Since `NA` is only used for missing observations, we can count their numbers with `is.na()`
+]
+
+---
+
+# Missing Data
+
+.code120[
+
+```r
+head(afghan$income, n = 10)
+```
+
+```
+##  [1] 2,001-10,000  2,001-10,000  2,001-10,000  2,001-10,000  2,001-10,000 
+##  [6] &lt;NA&gt;          10,001-20,000 2,001-10,000  2,001-10,000  &lt;NA&gt;         
+## 5 Levels: 10,001-20,000 2,001-10,000 20,001-30,000 ... over 30,000
+```
+
+```r
+sum(is.na(afghan$income)) # number of missings
+```
+
+```
+## [1] 154
+```
+
+```r
+round(mean(is.na(afghan$income)), 2) # proportion of missings
+```
+
+```
+## [1] 0.06
+```
+]
+---
+
+# Missing Data
+
+.font150[
+* Some R function don't work if there's missing data
+
+* We add `na.rm = TRUE` to the code
+]
+
+.code120[
+
+```r
+# Victims of Taliban violence
+sum(is.na(afghan$violent.exp.taliban))
+```
+
+```
+## [1] 54
+```
+
+```r
+mean(afghan$violent.exp.taliban)
+```
+
+```
+## [1] NA
+```
+
+```r
+round(mean(afghan$violent.exp.taliban, na.rm = TRUE), 2)
+```
+
+```
+## [1] 0.33
+```
+]
+
+.font150[
+* Why do you think we have missing data here?
+]
+
+---
+# Missing Data
+
+.font150[
+* We can create a new variable or data set without missing observations
+
+* Use the `na.omit()` command
+]
+
+.code150[
+
+```r
+length(afghan$violent.exp.taliban)
+```
+
+```
+## [1] 2754
+```
+
+```r
+taliban.no.missing &lt;- na.omit(afghan$violent.exp.taliban)
+length(taliban.no.missing)
+```
+
+```
+## [1] 2700
+```
+
+```r
+length(afghan$violent.exp.taliban) - length(taliban.no.missing)
+```
+
+```
+## [1] 54
+```
+]
+
+---
+
+# Missing Data
+
+.font150[
+* You can also visualise the number of missing observations with `summary()`
+]
+
+.code150[
+
+```r
+summary(afghan$violent.exp.taliban)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##  0.0000  0.0000  0.0000  0.3289  1.0000  1.0000      54
+```
+
+```r
+sum(is.na(afghan$violent.exp.taliban))
+```
+
+```
+## [1] 54
+```
+]
+---
+class: inverse, center, middle
+
+# Data Visualisation
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Bar Plots
+
+.font120[
+* Bar plots are used to visualise .orange[factor/character variables]
+
+* Proportion of observations in each category as the height of each bar
+
+* Options:
+
+  - `main = "Title"`
+  - `xlab = "X label"`
+  - `ylab = "Y label"`
+  - `xlim = c(number, number)` limits for the x variable  
+  - `ylim = c(number, number)` limits for the y variable  
+  - `names.arg = c("Bars labels")` - in the same order of the variable
+  - `horiz = TRUE` for horizontal plots
+  - `cols = "colour name"` bar colour (see: )
+  
+* You can use `barplot()` with `prop.table()` instead of pie charts
+]
+---
+
+# Bar Plots
+
+
+```r
+employed.ptable &lt;- prop.table(table(afghan$employed))
+employed.ptable
+```
+
+```
+## 
+##         0         1 
+## 0.4172113 0.5827887
+```
+
+
+```r
+employed.ptable &lt;- prop.table(table(afghan$employed))
+barplot(employed.ptable,
+        names.arg = c("Unemployed", "Employed"), 
+        main = "Proportion of Employed Afghanis",
+        xlab = "Employment",
+        ylab = "Proportion",
+        ylim = c(0, 0.6))
+```
+---
+
+# Bar Plots
+
+.center[
+![](week04b_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+---
+
+# Bar Plots
+
+
+```r
+barplot(employed.ptable,
+        names.arg = c("Unemployed", "Employed"), # 0 and 1, respectively
+        main = "Proportion of Employed Afghanis",
+        ylab = "Employment", # change the axes
+        xlab = "Proportion", 
+        xlim = c(0, 0.7), # now it's xlim 
+        horiz = TRUE,     # because the plot is horizontal
+        col = "brown")
+```
+---
+
+# Bar Plots
+
+.center[
+![](week04b_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+]
+---
+
+# Histograms
+
+.font120[
+* We use histograms to display the distribution of a .orange[numeric variable]
+
+* They are similar to bar plots
+
+* Numeric variables are _binned_ into groups
+
+* Histograms shows the density of each bin
+
+* Important: Height is share of observations in bin divided by bin size
+
+* We care less about the density of each bin than about the distribution of the variable as a whole
+
+* Area of each bar is the share of observations that fall into that bin
+
+* Area of all bins sum to one
+]
+---
+
+# Histograms
+
+.font120[
+* Many options are similar to those of `barplot()`: `main`, `xlab`, `ylim`, `col`
+
+* We can also add `freq = FALSE` to show the density of each histograms
+
+* `breaks =` changes the size of the bins
+
+* Densities are useful to compare different distributions
+]
+---
+
+# Histograms
+
+
+```r
+# For colours, see: http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf
+hist(afghan$age,
+     main = "Histogram - Age",
+     xlab = "Age",
+     xlim = c(0, 0.04),
+     freq = FALSE,
+     col = "darkorange2") 
+```
+---
+
+# Histograms
+
+.center[
+![](week04b_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+---
+
+# Histograms
+
+.font150[
+* We can also add text and fitted lines to all R plots
+
+* Use `text()` and `abline()` after `hist()`
+]
+
+
+```r
+hist(afghan$age,
+     main = "Histogram - Age",
+     xlab = "Age",
+     ylim = c(0, 0.04),
+     freq = FALSE,
+     col = "darkorange2") 
+## add a text label at (x, y) = (3, 0.5)
+text(x = 35, y = 0.035, "median")
+## add a vertical line representing median
+abline(v = median(afghan$age))
+```
+---
+
+# Histograms
+
+.center[
+![](week04b_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+---
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Homework
+
+.font150[
+* `MEASUREMENT01`
+]
+
+---
+
+class: inverse, center, middle
+
+# See you on Friday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
