@@ -60,8 +60,6 @@ options(repos = r)
 * How to save R plots
 
 * Survey sampling methods 
-
-* Time permitting, list experiments
 ]
 
 ---
@@ -304,7 +302,7 @@ class: inverse, center, middle
 
 ---
 
-# Difficulty of Obtaining a Representative Sample
+# Difficulties
 
 .font130[
 * Problems of telephone survey
