@@ -311,7 +311,7 @@ class: inverse, center, middle
 # Final Project
 
 .font150[
-* Due: last two weeks of April
+* Due: 29th of April
 
 * 50% of final grade
 
