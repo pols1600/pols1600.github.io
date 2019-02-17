@@ -99,7 +99,7 @@ options(repos = r)
 
 # Bar Plots
 
-```{r}
+```{r, fig.align='center'}
 afghan <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/measurement/afghan.csv")
 barplot(prop.table(table(afghan$violent.exp.taliban)), main = "Taliban Victimisation Rate")
 ```
@@ -122,7 +122,7 @@ barplot(prop.table(table(afghan$violent.exp.taliban)), main = "Taliban Victimisa
 
 # Histograms
 
-```{r}
+```{r, fig.align='center'}
 hist(afghan$age, main = "Age Distribution")
 ```
 
@@ -142,7 +142,7 @@ hist(afghan$age, main = "Age Distribution")
 
 # Box Plots
 
-```{r}
+```{r, fig.align='center'}
 boxplot(afghan$age ~ afghan$province, main = "Age Distribution by province")
 ```
 

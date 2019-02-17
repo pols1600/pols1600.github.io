@@ -103,7 +103,7 @@ quantile(afghan$age, probs = c(0, .25, .5, .75, 1))
 
 # Box Plots
 
-```{r tidy=FALSE}
+```{r tidy=FALSE, fig.align='center'}
 boxplot(afghan$age, main = "Distribution of age", ylab = "Age", ylim = c(10, 80))
 ```
 ---
@@ -129,8 +129,7 @@ abline(v = median(afghan$age))
 
 # Histogram
 
-.center[
-```{r tidy=FALSE, echo=FALSE}
+```{r tidy=FALSE, echo=FALSE, fig.align='center'}
 hist(afghan$age,
      main = "Histogram - Age",
      xlab = "Age",
@@ -141,12 +140,11 @@ text(x = 35, y = 0.035, "median")
 ## add a vertical line representing median
 abline(v = median(afghan$age))
 ```
-]
 ---
 
 # Box Plots
 
-```{r tidy=FALSE}
+```{r tidy=FALSE, fig.align='center'}
 boxplot(afghan$age, main = "Age Distribution", ylab = "Age", ylim = c(10, 80))
 ```
 ---
@@ -166,7 +164,7 @@ tapply(afghan$age, afghan$province, median, na.rm = TRUE)
 
 # Box Plots
 
-```{r tidy=FALSE}
+```{r tidy=FALSE, fig.align='center'}
 boxplot(afghan$age ~ afghan$province,
         main = "Age Distribution by Province", ylab = "Age", col = "grey")
 ```
