@@ -1,1 +1,1 @@
-Suggestions are very welcome. Feel free to submit your pull requests!
+Suggestions are very welcome. Feel free to submit your push requests!
