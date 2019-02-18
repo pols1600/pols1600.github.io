@@ -1,0 +1,170 @@
+---
+title: "Week 05 - Measurement"
+subtitle: "Bivariate Relationships: Scatter Plots and Correlations <html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "22th February 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Final project
+
+* Scatter plots
+
+* Correlation
+
+* If time allows, a video
+]
+
+---
+
+# Scatter Plots
+
+.font150[
+* So far we have described one variable at a time
+
+* Scatter plots to show how two variables relate to each other
+
+* Convention: _x_ is the independent variable (what you change), _y_ is the dependent variable (what you want to explain)
+
+* `plot(x,y)` in R
+]
+---
+
+# Scatter Plots
+
+.font150[
+* `plot()` also has many options:
+
+	- `main`, `xlab`, `ylab`, `ylim`, `xlim`, `col` as we've seen before
+	- `pch =` different plotting symbols. See: <
+	
+* You can add another variable to the same graph with `points()`
+]
+---
+
+# Scatter Plots
+
+.center[![:scale 60%](pch.png)]
+---
+
+# Scatter Plots
+
+```{r, fig.align='center',fig.width=10, fig.height=5}
+set.seed(12345)                       # reproducibility
+x <- rnorm(n = 100, mean = 5, sd = 2) # random numbers with normal distribution
+y <- x + rnorm(100, 0, 1)             # no need to write function arguments
+plot(x, y, main = "Scatter Plot")     # plot
+```
+
+---
+
+# Scatter Plots
+
+```{r, fig.align='center',fig.width=10, fig.height=5}
+plot(x, y, main = "Scatter Plot", pch = 17, col = "blue")
+z <- runif(n = 10, min = 0, max = 10) # add another variable 
+{{points(z, pch = 16, col = "red")}}      # plot it
+```
+
+---
+
+# Time-Series Plots
+
+.font150[
+* `plot()` also plots time trends
+
+* Add `type = "l"` (line) to your code
+
+* Additional lines with `lines()`
+
+* Be sure to include _the same x variable in both_
+]
+---
+
+# Time-Series Plots
+
+```{r, fig.align='center',fig.width=10, fig.height=5}
+set.seed(1) 
+years <- seq(from = 1950, to = 2010, by = 10)
+k <- rnorm(n = 7, mean = 5, sd = 5)
+plot(years, k, main = "Time-Series Plot", type = "l", col = "brown")
+```
+
+---
+
+# Time-Series Plots
+
+```{r, fig.align='center',fig.width=10, fig.height=5}
+set.seed(3)                               # different random numbers
+z <- rnorm(n = 7, mean = 5, sd = 2.5)
+plot(years, k, main = "Time-Series Plot", type = "l", col = "brown")
+{{lines(years, z, type = "l", col = "blue")}} # add z to plot
+text(2009, 8, "K variable", col = "brown")
+text(2009, 4, "Z variable", col = "blue")
+```
+
+---
+
+# Hans Rosling - The Joy of Stats
+
+.center[
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jbkSRLYSojo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+---
+
+class: inverse, center, middle
+
+# See You Next Week!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 

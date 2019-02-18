@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 05 - Measurement</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week05c_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week05c_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week05c_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 05 - Measurement
+## Bivariate Relationships: Scatter Plots and Correlations
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 22th February 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Final project
+
+* Scatter plots
+
+* Correlation
+
+* If time allows, a video
+]
+
+---
+
+# Scatter Plots
+
+.font150[
+* So far we have described one variable at a time
+
+* Scatter plots to show how two variables relate to each other
+
+* Convention: _x_ is the independent variable (what you change), _y_ is the dependent variable (what you want to explain)
+
+* `plot(x,y)` in R
+]
+---
+
+# Scatter Plots
+
+.font150[
+* `plot()` also has many options:
+
+	- `main`, `xlab`, `ylab`, `ylim`, `xlim`, `col` as we've seen before
+	- `pch =` different plotting symbols. See: &lt;
+	
+* You can add another variable to the same graph with `points()`
+]
+---
+
+# Scatter Plots
+
+.center[![:scale 60%](pch.png)]
+---
+
+# Scatter Plots
+
+
+```r
+set.seed(12345)                       # reproducibility
+x &lt;- rnorm(n = 100, mean = 5, sd = 2) # random numbers with normal distribution
+y &lt;- x + rnorm(100, 0, 1)             # no need to write function arguments
+plot(x, y, main = "Scatter Plot")     # plot
+```
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Scatter Plots
+
+
+```r
+plot(x, y, main = "Scatter Plot", pch = 17, col = "blue")
+z &lt;- runif(n = 10, min = 0, max = 10) # add another variable 
+*points(z, pch = 16, col = "red")      # plot it
+```
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Time-Series Plots
+
+.font150[
+* `plot()` also plots time trends
+
+* Add `type = "l"` (line) to your code
+
+* Additional lines with `lines()`
+
+* Be sure to include _the same x variable in both_
+]
+---
+
+# Time-Series Plots
+
+
+```r
+set.seed(1) 
+years &lt;- seq(from = 1950, to = 2010, by = 10)
+k &lt;- rnorm(n = 7, mean = 5, sd = 5)
+plot(years, k, main = "Time-Series Plot", type = "l", col = "brown")
+```
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Time-Series Plots
+
+
+```r
+set.seed(3)                               # different random numbers
+z &lt;- rnorm(n = 7, mean = 5, sd = 2.5)
+plot(years, k, main = "Time-Series Plot", type = "l", col = "brown")
+*lines(years, z, type = "l", col = "blue") # add z to plot
+text(2009, 8, "K variable", col = "brown")
+text(2009, 4, "Z variable", col = "blue")
+```
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Hans Rosling - The Joy of Stats
+
+.center[
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/jbkSRLYSojo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+]
+
+---
+
+class: inverse, center, middle
+
+# See You Next Week!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
