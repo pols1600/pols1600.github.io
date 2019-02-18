@@ -56,11 +56,9 @@ class: center, middle, inverse, title-slide
 # Today's Agenda
 
 .font150[
-* Final project
-
 * Scatter plots
 
-* Correlation
+* Correlations
 
 * If time allows, a video
 ]
@@ -70,11 +68,11 @@ class: center, middle, inverse, title-slide
 # Scatter Plots
 
 .font150[
-* So far we have described one variable at a time
-
-* Scatter plots to show how two variables relate to each other
+* Scatter plots show how two variables are related to each other
 
 * Convention: _x_ is the independent variable (what you change), _y_ is the dependent variable (what you want to explain)
+
+* Cartesian coordinates (x, y) of the data points
 
 * `plot(x,y)` in R
 ]
@@ -86,7 +84,7 @@ class: center, middle, inverse, title-slide
 * `plot()` also has many options:
 
 	- `main`, `xlab`, `ylab`, `ylim`, `xlim`, `col` as we've seen before
-	- `pch =` different plotting symbols. See: &lt;
+	- `pch =` different plotting symbols. 
 	
 * You can add another variable to the same graph with `points()`
 ]
@@ -104,10 +102,33 @@ class: center, middle, inverse, title-slide
 set.seed(12345)                       # reproducibility
 x &lt;- rnorm(n = 100, mean = 5, sd = 2) # random numbers with normal distribution
 y &lt;- x + rnorm(100, 0, 1)             # no need to write function arguments
-plot(x, y, main = "Scatter Plot")     # plot
+df &lt;- data.frame(x,y)                 # just to see them side-by-side
+head(df, 10)                          # first 10 observations
 ```
 
-&lt;img src="week05c_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+```
+##           x         y
+## 1  6.171058 6.3949830
+## 2  6.418932 5.2627087
+## 3  4.781393 5.2038119
+## 4  4.093006 2.7682504
+## 5  6.211775 6.3528592
+## 6  1.364088 0.8280401
+## 7  6.260197 5.9485910
+## 8  4.447632 6.0037414
+## 9  4.431681 3.9836472
+## 10 3.161356 3.4824795
+```
+---
+
+# Scatter Plots
+
+
+```r
+plot(df$x, df$y, main = "Scatter Plot", pch = 16, col = "blue")     # plot
+```
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -115,12 +136,35 @@ plot(x, y, main = "Scatter Plot")     # plot
 
 
 ```r
-plot(x, y, main = "Scatter Plot", pch = 17, col = "blue")
 z &lt;- runif(n = 10, min = 0, max = 10) # add another variable 
-*points(z, pch = 16, col = "red")      # plot it
+df &lt;- data.frame(x,y,z)
+head(df, 10)
 ```
 
-&lt;img src="week05c_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+```
+##           x         y         z
+## 1  6.171058 6.3949830 0.7548045
+## 2  6.418932 5.2627087 4.7438424
+## 3  4.781393 5.2038119 2.6458955
+## 4  4.093006 2.7682504 2.3074607
+## 5  6.211775 6.3528592 5.9619939
+## 6  1.364088 0.8280401 1.5892558
+## 7  6.260197 5.9485910 8.5505484
+## 8  4.447632 6.0037414 2.3745380
+## 9  4.431681 3.9836472 7.9711170
+## 10 3.161356 3.4824795 0.7848559
+```
+---
+
+# Scatter Plots
+
+
+```r
+plot(df$x, df$y, main = "Scatter Plot", pch = 16, col = "blue")
+*points(df$z, pch = 17, col = "red")      # add z to the plot
+```
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -147,7 +191,7 @@ k &lt;- rnorm(n = 7, mean = 5, sd = 5)
 plot(years, k, main = "Time-Series Plot", type = "l", col = "brown")
 ```
 
-&lt;img src="week05c_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="week05c_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -163,14 +207,196 @@ text(2009, 8, "K variable", col = "brown")
 text(2009, 4, "Z variable", col = "blue")
 ```
 
-&lt;img src="week05c_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="week05c_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 
+---
+
+# The Health and Wealth of Nations
+
+
+```r
+library(ggplot2)
+library(gganimate)
+library(gapminder)
+head(gapminder)
+```
+
+```
+## # A tibble: 6 x 6
+##   country     continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8  8425333      779.
+## 2 Afghanistan Asia       1957    30.3  9240934      821.
+## 3 Afghanistan Asia       1962    32.0 10267083      853.
+## 4 Afghanistan Asia       1967    34.0 11537966      836.
+## 5 Afghanistan Asia       1972    36.1 13079460      740.
+## 6 Afghanistan Asia       1977    38.4 14880372      786.
+```
+---
+
+# The Health and Wealth of Nations
+
+
+```r
+# Plot
+ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = continent)) +
+  geom_point(alpha = 0.7, show.legend = TRUE) +
+  scale_colour_manual(values = continent_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}', x = 'GDP per capita', y = 'life expectancy') +
+  transition_time(year) +
+  ease_aes('linear', interval = 0.0005)
+```
+---
+
+# The Health and Wealth of Nations
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-9-1.gif" style="display: block; margin: auto;" /&gt;
+---
+
+# The Health and Wealth of Nations
+
+
+```r
+# Plot by Continent
+ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
+  geom_point(alpha = 0.7, show.legend = FALSE) +
+  scale_colour_manual(values = country_colors) +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+*facet_wrap(~continent) +
+  labs(title = 'Year: {frame_time}', x = 'GDP per Capita', y = 'Life Expectancy') +
+  transition_time(year) +
+  ease_aes('linear', interval = 0.0005)
+```
+---
+
+# The Health and Wealth of Nations
+
+&lt;img src="week05c_files/figure-html/unnamed-chunk-11-1.gif" style="display: block; margin: auto;" /&gt;
+---
+
+class: inverse, center, middle
+
+# Correlation
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Correlation
+
+.font150[
+* Most widely-used statistics to summarise bivariate relationships
+
+* Many types of correlation coefficients, most common is _Pearson's r_
+
+* It ranges from -1 (strongest negative correlation) to +1 (strongest positive correlation)
+
+* 0 denotes no correlation
+
+* Average product of .orange[z-scores] for x and y
+
+* Remember: .orange[correlation is not causation]
+]
+---
+
+# z-score
+
+.font150[
+* z-score is the number of standard deviations an observation is above or below the mean
+
+* z-score of an observation _i_ of variable _x_ is defined as _the value of i minus the mean of x over the standard deviation of x_. Formally:
+
+* `\(z_{x_i} = \frac{x_i - \bar{x}}{S_x}\)`
+
+* For instance, if a data point has a z-score of 2, it is 2 standard deviations from the mean
+
+* As z-scores .orange[standardise] the variables, .orange[the original unit of measure doesn't matter]
+]
+---
+
+# Correlation
+
+.font150[
+* Correlation coefficient is .orange[the average products of the z-score of _x_ and the z-score of _y_]
+
+* Formally:
+
+* `\(r_{x,y} = \frac{1}{n} \sum^{n-1}_{i=1} \big(\frac{x_i - \bar{x}}{S_x} \times \frac{y_i - \bar{y}}{S_y}\big)\)`
+
+* In R: `cor(x,y)`
+]
+---
+
+# Correlation
+
+.font150[
+* How do we know if a correlation is strong or not?
+
+* _Theory_
+
+* In social sciences, usually we consider
+  - lower than 0.3 = weak
+  - between 0.3 and 0.5 = moderate
+  - higher than 0.5 = strong
+  - (but don't quote me on that!)
+]
+---
+
+# Correlation
+
+
+```r
+data(gapminder)
+names(gapminder)
+```
+
+```
+## [1] "country"   "continent" "year"      "lifeExp"   "pop"       "gdpPercap"
+```
+
+```r
+cor(gapminder$gdpPercap, gapminder$lifeExp)
+```
+
+```
+## [1] 0.5837062
+```
+
+```r
+cor(gapminder$pop, gapminder$lifeExp)
+```
+
+```
+## [1] 0.06495537
+```
+
+```r
+cor(gapminder$pop, gapminder$gdpPercap)
+```
+
+```
+## [1] -0.02559958
+```
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
 ---
 
 # Hans Rosling - The Joy of Stats
 
 .center[
 &lt;iframe width="560" height="315" src="https://www.youtube.com/embed/jbkSRLYSojo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+]
+
+.font150[
+Hans Rosling's 200 Countries, 200 Years, 4 Minutes - The Joy of Stats - BBC Four. &lt;https://youtu.be/jbkSRLYSojo&gt;
 ]
 
 ---
