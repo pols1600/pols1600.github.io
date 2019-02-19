@@ -253,12 +253,6 @@ class: inverse, center, middle
 
 # The 1936 Literary Digest Poll
 
-.center[![:scale 90%](truman.jpg)]
-
----
-
-# The 1936 Literary Digest Poll
-
 .font150[
 * Why did the Literary Digest get the numbers so wrong?
 ]
