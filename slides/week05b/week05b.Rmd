@@ -73,7 +73,7 @@ options(repos = r)
 
 * Standard deviation: average distance from points to the mean
 	
-	- $SD = (\sqrt{\frac{1}{n} \sum^{N}_{i = 1} (x_{i} - \bar{x})^{2}})$  
+	- $SD = \sqrt{\frac{1}{n} \sum^{n}_{i = 1} (x_{i} - \bar{x})^{2}}$  
 
 * Outliers: 1.5x IQR
 
