@@ -116,7 +116,7 @@ barplot(prop.table(table(afghan$violent.exp.taliban)), main = "Taliban Victimisa
 * Histograms
 
 	- Describe numeric variables
-	- Shows the shape of the variable distribution
+	- Show the shape of the variable distribution
 	- Densities are .orange[not] percentiles
 	- Densities are the proportion of _each bin_
 	- `hist(dataset$variable, freq = FALSE)`
@@ -128,7 +128,7 @@ barplot(prop.table(table(afghan$violent.exp.taliban)), main = "Taliban Victimisa
 
 
 ```r
-hist(afghan$age, main = "Age Distribution")
+hist(afghan$age, main = "Age Distribution", freq = FALSE)
 ```
 
 &lt;img src="week05b_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
@@ -194,7 +194,7 @@ boxplot(afghan$age ~ afghan$province, main = "Age Distribution by province")
 
 * Examples: support for drug use, abortion, etc
 
-* Underestimation of true proportion
+* Under- or overestimation of true proportion
 ]
 
 ---
@@ -228,11 +228,11 @@ boxplot(afghan$age ~ afghan$province, main = "Age Distribution by province")
 
 Now  I’m  going  to  read  you  three  things  that  sometimes  make  people  angryor upset. After I read all three, just tell me HOW MANY of them upset you. (I don’t want to know which ones, just how many.)
 
-1) “the federal government increasing the tax on gasoline;”
+1) "the federal government increasing the tax on gasoline;"
 
-2) “professional athletes getting million-dollar-plus salaries;”
+2) "professional athletes getting million-dollar-plus salaries;"
 
-3) “large corporations polluting the environment.”
+3) "large corporations polluting the environment."
 
 How many, if any, of these things upset you?
 ]
@@ -245,13 +245,13 @@ How many, if any, of these things upset you?
 
 Now  I’m  going  to  read  you  three  things  that  sometimes  make  people  angryor upset. After I read all three, just tell me HOW MANY of them upset you. (I don’t want to know which ones, just how many.)
 
-1) “the federal government increasing the tax on gasoline;”
+1) "the federal government increasing the tax on gasoline;"
 
-2) “professional athletes getting million-dollar-plus salaries;”
+2) "professional athletes getting million-dollar-plus salaries;"
 
-3) “large corporations polluting the environment.”
+3) "large corporations polluting the environment."
 
-.orange[4) “a black family moving next door to you.”]
+.orange[4) "a black family moving next door to you."]
 
 How many, if any, of these things upset you?
 ]
