@@ -59,8 +59,6 @@ set.seed(12345)
 * Scatter plots
 
 * Correlations
-
-* If time allows, a video
 ]
 
 ---
@@ -239,6 +237,11 @@ ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
   transition_time(year) +
   ease_aes('linear', interval = 0.0005)
 ```
+---
+
+# Perceived Income Distribution in Austria
+
+.center[![:scale 150%](austria.gif)]
 ---
 
 class: inverse, center, middle
