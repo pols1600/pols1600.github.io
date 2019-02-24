@@ -1,0 +1,341 @@
+---
+title: "Week 06 - Measurement"
+subtitle: "Correlations, QQ Plots and Matrices <html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "25th February 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Final Project, Assignments
+
+* Recap: Z-Score and Correlations
+
+* Logarithmic Transformations
+
+* Quantile-Quantile (QQ) Plots
+
+* Basic Matrix Operations
+]
+
+---
+
+# Assignments
+
+.font150[
+* 3-4 groups missing
+
+* Assignment 3 is online - due next Monday
+
+* Research topics due next week
+]
+
+---
+
+# Recap
+
+.font150[
+* .orange[Z-Score:] number of standard deviations an observation is above or below the mean
+
+* $z_{x_i} = \frac{x_i - \bar{x}}{S_x}$
+
+* .orange[Correlations:] the average products of the z-score of _x_ and the z-score of _y_
+
+* $r_{x,y} = \frac{1}{n-1} \sum^{n}_{i=1} \big(\frac{x_i - \bar{x}}{S_x} \times \frac{y_i - \bar{y}}{S_y}\big)$
+
+* From -1 to +1, regardless of the original scale
+
+* Correlations only measure _linear_ relationships
+]
+---
+
+# The Health and Wealth of Nations
+
+```{r}
+library(gapminder)
+names(gapminder)
+cor(gapminder$gdpPercap, gapminder$lifeExp)
+cor(gapminder$pop, gapminder$lifeExp)
+
+df <- subset(gapminder, select = c("lifeExp", "pop", "gdpPercap")) # variables
+cor(df, use = "pairwise.complete.obs") # pairwise correlations
+```
+
+---
+
+# The Health and Wealth of Nations
+
+```{r, tidy=FALSE, cache=TRUE, fig.align='center', warning=FALSE, message=FALSE, fig.width=11, fig.height=5}
+plot(gapminder$gdpPercap, gapminder$lifeExp,
+     main = "GDP per capita and life expectancy",
+     ylab = "Life expectancy",
+     xlab = "GDP per capita",
+     pch = 16, col = "grey")
+```
+---
+
+# Log Transformations
+
+.font150[
+* When data are skewed, we often .orange[log transform] the variable
+
+* Logarithm of a positive number _x_ is the exponent of a base _b_
+
+* $y = log_{b}x \Longleftrightarrow x = b^y$
+
+* $4 = log_{3}81 \Longleftrightarrow 81 = 3ˆ{4}$ 
+
+```{r}
+log(81, base = 3)
+```
+]
+---
+
+# Système International d'Unités (SI)
+
+.center[
+| Prefix |   Decimal  | Base 10 | 
+|:------:|:----------:| :------:|
+| giga   | 1000000000 | 10^9    | 
+| mega   | 1000000    | 10^6    |
+| kilo   | 1000       | 10^3    |
+| -      | 1          | 10^0    | 
+| centi  | 0.01       | 10^-2   |
+| mili   | 0.001      | 10^-3   |
+]
+
+.font120[
+* .orange[Logarithmic scales represent an equal amount of multiplicative change]
+
+* One log increase represents a 10x increase in the original unit
+
+* From one kilobyte (kB) to one megabyte (MB) = 1000x = just 3 in base 10
+
+* _Pulls small values apart and bring large values together_
+]
+---
+
+# Euler's Number
+
+.font150[
+* Natural logarithm: $e$ (Euler's number) as base value
+
+* $e = 2.7182 \dots$
+
+* $y = log_{e}x \Longleftrightarrow x = e^y$
+
+```{r}
+log(81) # e is the base argument default
+```
+]
+---
+
+# Log Transformation
+
+```{r, fig.align='center'}
+hist(gapminder$gdpPercap, main = "GDP per capita", freq = FALSE)
+```
+---
+
+# Log Transformation
+
+```{r, fig.align='center'}
+hist(log(gapminder$gdpPercap), main = "Log GDP per capita", freq = FALSE)
+```
+
+---
+
+# The Health and Wealth of Nations
+
+```{r, tidy=FALSE, cache=TRUE, fig.align='center', warning=FALSE, message=FALSE, fig.width=11, fig.height=5}
+plot(gapminder$gdpPercap, gapminder$lifeExp,
+     main = "GDP per capita and life expectancy",
+     ylab = "life expectancy",
+     xlab = "GDP per capita",
+     pch = 16, col = "grey")
+```
+---
+
+# The Health and Wealth of Nations
+
+```{r, tidy=FALSE, cache=TRUE, fig.align='center', warning=FALSE, message=FALSE, fig.width=11, fig.height=4.5}
+cor(log(gapminder$gdpPercap), gapminder$lifeExp)
+plot(log(gapminder$gdpPercap), gapminder$lifeExp,
+     main = "Log GDP per capita and life expectancy",
+     ylab = "life expectancy",xlab = "Log GDP per capita",
+     pch = 16, col = "grey")
+```
+---
+
+# Log Transformations
+
+.font150[
+* Often used with population or GDP per capita
+
+* Reduce positive skew
+
+* Make distributions more symmetrical
+
+* Useful because correlations are only valid for linear relationships
+
+* .orange[Always plot your data before the analysis]
+]
+---
+
+# Quantile-Quantile Plots
+
+.font150[
+* Specific type of correlation
+
+* Compare whole distributions
+
+* Each point represents same quantile
+
+* If 2 distributions are identical, the graph will be a 45-degree line
+
+* `qqplot()`
+]
+---
+
+# Quantile-Quantile Plots
+
+```{r, tidy=FALSE, cache=TRUE, fig.align='center', warning=FALSE, message=FALSE, fig.height=6}
+qqplot(gapminder$gdpPercap, gapminder$lifeExp, main = "QQ plot",
+       xlab = "GDP per capita", ylab = "Life expectancy")
+```
+---
+
+# Quantile-Quantile Plots
+
+```{r, tidy=FALSE, cache=TRUE, fig.align='center', warning=FALSE, message=FALSE, fig.height=6}
+qqplot(log(gapminder$gdpPercap), gapminder$lifeExp, main = "QQ plot",
+       xlab = "Log GDP per capita", ylab = "Life expectancy")
+```
+---
+
+# Always Plot Your Data
+
+.center[![:scale 100%](dino.gif)]
+
+Source: [Autodesk Research](https://www.autodeskresearch.com/publications/samestats)
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+---
+
+# Matrices
+
+.font150[
+* R can perform many operations with matrices
+
+* Data frames have many types of variables (numeric, factor, integer), matrices only take numeric entries
+
+* Select variables: 
+  - Data frame: `dataset$variable`
+  - Matrices: `matrix[row number,column number]`
+]
+---
+
+# Matrices
+
+```{r}
+ma1 <- matrix(1:10, nrow = 2, ncol = 5, byrow = TRUE)
+ma1
+ma1 * 3
+t(ma1)    # transpose
+```
+
+---
+
+# Matrices
+
+```{r}
+ma1
+diag(ma1)            # diagonal
+apply(ma1, 1, mean)  # 1 = row, 2 = column
+apply(ma1, 1, sum)   # sum of matrix rows
+apply(ma1, 2, sd)    # standard deviation of columns
+```
+
+---
+# Matrices
+
+```{r}
+ma2 <- matrix(21:30, nrow = 2, ncol = 5, byrow = FALSE)
+ma2
+
+ma1 + ma2  
+ma3 <- rbind(ma1, ma2) # concatenate rows, use cbind to aggregate columns
+ma3
+```
+---
+
+# Homework
+
+.font150[
+* Watch this video about Euler's number: <https://youtu.be/AuA2EAgAegE>
+
+* Start working on assignment #3
+
+* Think of possible topics you would like to know more about
+]
+
+---
+class: inverse, center, middle
+
+# See You on Wednesday!  
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
