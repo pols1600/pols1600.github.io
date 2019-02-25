@@ -1,0 +1,64 @@
+---
+title: "Access to Information and Attitudes towards Intimate Partner Violence"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+In this exercise, we examine cross-national differences in attitudes towards domestic violence and access to information. We explore the hypothesis that there is an association at an aggregate level between the extent to which individuals in a country have access to knowledge and new information, both through formal schooling and through the mass media, and their likelihood of condemning acts of intimate partner violence.  This exercise is in part based on: 
+
+Pierotti, Rachel. (2013). "[Increasing Rejection of Intimate Partner Violence: Evidence of Global Cultural Diffusion](http://dx.doi.org/10.1177/0003122413480363)." *American Sociological Review*, 78: 240-265. 
+
+We use data from the Demographic and Health Surveys, which are a set of over 300 nationally, regionally and residentially representative surveys that have been fielded in developing countries around the world, beginning in 1992. The surveys employ a stratified two-stage cluster design. In the first stage enumeration areas (EA) are drawn from Census files. In the second stage within each EA a sample of households is drawn from an updated list of households. In addition, the surveys have identical questionnaires and trainings for interviewers, enabling the data from one country to be directly compared with data collected in other countries. It is important to note that different groups of countries are surveyed every year. 
+
+In the study, the author used these data to show that "women with greater access to global cultural scripts through urban living, secondary education, or access to media were more likely to reject intimate partner violence." The data set is in the csv file [dhs_ipv.csv](https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/measurement/dhs_ipv.csv). The names and descriptions of variables are:
+
+-------------------------------------------------------------------------------
+Name             Description
+---------------- ---------------------------------------------------------
+`beat_goesout`   Percentage of women in each country that think a husband is justified to beat his wife if she goes                     out without telling him. 
+
+`beat_burnfood`  Percentage of women in each country that think a husband is justified to beat his wife if she burns                    his food.  
+
+`no_media`       Percentage of women in each country that rarely encounter a newspaper, radio, or television. 
+
+`sec_school`     Percentage of women in each country with secondary or higher education.
+
+`year`           Year of the survey
+
+`region`         Region of the world
+
+`country`        Country
+-------------------------------------------------------------------------------
+
+
+Note that there are two indicators of *attitudes towards domestic violence*: `beat_goesout` and `beat_burnfood`. There are also two indicators of *access to information*: `sec_school` and `no_media`. 
+
+## Question 1
+
+Let's begin by examining the association between attitudes towards intimate partner violence and the two exposure to information variables in our data. Load the `dhs_ipv.csv` data set. Use scatterplots to examine the bivariate relationship between `beat_goesout` and `no_media` as well as between `beat_goesout` and `sec_school`. Repeat these bivariate graphs between `beat_burnfood` and  `no_media`, as well as `beat_burnfood` and `sec_school`. Be sure to add informative axis labels. Briefly interpret these graphs in light of the hypothesis of the study.
+
+## Answer 1
+
+```{r}
+
+```
+
+## Question 2
+
+Compute the correlation coefficient between `beat_burnfood` and media exposure, as well as between `beat_burnfood` and education. Remember to use complete observations. What do these measures tell us about the association between education and media exposure with attitudes towards intimate partner violence?
+
+## Answer 2
+
+```{r}
+```
+
+## Question 3
+
+We proceed to explore the national-level differences in attitudes towards domestic violence. First, use boxplots to compare the variation in the percentege of `beat_burnfood` between different regions of the world using `region`. What are the main differences across regions in terms of the median and dispersion of the distribution?  Second, using boxplots examine the distribution of `no_media` and `sec_school` by region of the world. Comment on the main differences of the distribution of these variables across regions. 
+
+## Answer 3
+
+```{r}
+
+```

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 06 - Prediction</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week06b_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week06b_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week06b_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 06 - Prediction
+## In Class Exercise: Domestic Violence
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 25th February 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Information and Attitudes towards Intimate Partner Violence 
+
+.font130[
+In this exercise, we examine cross-national differences in attitudes towards domestic violence and access to information. We explore the hypothesis that there is an association at an aggregate level between the extent to which individuals in a country have access to knowledge and new information, both through formal schooling and through the mass media, and their likelihood of condemning acts of intimate partner violence.  This exercise is in part based on: 
+
+Pierotti, Rachel. (2013). "[Increasing Rejection of Intimate Partner Violence: Evidence of Global Cultural Diffusion](http://dx.doi.org/10.1177/0003122413480363)." *American Sociological Review*, 78: 240-265. 
+]
+---
+
+# Information and Attitudes towards Intimate Partner Violence 
+
+.font130[
+We use data from the Demographic and Health Surveys, which are a set of over 300 nationally, regionally and residentially representative surveys that have been fielded in developing countries around the world, beginning in 1992. The surveys have identical questionnaires and trainings for interviewers, enabling the data from one country to be directly compared with data collected in other countries. It is important to note that different groups of countries are surveyed every year.
+]
+---
+
+# Information and Attitudes towards Intimate Partner Violence 
+
+.font150[
+In the study, the author used these data to show that "women with greater access to global cultural scripts through urban living, secondary education, or access to media were more likely to reject intimate partner violence." The data set is in the csv file [dhs_ipv.csv](https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/measurement/dhs_ipv.csv). The names and descriptions of variables are:
+]
+---
+
+# Information and Attitudes towards Intimate Partner Violence 
+
+|Name            | Description
+|:---------------|:-----------------------|
+|`beat_goesout`  |Percentage of women in each country that think a husband is justified to beat his wife if she goes out without telling him.| 
+|`beat_burnfood` | Percentage of women in each country that think a husband is justified to beat his wife if she burns his food. | 
+|`no_media`      | Percentage of women in each country that rarely encounter a newspaper, radio, or television.| 
+|`sec_school`    | Percentage of women in each country with secondary or higher education.|
+|`year`          | Year of the survey|
+|`region`        | Region of the world|
+|`country`       | Country|
+---
+# Information and Attitudes towards Intimate Partner Violence 
+
+.font150[
+Note that there are two indicators of *attitudes towards domestic violence*: `beat_goesout` and `beat_burnfood`. There are also two indicators of *access to information*: `sec_school` and `no_media`. 
+]
+---
+
+# Question 1
+
+.font130[
+Let's begin by examining the association between attitudes towards intimate partner violence and the two exposure to information variables in our data. Load the `dhs_ipv.csv` data set. Use scatterplots to examine the bivariate relationship between `beat_goesout` and `no_media` as well as between `beat_goesout` and `sec_school`. Repeat these bivariate graphs between `beat_burnfood` and  `no_media`, as well as `beat_burnfood` and `sec_school`. Be sure to add informative axis labels. Briefly interpret these graphs in light of the hypothesis of the study.
+]
+---
+
+# Question 2
+
+.font130[
+Compute the correlation coefficient between `beat_burnfood` and media exposure, as well as between `beat_burnfood` and education. Remember to use complete observations. What do these measures tell us about the association between education and media exposure with attitudes towards intimate partner violence?
+]
+---
+
+# Question 3
+
+.font130[
+We proceed to explore the national-level differences in attitudes towards domestic violence. First, use boxplots to compare the variation in the percentege of `beat_burnfood` between different regions of the world using `region`. What are the main differences across regions in terms of the median and dispersion of the distribution?  Second, using boxplots examine the distribution of `no_media` and `sec_school` by region of the world. Comment on the main differences of the distribution of these variables across regions. 
+]
+
+---
+class: inverse, center, middle
+
+# See You on Friday!  
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
