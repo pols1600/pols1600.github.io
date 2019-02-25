@@ -1,8 +1,8 @@
 ---
 title: "Week 06 - Prediction"
-subtitle: "In Class Exercise: Domestic Violence <html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+subtitle: "In Class Exercise: Access to Information and Attitudes towards Intimate Partner Violence<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
-date: "25th February 2019"
+date: "27th February 2019"
 output: 
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
@@ -53,7 +53,7 @@ set.seed(12345)
 }
 </style>
 
-# Information and Attitudes towards Intimate Partner Violence 
+# Partner Violence 
 
 .font130[
 In this exercise, we examine cross-national differences in attitudes towards domestic violence and access to information. We explore the hypothesis that there is an association at an aggregate level between the extent to which individuals in a country have access to knowledge and new information, both through formal schooling and through the mass media, and their likelihood of condemning acts of intimate partner violence.  This exercise is in part based on: 
@@ -62,21 +62,21 @@ Pierotti, Rachel. (2013). "[Increasing Rejection of Intimate Partner Violence: E
 ]
 ---
 
-# Information and Attitudes towards Intimate Partner Violence 
+# Partner Violence 
 
 .font130[
 We use data from the Demographic and Health Surveys, which are a set of over 300 nationally, regionally and residentially representative surveys that have been fielded in developing countries around the world, beginning in 1992. The surveys have identical questionnaires and trainings for interviewers, enabling the data from one country to be directly compared with data collected in other countries. It is important to note that different groups of countries are surveyed every year.
 ]
 ---
 
-# Information and Attitudes towards Intimate Partner Violence 
+# Partner Violence 
 
 .font150[
 In the study, the author used these data to show that "women with greater access to global cultural scripts through urban living, secondary education, or access to media were more likely to reject intimate partner violence." The data set is in the csv file [dhs_ipv.csv](https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/measurement/dhs_ipv.csv). The names and descriptions of variables are:
 ]
 ---
 
-# Information and Attitudes towards Intimate Partner Violence 
+# Partner Violence 
 
 |Name            | Description
 |:---------------|:-----------------------|
