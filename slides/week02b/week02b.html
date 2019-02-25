@@ -199,7 +199,7 @@ class: inverse, center, middle
 .font150[
 * The causal effect of the treatment _T_ is the difference in _Y_ with and without _T_
   
-* _Y(T = 1) - Y(T = 0)_ or `\(Y_{1} - Y_{0}\)`
+* `\(Y(T = 1) - Y(T = 0)\)` or `\(Y_{1} - Y_{0}\)`
 ]
 
 .center[![:scale 100%](causal01.png)]
@@ -345,7 +345,7 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

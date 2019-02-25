@@ -6,6 +6,7 @@ date: "30th January 2019"
 output: 
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature: 
       beforeInit: "macros.js"
       highlightStyle: github
@@ -197,7 +198,7 @@ class: inverse, center, middle
 .font150[
 * The causal effect of the treatment _T_ is the difference in _Y_ with and without _T_
   
-* _Y(T = 1) - Y(T = 0)_ or $Y_{1} - Y_{0}$
+* $Y(T = 1) - Y(T = 0)$ or $Y_{1} - Y_{0}$
 ]
 
 .center[![:scale 100%](causal01.png)]
