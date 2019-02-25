@@ -286,6 +286,8 @@ class: inverse, center, middle
 * Select variables: 
   - Data frame: `dataset$variable`
   - Matrices: `matrix[row number,column number]`
+
+* `matrix(numbers, nrow = x, ncol = y, byrow = TRUE/FALSE)`
 ]
 ---
 
@@ -323,6 +325,19 @@ ma3
 ```
 ---
 
+# What You Have Learned
+
+.font150[
+* Survey sampling: random and quota sampling
+
+* Biases: individual non-response, item non-response, social desirability
+
+* Plots: histograms, bar plots, box plots, scatter plots, time series
+
+* Z-Scores, correlations, quantile-quantile plots, list experiments
+]
+---
+
 # Homework
 
 .font150[
@@ -332,8 +347,8 @@ ma3
 
 * Think of possible topics you would like to know more about
 ]
-
 ---
+
 class: inverse, center, middle
 
 # See You on Wednesday!  
