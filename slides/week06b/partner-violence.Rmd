@@ -2,7 +2,6 @@
 title: "Access to Information and Attitudes towards Intimate Partner Violence"
 output:
   pdf_document: default
-  html_document: default
 ---
 
 In this exercise, we examine cross-national differences in attitudes towards domestic violence and access to information. We explore the hypothesis that there is an association at an aggregate level between the extent to which individuals in a country have access to knowledge and new information, both through formal schooling and through the mass media, and their likelihood of condemning acts of intimate partner violence.  This exercise is in part based on: 
@@ -55,7 +54,7 @@ Compute the correlation coefficient between `beat_burnfood` and media exposure, 
 
 ## Question 3
 
-We proceed to explore the national-level differences in attitudes towards domestic violence. First, use boxplots to compare the variation in the percentege of `beat_burnfood` between different regions of the world using `region`. What are the main differences across regions in terms of the median and dispersion of the distribution?  Second, using boxplots examine the distribution of `no_media` and `sec_school` by region of the world. Comment on the main differences of the distribution of these variables across regions. 
+We proceed to explore the national-level differences in attitudes towards domestic violence. First, use boxplots to compare the variation in the percentage of `beat_burnfood` between different regions of the world using `region`. What are the main differences across regions in terms of the median and dispersion of the distribution?  Second, using boxplots examine the distribution of `no_media` and `sec_school` by region of the world. Comment on the main differences of the distribution of these variables across regions. 
 
 ## Answer 3
 
