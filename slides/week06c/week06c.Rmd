@@ -275,8 +275,20 @@ range(polls2016$DaysToElection)
     - `{ }`: curly braces to define the beginning and the end
 
 * Indentation is important for the readability of code
-* Code without loop first by setting the counter to a specific value
 ]
+---
+
+# For Loops in R
+
+.font150[
+* .orange[Tip]: Code without loop first by setting the counter to a specific value
+]
+```{r tip,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+values <- c(2, 4, 6)
+i <- 1
+x <- values[i]*2
+cat(values[i], "times 2 is equal to", x, "\n")
+```
 ---
 
 # For Loops in R
