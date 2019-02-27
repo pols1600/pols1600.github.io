@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 06 - Prediction</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week06c_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week06c_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week06c_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 06 - Prediction
+## Election Polls, For Loops and If Statements
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 1st of March 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Why is prediction important?
+
+* Election prediction, 538-style
+
+* For Loops
+
+* Conditional statements (time permitting)
+]
+---
+
+class: inverse, center, middle
+
+# Prediction
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+class: clear
+
+background-image: url(antikythera01.png)
+---
+
+# Antikythera Mechanism
+
+.center[![:scale 80%](antikythera02.jpg)]
+---
+
+# Antikythera Mechanism
+
+.center[![:scale 120%](antikythera03.jpg)]
+---
+
+# Paul the Octopus
+
+.center[![:scale 75%](paul01.png)]
+---
+
+# Canada Flu Activity
+
+.center[![:scale 100%](flu.png)]
+---
+
+# Coups d'État
+
+.center[![:scale 70%](coups.png)]
+---
+
+# Mass Killings
+
+.center[![:scale 75%](rf01.png)]
+---
+
+# Mass Killings
+
+.center[![:scale 100%](rf02.png)]
+---
+
+# 2008 US Presidential Election
+
+.font130[
+* Barack Obama won 52.9% of the national votes while McCain won 45.7%
+
+* Polls fluctuate early but very accurate at the end
+]
+.center[![:scale 70%](pollster2008.pdf)]
+---
+
+# 2012 US Presidential Election
+
+.font150[
+* Obama: 51.1% (polls: 48.2%)
+
+* Romney: 47.2% (polls: 46.7%)
+]
+
+.center[![:scale 70%](pollster2012.png)]
+---
+
+# How Should We "Forecast" Elections?
+
+.font110[
+* Macro political and economic fundamentals for early forecasting
+]
+
+.center[![:scale 60%](EriksonWlezien.pdf)]
+
+.font110[
+* Recent method: combine them with polls
+]
+---
+
+# Let's Analyse Some Polls
+
+.font120[
+* We will use a nice `R` package called `pollstR`, which scrapes the data from Huffington Post:
+]
+
+.center[![:scale 100%](pollsterWebPage.png)]
+---
+
+# Let's Analyse Some Polls
+
+.font150[
+* Only a few lines of code does it:
+]
+
+
+```r
+library(pollstR)
+chart_name &lt;- "2016-general-election-trump-vs-clinton"
+polls2016 &lt;- pollster_charts_polls(chart_name)[["content"]]
+polls2016 &lt;- as.data.frame(polls2016)
+names(polls2016)
+```
+
+```
+##  [1] "Trump"                "Clinton"              "Other"               
+##  [4] "Undecided"            "poll_slug"            "survey_house"        
+##  [7] "start_date"           "end_date"             "question_text"       
+## [10] "sample_subpopulation" "observations"         "margin_of_error"     
+## [13] "mode"                 "partisanship"         "partisan_affiliation"
+```
+
+```r
+polls2016[1:3, c("Trump", "Clinton", "start_date", "end_date")]
+```
+
+```
+##   Trump Clinton start_date   end_date
+## 1    43      46 2016-11-04 2016-11-06
+## 2    39      44 2016-11-02 2016-11-06
+## 3    43      47 2016-11-02 2016-11-06
+```
+---
+
+# Plotting Polls over Time
+
+.font150[
+* Compute the days to the election variable
+]
+
+```r
+class(polls2016$end_date)
+```
+
+```
+## [1] "Date"
+```
+
+```r
+polls2016$DaysToElection &lt;- as.Date("2016-11-8") - polls2016$end_date
+```
+.font150[
+* Plot results
+]
+
+```r
+plot(polls2016$DaysToElection, polls2016$Clinton,
+     xlab = "Days to the Election", ylab = "Support",
+     xlim = c(550, 0), ylim = c(25, 65), pch = 19,
+     col = "blue")
+points(polls2016$DaysToElection, polls2016$Trump,
+       pch = 20, col = "red")
+```
+---
+
+# Plotting Polls over Time
+
+&lt;img src="week06c_files/figure-html/hp04-1.png" style="display: block; margin: auto;" /&gt;
+
+.font130[
+.center[What's wrong with this plot?]
+]
+---
+
+# Plotting Polls over Time
+
+&lt;img src="week06c_files/figure-html/hp05-1.png" style="display: block; margin: auto;" /&gt;
+
+.font130[
+.center[Time series looks even worse]
+]
+---
+
+# Smoothing over Time
+
+.font140[
+* .orange[Moving average]: average polls within a one-week period
+]
+--
+.font140[
+* For example, on 17th of October, we will take all polls conducted within the past week
+]
+--
+.font140[
+* Window size: amount of smoothing
+]
+--
+.font140[
+* Coding strategy: for each day, we subset the relevant polls and compute the average
+]
+--
+.font140[
+* Range of the `DaysToElection` variable:
+]
+
+```r
+range(polls2016$DaysToElection)
+```
+
+```
+## Time differences in days
+## [1]   2 532
+```
+---
+
+# For Loops in R
+
+.font120[
+* Basic structure
+]
+
+```r
+ for (i in X) {
+    expression1
+    expression2
+    ...
+    expressionN
+}
+```
+.font120[
+* Elements of a loop
+    - `i`: counter (can use any object name other than `i`)
+    - `X`: vector containing a set of ordered values the counter takes
+    - `expression`: a set of expressions that will be repeatedly evaluated
+    - `{ }`: curly braces to define the beginning and the end
+
+* Indentation is important for the readability of code
+* Code without loop first by setting the counter to a specific value
+]
+---
+
+# For Loops in R
+
+.font150[
+* Step by step: 
+]
+
+```r
+# our vector
+values &lt;- c(2, 4, 6)
+# number of elements in `values'
+n &lt;- length(values)
+# empty vector for storing the results
+results &lt;- rep(NA, n)
+# counter `i' will take values on 1, 2, ..., n in that order 
+for (i in 1:n) {
+# store the result as the ith element of `results' vector
+results[i] &lt;- values[i] * 2
+# print the values, you will not see this
+cat(values[i], "times 2 is equal to", results[i], "\n") 
+}
+```
+
+```
+## 2 times 2 is equal to 4 
+## 4 times 2 is equal to 8 
+## 6 times 2 is equal to 12
+```
+---
+
+# For Loops in R
+
+.font150[
+* Printing out an iteraction number can be helpful for debugging
+]
+
+```r
+values &lt;- c(1, -1, 2)
+results &lt;- rep(NA, 3)
+for (i in 1:3) {
+    cat("iteration", i, "\n")
+    results[i] &lt;- log(values[i])
+}
+```
+
+```
+## iteration 1 
+## iteration 2
+```
+
+```
+## Warning in log(values[i]): NaNs produced
+```
+
+```
+## iteration 3
+```
+---
+
+# 7-Day Moving Average
+
+
+```r
+days &lt;- 500:26
+window &lt;- 7
+Clinton.pred &lt;- Trump.pred &lt;- rep(NA, length(days))
+for (i in 1:length(days)) {
+    week.data &lt;-
+        subset(polls2016,
+               subset = ((DaysToElection &lt; (days[i] + window))
+                   &amp; (DaysToElection &gt;= days[i])))
+    Clinton.pred[i] &lt;- mean(week.data$Clinton)
+    Trump.pred[i] &lt;- mean(week.data$Trump)
+}
+plot(days, Clinton.pred, type = "l", col = "blue",
+     xlab = "Days to the Election", ylab = "Support",
+     xlim = c(550, 0), ylim = c(25, 65))
+lines(days, Trump.pred, col = "red")
+```
+---
+
+# 7-Day Moving Average
+
+&lt;img src="week06c_files/figure-html/pres02-1.png" style="display: block; margin: auto;" /&gt;
+.font130[
+.center[Maybe we should try another window]
+]
+---
+
+# 3-Day Moving Average
+
+
+```r
+days &lt;- 500:26
+window &lt;- 3
+Clinton.pred &lt;- Trump.pred &lt;- rep(NA, length(days))
+for (i in 1:length(days)) {
+    week.data &lt;-
+        subset(polls2016,
+               subset = ((DaysToElection &lt; (days[i] + window))
+                   &amp; (DaysToElection &gt;= days[i])))
+    Clinton.pred[i] &lt;- mean(week.data$Clinton)
+    Trump.pred[i] &lt;- mean(week.data$Trump)
+}
+
+plot(days, Clinton.pred, type = "l", col = "blue",
+     xlab = "Days to the Election", ylab = "Support",
+     xlim = c(550, 0), ylim = c(25, 65))
+lines(days, Trump.pred, col = "red")
+```
+---
+
+# 3-Day Moving Average
+
+&lt;img src="week06c_files/figure-html/pres04-1.png" style="display: block; margin: auto;" /&gt;
+.font130[
+.center[Maybe we should try _yet another_ window]
+]
+---
+
+# 2-Week Moving Average
+
+&lt;img src="week06c_files/figure-html/pres05-1.png" style="display: block; margin: auto;" /&gt;
+.font130[
+.center[It's getting better!]
+]
+---
+
+# Let’s Add Some Informative Labels
+
+.font150[
+* Candidate names
+]
+
+```r
+text(400, 50, "Clinton", col = "blue")
+text(400, 40, "Trump", col = "red")
+```
+
+.font150[
+* Events: party conventions and debates
+]
+
+```r
+text(200, 60, "party\n conventions")
+abline(v = as.Date("2016-11-8") - as.Date("2016-7-28"),
+       lty = "dotted", col = "blue")
+abline(v = as.Date("2016-11-8") - as.Date("2016-7-21"),
+       lty = "dotted", col = "red")
+
+text(60, 30, "debates")
+abline(v = as.Date("2016-11-8") - as.Date("2016-9-26"),
+       lty = "dashed")
+abline(v = as.Date("2016-11-8") - as.Date("2016-10-9"),
+       lty = "dashed")
+```
+---
+
+# Let’s Add Some Informative Labels
+
+&lt;img src="week06c_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+.font130[
+.center[Looks pretty good!]
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+class: inverse, center, middle
+
+# Have a Great Weekend!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
