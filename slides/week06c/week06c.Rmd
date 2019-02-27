@@ -1,6 +1,6 @@
 ---
 title: "Week 06 - Prediction"
-subtitle: "Election Polls, For Loops and If Statements<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+subtitle: "Election Polls and For Loops<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
 date: "1st of March 2019"
 output: 
@@ -26,6 +26,7 @@ r <- getOption("repos")
 r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
 options(repos = r)
 set.seed(12345)
+install.packages("pollstR")
 ```
 
 <style>
