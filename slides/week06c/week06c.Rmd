@@ -332,9 +332,13 @@ for (i in 1:3) {
 # 7-Day Moving Average
 
 ```{r pres01,fig.align="center",tidy=F,warning=F,message=F,cache=T,eval=F}
+# Days
 days <- 500:26
+# Set a 7-day moving average window
 window <- 7
+# Fill two vectors with NAs
 Clinton.pred <- Trump.pred <- rep(NA, length(days))
+# Loop
 for (i in 1:length(days)) {
     week.data <-
         subset(polls2016,
@@ -343,6 +347,7 @@ for (i in 1:length(days)) {
     Clinton.pred[i] <- mean(week.data$Clinton)
     Trump.pred[i] <- mean(week.data$Trump)
 }
+# Plot
 plot(days, Clinton.pred, type = "l", col = "blue",
      xlab = "Days to the Election", ylab = "Support",
      xlim = c(550, 0), ylim = c(25, 65))
@@ -354,7 +359,7 @@ lines(days, Trump.pred, col = "red")
 
 ```{r pres02,fig.align="center",tidy=F,warning=F,message=F,cache=T,echo=F}
 days <- 500:26
-window <- 7    # one week
+window <- 7   
 Clinton.pred <- Trump.pred <- rep(NA, length(days)) # empty vectors
 for (i in 1:length(days)) {
     week.data <-
@@ -379,9 +384,13 @@ lines(days, Trump.pred, col = "red")
 # 3-Day Moving Average
 
 ```{r pres03,fig.align="center",tidy=F,warning=F,message=F,cache=T,eval=F}
+# Days
 days <- 500:26
+# 3-day moving averages
 window <- 3
+# Empty vectors
 Clinton.pred <- Trump.pred <- rep(NA, length(days))
+# Loop
 for (i in 1:length(days)) {
     week.data <-
         subset(polls2016,
@@ -390,7 +399,7 @@ for (i in 1:length(days)) {
     Clinton.pred[i] <- mean(week.data$Clinton)
     Trump.pred[i] <- mean(week.data$Trump)
 }
-
+# Plot
 plot(days, Clinton.pred, type = "l", col = "blue",
      xlab = "Days to the Election", ylab = "Support",
      xlim = c(550, 0), ylim = c(25, 65))
