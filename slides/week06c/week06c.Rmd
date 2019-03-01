@@ -297,7 +297,7 @@ cat(values[i], "times 3 is equal to", x, "\n")
 .font150[
 * Step by step: 
 ]
-```{r loop02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+```{r loop02,fig.align="center",tidy=F,warning=F,message=F,cache=T,tidy=F}
 # our vector
 values <- c(2, 4, 6)
 # empty vector for storing the results
@@ -305,9 +305,9 @@ results <- rep(NA, length(values))
 # counter `i' will take values on 1, 2, ..., length(values) in that order 
 for (i in 1:length(values)) {
 # store the result as the ith element of `results' vector
-results[i] <- values[i] * 3
+    results[i] <- values[i] * 3
 # print the values, you will not see this
-cat(values[i], "times 3 is equal to", results[i], "\n") 
+    cat(values[i], "times 3 is equal to", results[i], "\n") 
 }
 ```
 ---
@@ -317,7 +317,7 @@ cat(values[i], "times 3 is equal to", results[i], "\n")
 .font150[
 * Printing out an iteraction number can be helpful for debugging
 ]
-```{r loop03,fig.align="center",tidy=F,message=F,cache=T}
+```{r loop03,fig.align="center",tidy=F,message=F,cache=T,tidy=F}
 values <- c(1, -1, 2)
 results <- rep(NA, 3)
 for (i in 1:3) {
@@ -536,6 +536,6 @@ class: inverse, center, middle
 
 class: inverse, center, middle
 
-# Have a Great Weekend!
+# Have A Great Weekend!
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
