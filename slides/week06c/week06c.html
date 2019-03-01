@@ -306,12 +306,12 @@ range(polls2016$DaysToElection)
 ```r
 values &lt;- c(2, 4, 6)
 i &lt;- 1
-x &lt;- values[i]*2
-cat(values[i], "times 2 is equal to", x, "\n")
+x &lt;- values[i] * 3
+cat(values[i], "times 3 is equal to", x, "\n")
 ```
 
 ```
-## 2 times 2 is equal to 4
+## 2 times 3 is equal to 6
 ```
 ---
 
@@ -324,23 +324,21 @@ cat(values[i], "times 2 is equal to", x, "\n")
 ```r
 # our vector
 values &lt;- c(2, 4, 6)
-# number of elements in `values'
-n &lt;- length(values)
 # empty vector for storing the results
-results &lt;- rep(NA, n)
-# counter `i' will take values on 1, 2, ..., n in that order 
-for (i in 1:n) {
+results &lt;- rep(NA, length(values))
+# counter `i' will take values on 1, 2, ..., length(values) in that order 
+for (i in 1:length(values)) {
 # store the result as the ith element of `results' vector
-results[i] &lt;- values[i] * 2
+results[i] &lt;- values[i] * 3
 # print the values, you will not see this
-cat(values[i], "times 2 is equal to", results[i], "\n") 
+cat(values[i], "times 3 is equal to", results[i], "\n") 
 }
 ```
 
 ```
-## 2 times 2 is equal to 4 
-## 4 times 2 is equal to 8 
-## 6 times 2 is equal to 12
+## 2 times 3 is equal to 6 
+## 4 times 3 is equal to 12 
+## 6 times 3 is equal to 18
 ```
 ---
 
@@ -378,7 +376,7 @@ for (i in 1:3) {
 
 ```r
 # Days
-days &lt;- 500:26
+days &lt;- 532:2
 # Set a 7-day moving average window
 window &lt;- 7
 # Fill two vectors with NAs
@@ -413,7 +411,7 @@ lines(days, Trump.pred, col = "red")
 
 ```r
 # Days
-days &lt;- 500:26
+days &lt;- 532:2
 # 3-day moving averages
 window &lt;- 3
 # Empty vectors
