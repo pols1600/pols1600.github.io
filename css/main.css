@@ -78,6 +78,11 @@ a:hover {
     background-color: var(--accent);
 }
 
+.copyleft {
+  display:inline-block;
+  transform: rotate(180deg);
+}
+
 /*navigation bar icons*/
 
 .navbar-icon {
