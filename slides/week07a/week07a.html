@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Week 07 - Prediction</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Danilo Freire" />
+    <link href="week07a_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week07a_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week07a_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 07 - Prediction
+## Prediction Error, Conditional Statements and Custom Functions
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 4th March 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Predicting the US presidential election (continued)
+
+* Classification
+
+* General conditional statements
+
+* How to write your own R functions
+]
+---
+
+# Prediction Error
+
+.font150[
+* We need to verify the quality of our predictions
+
+* .orange[Prediction Error]: actual outcome - predicted outcome
+
+* Mean prediction error: mean(error)
+
+* Root mean square error (RMSE): `\(\sqrt{mean(error^2)}\)`
+  - Used with numeric variables
+  - Measures model fit 
+  - Always non-negative
+  - Lower values are better than higher ones
+  - _Cannot_ be used to compare models estimated with different data
+]
+---
+
+# Mean Predictor Error or RMSE?
+
+.font150[
+* Which one is better?
+
+* They are similar, but RMSE has interesting properties:
+  - Since the errors are squared before they are averaged, RMSE gives high weight to large errors
+  - Thus, RMSE is more useful when large errors are particularly undesirable
+]
+
+---
+
+# Prediction Error
+
+.font120[
+
+```r
+# Same code we saw last week, download data
+library(pollstR)
+chart_name &lt;- "2016-general-election-trump-vs-clinton"
+polls2016 &lt;- pollster_charts_polls(chart_name)[["content"]]
+polls2016 &lt;- as.data.frame(polls2016)
+polls2016$DaysToElection &lt;- as.Date("2016-11-8") - polls2016$end_date
+```
+]
+---
+
+# Prediction Error
+
+
+```r
+last.weeks.data &lt;- subset(polls2016, subset = DaysToElection &lt; 15) # recent polls
+margin &lt;- last.weeks.data$Clinton - last.weeks.data$Trump
+margin[1:5]                   # latest 5 polls
+```
+
+```
+## [1] 3 5 4 3 7
+```
+
+```r
+true.margin &lt;- 48.59 - 46.47  # election result
+pred.error &lt;- true.margin - margin
+pred.error
+```
+
+```
+##  [1] -0.88 -2.88 -1.88 -0.88 -4.88  0.12 -0.88  2.12 -0.88 -2.88  1.12
+## [12] -4.88
+```
+
+```r
+mean(pred.error)
+```
+
+```
+## [1] -1.463333
+```
+
+```r
+sqrt(mean(pred.error^2))
+```
+
+```
+## [1] 2.526737
+```
+---
+
+# National Polls Weren't Far Off
+
+
+```r
+hist(margin, main = "Poll Prediction", col = "grey",
+     xlab = "Predicted Clinton's margin of victory (%)")
+abline(v = true.margin, col = "red",
+       lwd = 2, lty = "dotted") # line width and line type
+```
+
+&lt;img src="week07a_files/figure-html/hist-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+# National Polls Weren't Far Off
+
+
+```r
+error &lt;- margin - true.margin
+hist(error, main = "Poll Prediction Error", col = "blue",
+     xlab = "Error in Predicted Clinton’s margin of victory (%)")
+```
+
+&lt;img src="week07a_files/figure-html/hist02-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+# Nate Silver
+
+.font150[
+"Trump outperformed his national polls by only 1 to 2 percentage points in losing the popular vote to Clinton, making them slightly closer to the mark than they were in 2012. Meanwhile, he beat his polls by only 2 to 3 percentage points in the average swing state"
+
+Nate Silver - [The Real Story of 2016](https://fivethirtyeight.com/features/the-real-story-of-2016)
+]
+---
+
+# Classification
+
+.font150[
+* Often we care about binary outcomes 
+
+* Did Trump win electoral college?
+
+* Did civil war occur?
+
+* Did it rain?
+
+* Prediction of binary outcome variable = .orange[classification problem]
+]
+---
+
+# Classification
+
+.font150[
+* Wrong prediction: misclassification
+  - True positive: correctly predicting civil war in country X at time T
+  - False positive: incorrectly predicting civil war in country X at time T
+  - True negative: correctly predicting no civil war in country X at time T
+  - False negative: incorrectly predicting no civil war in country X at time T
+
+* Sometimes false negatives are more important: e.g., civil war
+
+* .orange[Type I error]: false positive
+
+* .orange[Type II error]: false negative
+]
+---
+
+# False Positives and False Negatives 
+
+.center[![:scale 100%](pregnant.png)]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# General Conditional Statements
+
+.font150[
+* You already know how to write conditional statements in R: `ifelse()`
+
+
+```r
+values &lt;- 1:10
+ifelse(values &lt; 5, 0, 1)
+```
+
+```
+##  [1] 0 0 0 0 1 1 1 1 1 1
+```
+]
+---
+
+# General Conditional Statements
+
+.font150[
+* But we can write conditional statements in a more general way:
+]
+
+.font120[
+
+```r
+if (X) {
+    expression1a
+    ...
+    expressionNa
+} else if (Y) {
+    expression1b
+    ...
+    expressionNb
+} else {
+    expression1c
+    ...
+    expressionNc
+}
+```
+]
+---
+
+# General Conditional Statements
+
+.font150[
+* Elements of `if(){}else(){}`
+  - `X`: logical statement returning either `TRUE` or `FALSE`
+  - `Y`: additional statements also returning either `TRUE` or `FALSE`
+  - `expression`: code chunks evaluated depending on the value of `X`
+  
+* Can be combined with for loops
+]
+---
+
+# Example
+
+.font120[
+
+```r
+values &lt;- 1:10                     # sequence from 1 to 10
+results &lt;- rep(NA, length(values)) # empty vector
+
+# Loop
+for (i in values) {
+  if (values[i] &lt; 5) {
+    results[i] &lt;- 0
+} else if (values[i] == 5) {
+    results[i] &lt;- 5
+} else {
+    results[i] &lt;- 1
+}
+}
+
+# Print results
+results
+```
+
+```
+##  [1] 0 0 0 0 5 1 1 1 1 1
+```
+]
+---
+
+# Custom Functions in R
+
+.font120[
+* One of the best things about R is that users can create their own functions
+
+* R packages are just collection of functions
+
+* Custom functions save time and increase reliability. Basic syntax:
+
+
+```r
+function_name &lt;- function(arg_1, arg_2, ...) {
+   Function body 
+}
+```
+
+* Name: the name you want for your function
+
+* Arguments: a placeholder. When a function is invoked, you pass a value to the argument. A function can have as many arguments as you want to
+
+* Function body: what the function does
+]
+---
+
+# Example: Fahrenheit to Celsius
+
+.font120[
+
+```r
+# Call the function "temp.converter" and the argument "fahrenheit"
+temp.converter &lt;- function(fahrenheit) {
+  (fahrenheit - 32) / 1.8   # what the function does
+}
+
+# Testing the function
+temp.converter(0)   
+```
+
+```
+## [1] -17.77778
+```
+
+```r
+temp.converter(50)  
+```
+
+```
+## [1] 10
+```
+
+```r
+temp.converter(-40)
+```
+
+```
+## [1] -40
+```
+]
+---
+
+# A Fancier Function
+
+.font140[
+* Let's create a function called `is.prime()` that identifies any prime number
+
+```r
+# Call the function "is.prime" and the argument "num"
+is.prime &lt;- function(num) {
+   if (num == 2) {
+      cat("2 is the first prime number")
+   } else if (any(num %% 2:(num-1) == 0)) { 
+      cat(num, "is not a prime number", "\n") 
+   } else { 
+      cat(num, "is a prime number", "\n")
+   }
+}
+```
+]
+---
+
+# Testing the function
+
+.font120[
+
+```r
+is.prime(2)
+```
+
+```
+## 2 is the first prime number
+```
+
+```r
+is.prime(10)
+```
+
+```
+## 10 is not a prime number
+```
+
+```r
+is.prime(7919)
+```
+
+```
+## 7919 is a prime number
+```
+
+```r
+is.prime(sqrt(81))
+```
+
+```
+## 9 is not a prime number
+```
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
