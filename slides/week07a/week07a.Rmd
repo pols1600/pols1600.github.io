@@ -76,11 +76,6 @@ set.seed(12345)
 * Mean prediction error: mean(error)
 
 * Root mean square error (RMSE): $\sqrt{mean(error^2)}$
-  - Used with numeric variables
-  - Measures model fit 
-  - Always non-negative
-  - Lower values are better than higher ones
-  - _Cannot_ be used to compare models estimated with different data
 ]
 ---
 
@@ -169,14 +164,12 @@ Nate Silver - [The Real Story of 2016](https://fivethirtyeight.com/features/the-
 
 # Classification
 
-.font150[
+.font140[
 * Wrong prediction: misclassification
   - True positive: correctly predicting civil war in country X at time T
   - False positive: incorrectly predicting civil war in country X at time T
   - True negative: correctly predicting no civil war in country X at time T
   - False negative: incorrectly predicting no civil war in country X at time T
-
-* Sometimes false negatives are more important: e.g., civil war
 
 * .orange[Type I error]: false positive
 
