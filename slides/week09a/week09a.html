@@ -207,7 +207,7 @@ abline(v = 21, lwd = 2, lty = "dashed", col = "red")
 rdd2 &lt;- RDestimate(mva ~ agecell, data =  df, cutpoint = 21)
 plot(rdd2)
 title(main = "Motor Vehicle Accidents Death",
-      xlab = "Age", ylab = "Mortality rate from all causes (per 100,000)")
+      xlab = "Age", ylab = "Mortality rate per 100,000")
 abline(v = 21, lwd = 2, lty = "dashed", col = "red")
 ```
 
@@ -223,7 +223,7 @@ abline(v = 21, lwd = 2, lty = "dashed", col = "red")
 rdd3 &lt;- RDestimate(internal ~ agecell, data =  df, cutpoint = 21)
 plot(rdd3)
 title(main = "Other Causes of Death",
-      xlab = "Age", ylab = "Mortality rate from all causes (per 100,000)")
+      xlab = "Age", ylab = "Mortality rate per 100,000")
 abline(v = 21, lwd = 2, lty = "dashed", col = "red")
 ```
 
