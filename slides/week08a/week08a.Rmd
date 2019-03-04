@@ -1,0 +1,241 @@
+---
+title: "Week 08 - Regression"
+subtitle: "Multivariate Models and Heterogeneous Causal Effects<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "11th March 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Brief recap of multivariate linear models
+
+* Statistical controls
+
+* Heterogeneous causal effects
+]
+---
+
+# Multivariate Linear Models
+
+.font150[
+* We can include more than one predictor in the regression model: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)`
+
+* Principle of regression model stays the same: to draw the best fitting line through a cloud of points (now in multiple dimensions)
+
+* We can use the multiple regression to .orange[control for confounders]
+
+* We measure the effect of $X$ on $Y$ .orange[holding constant all remaining variables]
+]
+---
+
+# Interpretation
+
+.font150[
+* $Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + ... + \beta_n X_n + \epsilon$
+  - $\alpha =$ intercept, the value of $Y$ when _all_ $X$ variables are zero
+  - $\beta_n =$ the slope of predictor $X_n$
+  - $\beta_n =$ predicted change in $\hat{Y}$ when $X_n$ increases by 1 unit _and all other predictors are held constant_
+  
+* Example: impact of race when gender is not changing
+]
+---
+
+# Race and Jobs Revisited
+
+.font120[
+```{r race01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+resume <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
+lm(call ~ race + sex, data = resume)
+```
+]
+---
+
+# Child Mortality
+
+.font120[
+* Effect of Log GDP per capita on child mortality when we hold political regime constant
+```{r mort,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+mortality <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
+mortality <- subset(mortality, subset = Year == 2010)
+model.cm <- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
+coef(model.cm)
+summary(model.cm)$r.squared
+```
+]
+---
+
+# Adjusted R-Squared
+
+.font150[
+* In multiple regression models we want to adjust the goodness of fit statistic by the number of variables included
+
+* This is done via the degrees of freedom (DF) adjustment:
+
+$$\textsf{adjusted} R^{2} = 1 - \frac{SSR /(n-p-1)}{TSS/(n-1)}$$
+]
+.font110[
+```{r adj,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+summary(model.cm)$r.squared
+summary(model.cm)$adj.r.squared
+```
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font150[
+* In randomised experiments, we can explore _heterogeneous treatment effects_ using variable interactions
+
+* .orange[Drastically changes the interpretation of all the coefficients]
+
+* Plotting or predictions usually necessary
+
+* Equation: $Y = \alpha + \beta_1X_1 + \beta_2X_2 + \beta_3X_1X_2 + \epsilon$
+
+* $\beta_1$ is _not_ the unique effect of $X_1$ on $Y$; the interaction means the effect of $\beta_1$ _depends_ on $\beta_2$ and $X_2$. Vice-versa for $\beta_2$.
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font150[
+* As interactions are hard to interpret, one suggestion is to use predictions and plot graphs
+
+* Considering that $X_1$ is a numeric variable and $X_2$ is a factor and denotes treatment condition:
+  - `object01 <- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Control"))`
+  - `object02 <- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Treatment"))`
+  
+* The difference between both predictions is the average treatment effect
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font150[
+* It is .orange[strongly] advised to visualise heterogeneous effects with plots
+
+* I also .orange[strongly] recommend the following articles:
+  - Brambor, Thomas; Clark, William; Golder, Matt. 2006. [Understanding Interaction Models: Improving Empirical Analyses](https://www.jstor.org/stable/25791835?seq=1#metadata_info_tab_contents). _Political Analysis_, 14:1, 63-82.
+  - Hainmueller, Jens; Mummolo, Jonathan; Xu, Yiqing. 2018. [How Much Should We Trust Estimates from Multiplicative Interaction Models? Simple Tools to Improve Empirical Practice](https://doi.org/10.1017/pan.2018.46). _Political Analysis_, first view, 1-30.
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font110[
+```{r inter,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+social <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/social.csv")
+# subset Neighbours and Control groups
+social.neighbour <- subset(social,
+                           (messages == "Control") |
+                             (messages == "Neighbors"))
+# create new variable "age"
+social.neighbour$age <- 2008 - social.neighbour$yearofbirth
+summary(social.neighbour$age)
+```
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font110[
+```{r inter02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+# fit model
+model.inter <- lm(primary2006 ~ age + I(age^2) +
+                    messages + age:messages + I(age^2):messages,
+                  data = social.neighbour)
+model.inter
+```
+]
+---
+
+# Predictions
+
+.font110[
+```{r inter03,fig.align="center",tidy=F,warning=F,message=F,cache=F}
+# predicted turnout rate under the Neighbours treatment condition
+yT.hat <- predict(model.inter,
+                  newdata = data.frame(age = 25:85, messages = "Neighbors"))
+
+# predicted turnout rate under the Control condition
+yC.hat <- predict(model.inter,
+                  newdata = data.frame(age = 25:85, messages = "Control"))
+
+# average treatment effect
+ate.age <- yT.hat - yC.hat
+```
+]
+---
+
+# Plot
+
+.font110[
+```{r inter04,fig.align="center",tidy=F,warning=F,message=F,cache=T,fig.height=6}
+plot(x = 25:85, y = ate.age, type = "l", 
+     main = "Average Treatment Effects According to Age",
+     xlab = "Age", ylab = "Estimated ATE")
+```
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  

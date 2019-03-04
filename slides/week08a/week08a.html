@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 08 - Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <link href="week08a_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week08a_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week08a_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 08 - Regression
+## Multivariate Models and Heterogeneous Causal Effects
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 11th March 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Brief recap of multivariate linear models
+
+* Statistical controls
+
+* Heterogeneous causal effects
+]
+---
+
+# Multivariate Linear Models
+
+.font150[
+* We can include more than one predictor in the regression model: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)`
+
+* Principle of regression model stays the same: to draw the best fitting line through a cloud of points (now in multiple dimensions)
+
+* We can use the multiple regression to .orange[control for confounders]
+
+* We measure the effect of `\(X\)` on `\(Y\)` .orange[holding constant all remaining variables]
+]
+---
+
+# Interpretation
+
+.font150[
+* `\(Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + ... + \beta_n X_n + \epsilon\)`
+  - `\(\alpha =\)` intercept, the value of `\(Y\)` when _all_ `\(X\)` variables are zero
+  - `\(\beta_n =\)` the slope of predictor `\(X_n\)`
+  - `\(\beta_n =\)` predicted change in `\(\hat{Y}\)` when `\(X_n\)` increases by 1 unit _and all other predictors are held constant_
+  
+* Example: impact of race when gender is not changing
+]
+---
+
+# Race and Jobs Revisited
+
+.font120[
+
+```r
+resume &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
+lm(call ~ race + sex, data = resume)
+```
+
+```
+## 
+## Call:
+## lm(formula = call ~ race + sex, data = resume)
+## 
+## Coefficients:
+## (Intercept)    racewhite      sexmale  
+##    0.066534     0.032130    -0.009128
+```
+]
+---
+
+# Child Mortality
+
+.font120[
+* Effect of Log GDP per capita on child mortality when we hold political regime constant
+
+```r
+mortality &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
+mortality &lt;- subset(mortality, subset = Year == 2010)
+model.cm &lt;- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
+coef(model.cm)
+```
+
+```
+## (Intercept)    log(GDP)    PolityIV 
+##  277.845620  -25.641789   -1.029062
+```
+
+```r
+summary(model.cm)$r.squared
+```
+
+```
+## [1] 0.6113747
+```
+]
+---
+
+# Adjusted R-Squared
+
+.font150[
+* In multiple regression models we want to adjust the goodness of fit statistic by the number of variables included
+
+* This is done via the degrees of freedom (DF) adjustment:
+
+`$$\textsf{adjusted} R^{2} = 1 - \frac{SSR /(n-p-1)}{TSS/(n-1)}$$`
+]
+.font110[
+
+```r
+summary(model.cm)$r.squared
+```
+
+```
+## [1] 0.6113747
+```
+
+```r
+summary(model.cm)$adj.r.squared
+```
+
+```
+## [1] 0.6061582
+```
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font150[
+* In randomised experiments, we can explore _heterogeneous treatment effects_ using variable interactions
+
+* .orange[Drastically changes the interpretation of all the coefficients]
+
+* Plotting or predictions usually necessary
+
+* Equation: `\(Y = \alpha + \beta_1X_1 + \beta_2X_2 + \beta_3X_1X_2 + \epsilon\)`
+
+* `\(\beta_1\)` is _not_ the unique effect of `\(X_1\)` on `\(Y\)`; the interaction means the effect of `\(\beta_1\)` _depends_ on `\(\beta_2\)` and `\(X_2\)`. Vice-versa for `\(\beta_2\)`.
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font150[
+* As interactions are hard to interpret, one suggestion is to use predictions and plot graphs
+
+* Considering that `\(X_1\)` is a numeric variable and `\(X_2\)` is a factor and denotes treatment condition:
+  - `object01 &lt;- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Control"))`
+  - `object02 &lt;- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Treatment"))`
+  
+* The difference between both predictions is the average treatment effect
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font150[
+* It is .orange[strongly] advised to visualise heterogeneous effects with plots
+
+* I also .orange[strongly] recommend the following articles:
+  - Brambor, Thomas; Clark, William; Golder, Matt. 2006. [Understanding Interaction Models: Improving Empirical Analyses](https://www.jstor.org/stable/25791835?seq=1#metadata_info_tab_contents). _Political Analysis_, 14:1, 63-82.
+  - Hainmueller, Jens; Mummolo, Jonathan; Xu, Yiqing. 2018. [How Much Should We Trust Estimates from Multiplicative Interaction Models? Simple Tools to Improve Empirical Practice](https://doi.org/10.1017/pan.2018.46). _Political Analysis_, first view, 1-30.
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font110[
+
+```r
+social &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/social.csv")
+# subset Neighbours and Control groups
+social.neighbour &lt;- subset(social,
+                           (messages == "Control") |
+                             (messages == "Neighbors"))
+# create new variable "age"
+social.neighbour$age &lt;- 2008 - social.neighbour$yearofbirth
+summary(social.neighbour$age)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   22.00   43.00   52.00   51.82   61.00  108.00
+```
+]
+---
+
+# Heterogeneous Effects/Interactions
+
+.font110[
+
+```r
+# fit model
+model.inter &lt;- lm(primary2006 ~ age + I(age^2) +
+                    messages + age:messages + I(age^2):messages,
+                  data = social.neighbour)
+model.inter
+```
+
+```
+## 
+## Call:
+## lm(formula = primary2006 ~ age + I(age^2) + messages + age:messages + 
+##     I(age^2):messages, data = social.neighbour)
+## 
+## Coefficients:
+##                (Intercept)                         age  
+##                 -9.700e-02                   1.172e-02  
+##                   I(age^2)           messagesNeighbors  
+##                 -7.389e-05                  -5.275e-02  
+##      age:messagesNeighbors  I(age^2):messagesNeighbors  
+##                  4.804e-03                  -3.961e-05
+```
+]
+---
+
+# Predictions
+
+.font110[
+
+```r
+# predicted turnout rate under the Neighbours treatment condition
+yT.hat &lt;- predict(model.inter,
+                  newdata = data.frame(age = 25:85, messages = "Neighbors"))
+
+# predicted turnout rate under the Control condition
+yC.hat &lt;- predict(model.inter,
+                  newdata = data.frame(age = 25:85, messages = "Control"))
+
+# average treatment effect
+ate.age &lt;- yT.hat - yC.hat
+```
+]
+---
+
+# Plot
+
+.font110[
+
+```r
+plot(x = 25:85, y = ate.age, type = "l", 
+     main = "Average Treatment Effects According to Age",
+     xlab = "Age", ylab = "Estimated ATE")
+```
+
+&lt;img src="week08a_files/figure-html/inter04-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
