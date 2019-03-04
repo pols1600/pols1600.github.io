@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 09 - Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <link href="week09a_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week09a_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week09a_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 09 - Regression
+## Regression Discontinuity Design
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 11th March 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Regression Discontinuity Design (RDD)
+
+.font150[
+* As we have discussed before, sometimes it is unfeasible to conduct an experiment to evaluate a question of interest. E.g.:
+
+  - Education and income
+  - Incumbency and reelection rates
+  - Gun laws and homicides
+  - Drunk driving and accidents
+  
+* Observations tend to have _systematic differences_
+
+* .orange[However:] some candidates might be suitable for comparison
+]
+---
+
+# Regression Discontinuity Design (RDD)
+
+.font150[
+* RDD's basic setup: treatment is assigned according to a **precise rule** based on another variable
+
+  - Test scores, voting percentage, legislation timing, drinking age
+
+* Useful for analysis in a "rule-based" world (administrative programs, elections, etc.)
+
+* People who barely passed and who barely failed are comparable in many dimensions
+
+* RDDs are a _quasi-experimental_ method at the cutoff (_and only at the cutoff_!)
+]
+---
+
+# Basic RDD Setup
+
+.center[![:scale 100%](rdd01.png)]
+---
+
+# Basic RDD Setup
+
+.center[![:scale 100%](rdd02.png)]
+
+.font150[
+**Note:** we only measure _local average treatment effect_ (LATE)
+]
+---
+
+# RDD Assumptions
+
+.font150[
+* Assignment "as good as random": the forcing variable is the _only_ source variation
+
+  - If graphs show _no other discontinuities_, the design is more credible
+  
+* Individuals _cannot choose_ if they are in the treatment or control group (_no sorting_)
+
+* If treatment is not deterministic (fuzzy RDD), statistical adjustements are necessary
+]
+
+---
+
+# Effect of Scholarship 
+
+.font150[
+* [Thistlethwaite and Campbell (1960)](https://obsstudies.org/wp-content/uploads/2017/01/regression_discontinuity_all_comments-1.pdf) study the effects of collegescholarships on later students’ achievements
+
+* Observation: scholarship winners have different attitudes
+
+* Are scholarship winners more likely to pursue further education or become teachers?
+
+* Spoiler: yes!
+]
+---
+
+# Effect of Scholarship 
+
+.center[![:scale 100%](scholarship.png)]
+---
+
+# More examples
+
+.font150[
+* David E. Broockman (2009). [Do Congressional Candidates Have Reverse Coattails? Evidence from a Regression Discontinuity Design](http://web.stanford.edu/~dbroock/published%20paper%20PDFs/broockman%20rdd%20reverse%20coattails.pdf)
+]
+
+.center[![:scale 80%](brookman.png)]
+
+---
+
+# Concealed Carry Ban and Homicides
+
+.font150[
+* Rodrigo Schneider (2019). [Crime and political effects of a concealed carry ban in Brazil](https://drive.google.com/file/d/0B1QCQasYG8iHaWJVZ0Z3VDJ2eEE/view)
+
+]
+
+.center[![:scale 100%](brazil01.png)]
+---
+
+# Concealed Carry Ban and Homicides
+
+.font150[
+* Testing the assumption that the law has caused the decline in homicide rates
+]
+.center[![:scale 70%](brazil02.png)]
+---
+
+# Let's Estimate Our Own Model
+
+.font120[
+* _Question:_ does minimum legal drinking age (MLDA) have an effect on mortality? Let's find out
+
+
+```r
+library(foreign) # load dta files
+library(rdd)     # run RDD model
+df &lt;- read.dta("http://masteringmetrics.com/wp-content/uploads/2015/01/AEJfigs.dta")
+rdd1 &lt;- RDestimate(all ~ agecell, data = df, cutpoint = 21)
+rdd1
+```
+
+```
+## 
+## Call:
+## RDestimate(formula = all ~ agecell, data = df, cutpoint = 21)
+## 
+## Coefficients:
+##      LATE    Half-BW  Double-BW  
+##     9.001      9.579      7.953
+```
+]
+---
+
+# MLDA and Mortality
+
+.font110[
+
+```r
+plot(rdd1)
+title(main = "All Causes of Death",
+      xlab = "Age", ylab = "Mortality rate from all causes (per 100,000)")
+abline(v = 21, lwd = 2, lty = "dashed", col = "red")
+```
+
+&lt;img src="week09a_files/figure-html/mm02-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Motor Vehicle Accidents
+
+.font110[
+
+```r
+rdd2 &lt;- RDestimate(mva ~ agecell, data =  df, cutpoint = 21)
+plot(rdd2)
+title(main = "Motor Vehicle Accidents Death",
+      xlab = "Age", ylab = "Mortality rate from all causes (per 100,000)")
+abline(v = 21, lwd = 2, lty = "dashed", col = "red")
+```
+
+&lt;img src="week09a_files/figure-html/mm03-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Other Causes of Death
+
+.font110[
+
+```r
+rdd3 &lt;- RDestimate(internal ~ agecell, data =  df, cutpoint = 21)
+plot(rdd3)
+title(main = "Other Causes of Death",
+      xlab = "Age", ylab = "Mortality rate from all causes (per 100,000)")
+abline(v = 21, lwd = 2, lty = "dashed", col = "red")
+```
+
+&lt;img src="week09a_files/figure-html/mm04-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
