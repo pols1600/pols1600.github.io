@@ -1,5 +1,5 @@
 ---
-title: "Week 07 - Prediction"
+title: "Week 07 - Regression"
 subtitle: "Introduction to Linear Models<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
 date: "6th March 2019"
@@ -117,7 +117,7 @@ cor(bivariate$Child.Mortality, log(bivariate$GDP), use = "complete")
 
 * Regression is the mathematical model to draw best fitting line through cloud of points
 
-* In R: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)`
+* In R: `lm(Y ~ X, data = yourdataset)`
 ]
 ---
 
@@ -167,7 +167,7 @@ plot(log(bivariate$GDP), bivariate$Child.Mortality, pch = 19,
 ]
 ---
 
-# Interpretation
+# Least Squares
 
 .font150[
 * We don't know the true .orange[data generating process] (DGP)
@@ -192,7 +192,7 @@ plot(log(bivariate$GDP), bivariate$Child.Mortality, pch = 19,
 * .orange[We minimise the _sum of the squared residuals (SSR)_]
 
 $$\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 = \sum_{i=1}^n (Y_i - \widehat{Y_{i}})^2 = \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta X_i)^2$$
-* This also minimizes the root mean squared error: $RMSE = \sqrt{\frac{1}{n}\textsf{SSR}}$
+* This also minimises the root mean squared error: $RMSE = \sqrt{\frac{1}{n}\textsf{SSR}}$
 ]
 ---
 
@@ -216,7 +216,7 @@ OR
 # Example
 
 .font130[
-* Enough math! R makes all that very easy to estimate with `lm()`
+* Enough math! R makes it very easy to estimate linear models with `lm()`
 
 ```{r lm01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
 lm(Child.Mortality ~ log(GDP), data = bivariate)

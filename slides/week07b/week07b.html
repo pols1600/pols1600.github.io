@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Week 07 - Prediction</title>
+    <title>Week 07 - Regression</title>
     <meta charset="utf-8" />
     <meta name="author" content="Danilo Freire" />
     <link href="week07b_files/remark-css/default.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Week 07 - Prediction
+# Week 07 - Regression
 ## Introduction to Linear Models
 <html>
 <div style="float:left">
@@ -127,7 +127,7 @@ cor(bivariate$Child.Mortality, log(bivariate$GDP), use = "complete")
 
 * Regression is the mathematical model to draw best fitting line through cloud of points
 
-* In R: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)`
+* In R: `lm(Y ~ X, data = yourdataset)`
 ]
 ---
 
@@ -180,7 +180,7 @@ plot(log(bivariate$GDP), bivariate$Child.Mortality, pch = 19,
 ]
 ---
 
-# Interpretation
+# Least Squares
 
 .font150[
 * We don't know the true .orange[data generating process] (DGP)
@@ -205,7 +205,7 @@ plot(log(bivariate$GDP), bivariate$Child.Mortality, pch = 19,
 * .orange[We minimise the _sum of the squared residuals (SSR)_]
 
 `$$\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 = \sum_{i=1}^n (Y_i - \widehat{Y_{i}})^2 = \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta X_i)^2$$`
-* This also minimizes the root mean squared error: `\(RMSE = \sqrt{\frac{1}{n}\textsf{SSR}}\)`
+* This also minimises the root mean squared error: `\(RMSE = \sqrt{\frac{1}{n}\textsf{SSR}}\)`
 ]
 ---
 
@@ -229,7 +229,7 @@ OR
 # Example
 
 .font130[
-* Enough math! R makes all that very easy to estimate with `lm()`
+* Enough math! R makes it very easy to estimate linear models with `lm()`
 
 
 ```r
