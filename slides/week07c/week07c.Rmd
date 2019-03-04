@@ -60,9 +60,9 @@ set.seed(12345)
 
 * How to assess model fit
 
-* Merging data sets with `merge()`
-
 * Analyse randomised experiments with `lm()`
+
+* Merge data sets with `merge(x, y, by = )`
 ]
 ---
 
@@ -257,8 +257,6 @@ lm(water ~ reserved, data = women)
 * Sum of squared residuals (SSR):
 
 * $\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 \ = \ \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta_1 X_{i1} - \hat\beta_2 X_{i2} - \cdots - \hat\beta_n X_{in})^2$
-
-* In R: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)` 
 ]
 ---
 
