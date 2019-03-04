@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 07 - Prediction</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <link href="week07c_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week07c_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week07c_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 07 - Prediction
+## Model Fit, LM for Randomised Experiments, Multiple Predictors, Merging Data Sets in R
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 8th March 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Review of least squares
+
+* How to assess model fit
+
+* Merging data sets with `merge()`
+
+* Analyse randomised experiments with `lm()`
+]
+---
+
+# Review
+
+.font150[
+* Linear regression minimised the squared distance of the points
+
+* Regression line always goes through the point of averages `\(\hat{X},\hat{Y}\)`
+
+* .orange[Regression equation]: `\(Y = \alpha + \beta X + \epsilon\)`
+  - `\(\alpha\)` is the intercept (value of `\(Y\)` when `\(X = 0\)`)
+  - `\(\beta\)` is the slope (increase/decrease in `\(Y\)` when `\(X\)` varies by one unit)
+  - `\(\epsilon\)` is the error term (difference from points to fitted line; mean zero)
+]
+---
+
+# Linear Models
+
+.font120[
+
+```r
+bivariate &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
+bivariate &lt;- subset(bivariate, Year == 2010)
+model1 &lt;- lm(Child.Mortality ~ log(GDP), data = bivariate)
+model1
+```
+
+```
+## 
+## Call:
+## lm(formula = Child.Mortality ~ log(GDP), data = bivariate)
+## 
+## Coefficients:
+## (Intercept)     log(GDP)  
+##      276.58       -26.13
+```
+* `\(Y = 276.58 - 26.13X + \epsilon\)`
+]
+---
+
+# R-Squared
+
+.font140[
+* How well does our regression line fit the data?
+
+* How well does the model predict the outcome?
+
+* `\(R^2\)`, _coefficient of determination_
+
+`$$R^2 = 1 - \frac{\textsf{SSR}}{\textsf{Total sum of squares (TSS)}}  \ = \ 1 - \frac{\sum_{i=1}^n \hat\epsilon_i^2}{\sum_{i=1}^n (Y_i - \overline{Y})^2}$$`
+* `\(R^2\)` is also defined as the _explained variance_ in Y
+
+* Goes from 0 to 1
+
+* We can use `summary(model)` to see it
+]
+---
+
+# Example
+
+.font110[
+
+```r
+summary(model1)
+```
+
+```
+## 
+## Call:
+## lm(formula = Child.Mortality ~ log(GDP), data = bivariate)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -46.733 -15.699  -4.320   6.974 133.772 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  276.582     15.534   17.80   &lt;2e-16 ***
+## log(GDP)     -26.127      1.691  -15.45   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 26.78 on 168 degrees of freedom
+##   (21 observations deleted due to missingness)
+*## Multiple R-squared:  0.587,	Adjusted R-squared:  0.5845 
+## F-statistic: 238.7 on 1 and 168 DF,  p-value: &lt; 2.2e-16
+```
+]
+---
+
+# Check the Residuals
+
+.font110[
+
+```r
+plot(fitted(model1), resid(model1), main = "Residuals",
+     xlab = "Fitted values", ylab = "Residuals")
+```
+
+&lt;img src="week07c_files/figure-html/res-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Check the Residuals
+
+.font120[
+
+```r
+# Which countries are the most relevant outliers?
+bivariate$Entity[resid(model1) == max(resid(model1))]
+```
+
+```
+## [1] Angola Timor 
+## 194 Levels: Afghanistan Albania Algeria Angola ... Zimbabwe
+```
+
+```r
+# Which country is the closest to the predicted line?
+bivariate$Entity[resid(model1) == min(resid(model1))]
+```
+
+```
+## [1] Kuwait
+## 194 Levels: Afghanistan Albania Algeria Angola ... Zimbabwe
+```
+]
+---
+
+# Caveats
+
+.font150[
+* `\(R^2\)` cannot be used to compare models estimated with different samples
+
+* `\(R^2\)` .orange[does not] indicate whether:
+  - _the independent variable causes the dependent variable_
+  - the model is correctly specified 
+  - the model suffers from ommitted variable bias
+  - there are enough data points to make a valid conclusion
+]
+---
+
+# Linear Models and RCTs
+
+.font150[
+* .orange[When the data come from a randomised experiment,] model parameters have a causal interpretation
+
+* Treatment status as the independent variable (0 or 1)
+  - 0 indicates control group
+  - 1 indicates treatment group
+]
+--
+.font150[
+* `\(Y = \alpha + \beta * treatment + \epsilon\)`
+]
+--
+.font150[
+* What is the interpretation of `\(\alpha\)` here?
+
+* What is the interpretation of `\(\beta\)` here?
+]
+---
+
+# Women as Policy Makers
+
+.font130[
+* Do women promote different policies than men?
+
+* Observational studies: compare policies adopted by female politicians with those adopted by male politicians
+
+* Randomised natural experiment:
+  - one third of village council heads reserved for women
+  - assigned at the level of Gram Panchayat (GP) since mid-1990s
+  - each GP has multiple villages
+
+* Hypothesis: female politicians represent the interests of female voters
+
+* Female voters complain about drinking water while male voters complain about irrigation
+]
+---
+
+# Data
+
+| Name         | Description                                                                                                                |
+| :----------- | :------------------------------------------------------------------------------------------------------------------------- |
+| `GP`         | An identifier for the Gram Panchayat (GP)                                                                                  |
+| `village`    | identifier for each village                                                                                                |
+| `reserved`   | binary variable indicating whether the GP was reserved for women leaders or not                                            |
+| `female`     | binary variable indicating whether the GP had a female leader or not                                                       |
+| `irrigation` | variable measuring the number of new or repaired irrigation facilities in the village since the reserve policy started     |
+| `water`      | variable measuring the number of new or repaired drinking-water facilities in the village since the reserve policy started |
+
+
+```r
+women &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/women.csv")
+names(women)
+```
+
+```
+## [1] "GP"         "village"    "reserved"   "female"     "irrigation"
+## [6] "water"
+```
+---
+
+# Models
+
+.font110[
+* Does the reservation policy increase female politicians?
+
+
+```r
+tapply(women$female, women$reserved, mean)
+```
+
+```
+##          0          1 
+## 0.07476636 1.00000000
+```
+
+* Does it change the policy outcomes?
+
+```r
+# drinking-water facilities
+tapply(women$water, women$reserved, mean)
+```
+
+```
+##        0        1 
+## 14.73832 23.99074
+```
+
+```r
+# irrigation facilities
+tapply(women$irrigation, women$reserved, mean)
+```
+
+```
+##        0        1 
+## 3.387850 3.018519
+```
+]
+---
+
+# Slope Coefficient = Difference-in-Means
+
+.font120[
+
+```r
+tapply(women$water, women$reserved, mean)
+```
+
+```
+##        0        1 
+*## 14.73832 23.99074
+```
+
+```r
+mean(women$water[women$reserved == 1]) - mean(women$water[women$reserved == 0])
+```
+
+```
+*## [1] 9.252423
+```
+
+```r
+lm(water ~ reserved, data = women)
+```
+
+```
+## 
+## Call:
+## lm(formula = water ~ reserved, data = women)
+## 
+## Coefficients:
+## (Intercept)     reserved  
+*##      14.738        9.252
+```
+]
+---
+
+# Linear Regression with Multiple Predictors
+
+.font130[
+* The Model:
+
+* `\(Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon\)`
+
+* Sum of squared residuals (SSR):
+
+* `\(\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 \ = \ \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta_1 X_{i1} - \hat\beta_2 X_{i2} - \cdots - \hat\beta_n X_{in})^2\)`
+
+* In R: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)` 
+]
+---
+
+# Social Pressure Experiment Revisited
+
+.font110[
+
+```r
+social &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/social.csv")
+levels(social$messages) # base level is `Civic'
+```
+
+```
+## [1] "Civic Duty" "Control"    "Hawthorne"  "Neighbors"
+```
+
+```r
+fit &lt;- lm(primary2006 ~ messages, data = social)
+fit
+```
+
+```
+## 
+## Call:
+## lm(formula = primary2006 ~ messages, data = social)
+## 
+## Coefficients:
+##       (Intercept)    messagesControl  messagesHawthorne  
+##          0.314538          -0.017899           0.007837  
+## messagesNeighbors  
+##          0.063411
+```
+* The `lm()` function automatically creates an indicator variable for each level of a factor variable
+]
+---
+
+# Social Pressure Experiment Revisited
+
+.font110[
+* The predicted values give the average outcome under each condition
+
+
+```r
+unique(social$messages)
+```
+
+```
+## [1] Civic Duty Hawthorne  Control    Neighbors 
+## Levels: Civic Duty Control Hawthorne Neighbors
+```
+
+```r
+predict(fit, newdata = data.frame(messages = unique(social$messages)))
+```
+
+```
+##         1         2         3         4 
+## 0.3145377 0.3223746 0.2966383 0.3779482
+```
+
+```r
+tapply(social$primary2006, social$messages, mean)
+```
+
+```
+## Civic Duty    Control  Hawthorne  Neighbors 
+##  0.3145377  0.2966383  0.3223746  0.3779482
+```
+]
+---
+
+# Merging Data Sets in R
+
+.font110[
+* We often have to merge data from different sources
+
+* If the data refer to the same units/indiviuals, .orange[it is essential that both data sets have the same identification variable]
+
+* Use `merge(x, y, by =)` function
+]
+
+
+```r
+pres2008 &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/pres08.csv")
+names(pres2008)
+```
+
+```
+## [1] "state.name" "state"      "Obama"      "McCain"     "EV"
+```
+
+```r
+intrade08 &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/intrade08.csv")
+names(intrade08)
+```
+
+```
+## [1] "X"         "day"       "statename" "PriceD"    "VolumeD"   "PriceR"   
+## [7] "VolumeR"   "state"
+```
+
+```r
+*pres.merged &lt;- merge(pres2008, intrade08, by = "state")
+```
+---
+
+# Merging Data Sets in R
+
+.font110[
+
+```r
+names(pres.merged)
+```
+
+```
+##  [1] "state"      "state.name" "Obama"      "McCain"     "EV"        
+##  [6] "X"          "day"        "statename"  "PriceD"     "VolumeD"   
+## [11] "PriceR"     "VolumeR"
+```
+
+```r
+head(pres.merged)
+```
+
+```
+##   state state.name Obama McCain EV     X        day statename PriceD
+## 1    AK     Alaska    38     59  3 24073 2008-02-28    Alaska    7.5
+## 2    AK     Alaska    38     59  3 25195 2008-03-21    Alaska    7.5
+## 3    AK     Alaska    38     59  3  8773 2007-05-04    Alaska   10.0
+## 4    AK     Alaska    38     59  3 25603 2008-03-29    Alaska    8.0
+## 5    AK     Alaska    38     59  3 25246 2008-03-22    Alaska    7.5
+## 6    AK     Alaska    38     59  3 23665 2008-02-20    Alaska    7.5
+##   VolumeD PriceR VolumeR
+## 1       0   92.5       0
+## 2       0   92.5       0
+## 3       0   90.0       0
+## 4       0   92.0       0
+## 5       0   92.5       0
+## 6       0   92.5       0
+```
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+# Homework
+
+.font150[
+* `swirl()` PREDICTION1
+]
+---
+
+class: inverse, center, middle
+
+# See you on Friday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

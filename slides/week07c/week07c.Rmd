@@ -1,0 +1,338 @@
+---
+title: "Week 07 - Prediction"
+subtitle: "Model Fit, LM for Randomised Experiments, Multiple Predictors, Merging Data Sets in R<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "8th March 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Review of least squares
+
+* How to assess model fit
+
+* Merging data sets with `merge()`
+
+* Analyse randomised experiments with `lm()`
+]
+---
+
+# Review
+
+.font150[
+* Linear regression minimised the squared distance of the points
+
+* Regression line always goes through the point of averages $\hat{X},\hat{Y}$
+
+* .orange[Regression equation]: $Y = \alpha + \beta X + \epsilon$
+  - $\alpha$ is the intercept (value of $Y$ when $X = 0$)
+  - $\beta$ is the slope (increase/decrease in $Y$ when $X$ varies by one unit)
+  - $\epsilon$ is the error term (difference from points to fitted line; mean zero)
+]
+---
+
+# Linear Models
+
+.font120[
+```{r lm01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+bivariate <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
+bivariate <- subset(bivariate, Year == 2010)
+model1 <- lm(Child.Mortality ~ log(GDP), data = bivariate)
+model1
+```
+* $Y = 276.58 - 26.13X + \epsilon$
+]
+---
+
+# R-Squared
+
+.font140[
+* How well does our regression line fit the data?
+
+* How well does the model predict the outcome?
+
+* $R^2$, _coefficient of determination_
+
+$$R^2 = 1 - \frac{\textsf{SSR}}{\textsf{Total sum of squares (TSS)}}  \ = \ 1 - \frac{\sum_{i=1}^n \hat\epsilon_i^2}{\sum_{i=1}^n (Y_i - \overline{Y})^2}$$
+* $R^2$ is also defined as the _explained variance_ in Y
+
+* Goes from 0 to 1
+
+* We can use `summary(model)` to see it
+]
+---
+
+# Example
+
+.font110[
+```{r rsq2,fig.align="center",tidy=F,warning=F,message=F,cache=T,highlight.output=18}
+summary(model1)
+```
+]
+---
+
+# Check the Residuals
+
+.font110[
+```{r res,fig.align="center",tidy=F,warning=F,message=F,cache=T,fig.height=6.5}
+plot(fitted(model1), resid(model1), main = "Residuals",
+     xlab = "Fitted values", ylab = "Residuals")
+```
+]
+---
+
+# Check the Residuals
+
+.font120[
+```{r res02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+# Which countries are the most relevant outliers?
+bivariate$Entity[resid(model1) == max(resid(model1))]
+
+# Which country is the closest to the predicted line?
+bivariate$Entity[resid(model1) == min(resid(model1))]
+```
+]
+---
+
+# Caveats
+
+.font150[
+* $R^2$ cannot be used to compare models estimated with different samples
+
+* $R^2$ .orange[does not] indicate whether:
+  - _the independent variable causes the dependent variable_
+  - the model is correctly specified 
+  - the model suffers from ommitted variable bias
+  - there are enough data points to make a valid conclusion
+]
+---
+
+# Linear Models and RCTs
+
+.font150[
+* .orange[When the data come from a randomised experiment,] model parameters have a causal interpretation
+
+* Treatment status as the independent variable (0 or 1)
+  - 0 indicates control group
+  - 1 indicates treatment group
+]
+--
+.font150[
+* $Y = \alpha + \beta * treatment + \epsilon$
+]
+--
+.font150[
+* What is the interpretation of $\alpha$ here?
+
+* What is the interpretation of $\beta$ here?
+]
+---
+
+# Women as Policy Makers
+
+.font130[
+* Do women promote different policies than men?
+
+* Observational studies: compare policies adopted by female politicians with those adopted by male politicians
+
+* Randomised natural experiment:
+  - one third of village council heads reserved for women
+  - assigned at the level of Gram Panchayat (GP) since mid-1990s
+  - each GP has multiple villages
+
+* Hypothesis: female politicians represent the interests of female voters
+
+* Female voters complain about drinking water while male voters complain about irrigation
+]
+---
+
+# Data
+
+| Name         | Description                                                                                                                |
+| :----------- | :------------------------------------------------------------------------------------------------------------------------- |
+| `GP`         | An identifier for the Gram Panchayat (GP)                                                                                  |
+| `village`    | identifier for each village                                                                                                |
+| `reserved`   | binary variable indicating whether the GP was reserved for women leaders or not                                            |
+| `female`     | binary variable indicating whether the GP had a female leader or not                                                       |
+| `irrigation` | variable measuring the number of new or repaired irrigation facilities in the village since the reserve policy started     |
+| `water`      | variable measuring the number of new or repaired drinking-water facilities in the village since the reserve policy started |
+
+```{r data,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+women <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/women.csv")
+names(women)
+```
+---
+
+# Models
+
+.font110[
+* Does the reservation policy increase female politicians?
+
+```{r m1,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+tapply(women$female, women$reserved, mean)
+```
+
+* Does it change the policy outcomes?
+```{r m2,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+# drinking-water facilities
+tapply(women$water, women$reserved, mean)
+
+# irrigation facilities
+tapply(women$irrigation, women$reserved, mean)
+```
+]
+---
+
+# Slope Coefficient = Difference-in-Means
+
+.font120[
+```{r women03,fig.align="center",tidy=F,warning=F,message=F,cache=T,highlight.output=2}
+tapply(women$water, women$reserved, mean)
+```
+```{r women04,fig.align="center",tidy=F,warning=F,message=F,cache=T,highlight.output=1}
+mean(women$water[women$reserved == 1]) - mean(women$water[women$reserved == 0])
+```
+```{r women05,fig.align="center",tidy=F,warning=F,message=F,cache=T,highlight.output=7}
+lm(water ~ reserved, data = women)
+```
+]
+---
+
+# Linear Regression with Multiple Predictors
+
+.font130[
+* The Model:
+
+* $Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$
+
+* Sum of squared residuals (SSR):
+
+* $\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 \ = \ \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta_1 X_{i1} - \hat\beta_2 X_{i2} - \cdots - \hat\beta_n X_{in})^2$
+
+* In R: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)` 
+]
+---
+
+# Social Pressure Experiment Revisited
+
+.font110[
+```{r soc01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+social <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/social.csv")
+levels(social$messages) # base level is `Civic'
+fit <- lm(primary2006 ~ messages, data = social)
+fit
+```
+* The `lm()` function automatically creates an indicator variable for each level of a factor variable
+]
+---
+
+# Social Pressure Experiment Revisited
+
+.font110[
+* The predicted values give the average outcome under each condition
+
+```{r soc02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+unique(social$messages)
+predict(fit, newdata = data.frame(messages = unique(social$messages)))
+tapply(social$primary2006, social$messages, mean)
+```
+]
+---
+
+# Merging Data Sets in R
+
+.font110[
+* We often have to merge data from different sources
+
+* If the data refer to the same units/indiviuals, .orange[it is essential that both data sets have the same identification variable]
+
+* Use `merge(x, y, by =)` function
+]
+
+```{r merge,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+pres2008 <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/pres08.csv")
+names(pres2008)
+intrade08 <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/intrade08.csv")
+names(intrade08)
+{{pres.merged <- merge(pres2008, intrade08, by = "state")}}
+```
+---
+
+# Merging Data Sets in R
+
+.font110[
+```{r merge01,fig.align="center",tidy=F,warning=F,message=F,cache=F}
+names(pres.merged)
+head(pres.merged)
+```
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
+---
+
+# Homework
+
+.font150[
+* `swirl()` PREDICTION1
+]
+---
+
+class: inverse, center, middle
+
+# See you on Friday!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
