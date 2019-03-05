@@ -204,7 +204,7 @@ plot(log(bivariate$GDP), bivariate$Child.Mortality, pch = 19,
 .font150[
 * .orange[We minimise the _sum of the squared residuals (SSR)_]
 
-`$$\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 = \sum_{i=1}^n (Y_i - \widehat{Y_{i}})^2 = \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta X_i)^2$$`
+`$$\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 = \sum_{i=1}^n (Y_i - \hat{Y_{i}})^2 = \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta X_i)^2$$`
 * This also minimises the root mean squared error: `\(RMSE = \sqrt{\frac{1}{n}\textsf{SSR}}\)`
 ]
 ---
@@ -228,7 +228,7 @@ OR
 
 # Example
 
-.font130[
+.font120[
 * Enough math! R makes it very easy to estimate linear models with `lm()`
 
 
