@@ -139,7 +139,7 @@ cor(bivariate$Child.Mortality, log(bivariate$GDP), use = "complete")
 plot(log(bivariate$GDP), bivariate$Child.Mortality, pch = 19, 
      main = "Log GDP Per Capita and Child Mortality",
      xlab = "Log GDP Per Capita", ylab = "Child Mortality")
-*abline(lm(bivariate$Child.Mortality ~ log(bivariate$GDP)), col = "red", lwd = 2)
+*abline(lm(Child.Mortality ~ log(GDP), data = bivariate), col = "red", lwd = 2)
 ```
 
 &lt;img src="week07b_files/figure-html/gap02-1.png" style="display: block; margin: auto;" /&gt;
