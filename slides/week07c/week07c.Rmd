@@ -1,5 +1,5 @@
 ---
-title: "Week 07 - Prediction"
+title: "Week 07 - Regression"
 subtitle: "Model Fit, LM for Randomised Experiments, Multiple Predictors, Merging Data Sets in R<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
 date: "8th March 2019"
@@ -58,7 +58,7 @@ set.seed(12345)
 .font150[
 * Review of least squares
 
-* How to assess model fit
+* How to assess model fit with $R^2$
 
 * Analyse randomised experiments with `lm()`
 
@@ -69,9 +69,9 @@ set.seed(12345)
 # Review
 
 .font150[
-* Linear regression minimised the squared distance of the points
+* Linear regression minimises the squared distance of the points
 
-* Regression line always goes through the point of averages $\hat{X},\hat{Y}$
+* A few things to remember:
 
 * .orange[Regression equation]: $Y = \alpha + \beta X + \epsilon$
   - $\alpha$ is the intercept (value of $Y$ when $X = 0$)
@@ -86,8 +86,8 @@ set.seed(12345)
 ```{r lm01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
 bivariate <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
 bivariate <- subset(bivariate, Year == 2010)
-model1 <- lm(Child.Mortality ~ log(GDP), data = bivariate)
-model1
+model.cm <- lm(Child.Mortality ~ log(GDP), data = bivariate)
+model.cm
 ```
 * $Y = 276.58 - 26.13X + \epsilon$
 ]
@@ -97,8 +97,6 @@ model1
 
 .font140[
 * How well does our regression line fit the data?
-
-* How well does the model predict the outcome?
 
 * $R^2$, _coefficient of determination_
 
@@ -116,29 +114,6 @@ $$R^2 = 1 - \frac{\textsf{SSR}}{\textsf{Total sum of squares (TSS)}}  \ = \ 1 - 
 .font110[
 ```{r rsq2,fig.align="center",tidy=F,warning=F,message=F,cache=T,highlight.output=18}
 summary(model1)
-```
-]
----
-
-# Check the Residuals
-
-.font110[
-```{r res,fig.align="center",tidy=F,warning=F,message=F,cache=T,fig.height=6.5}
-plot(fitted(model1), resid(model1), main = "Residuals",
-     xlab = "Fitted values", ylab = "Residuals")
-```
-]
----
-
-# Check the Residuals
-
-.font120[
-```{r res02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
-# Which countries are the most relevant outliers?
-bivariate$Entity[resid(model1) == max(resid(model1))]
-
-# Which country is the closest to the predicted line?
-bivariate$Entity[resid(model1) == min(resid(model1))]
 ```
 ]
 ---
@@ -179,14 +154,14 @@ bivariate$Entity[resid(model1) == min(resid(model1))]
 
 # Women as Policy Makers
 
-.font130[
+.font120[
 * Do women promote different policies than men?
 
 * Observational studies: compare policies adopted by female politicians with those adopted by male politicians
 
 * Randomised natural experiment:
   - one third of village council heads reserved for women
-  - assigned at the level of Gram Panchayat (GP) since mid-1990s
+  - assigned at the level of Gram Panchayat (village council) since mid-1990s
   - each GP has multiple villages
 
 * Hypothesis: female politicians represent the interests of female voters
@@ -199,7 +174,7 @@ bivariate$Entity[resid(model1) == min(resid(model1))]
 
 | Name         | Description                                                                                                                |
 | :----------- | :------------------------------------------------------------------------------------------------------------------------- |
-| `GP`         | An identifier for the Gram Panchayat (GP)                                                                                  |
+| `GP`         | An identifier for the Gram Panchayat (village council)                                                                     |
 | `village`    | identifier for each village                                                                                                |
 | `reserved`   | binary variable indicating whether the GP was reserved for women leaders or not                                            |
 | `female`     | binary variable indicating whether the GP had a female leader or not                                                       |
@@ -247,43 +222,81 @@ lm(water ~ reserved, data = women)
 ]
 ---
 
-# Linear Regression with Multiple Predictors
+# Resume Experiment Revisited
 
-.font130[
-* The Model:
-
-* $Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n + \epsilon$
-
-* Sum of squared residuals (SSR):
-
-* $\textsf{SSR} = \sum_{i=1}^n \hat\epsilon_i^2 \ = \ \sum_{i=1}^n (Y_i - \hat\alpha - \hat\beta_1 X_{i1} - \hat\beta_2 X_{i2} - \cdots - \hat\beta_n X_{in})^2$
-]
----
-
-# Social Pressure Experiment Revisited
-
-.font110[
+.font100[
 ```{r soc01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
-social <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/social.csv")
-levels(social$messages) # base level is `Civic'
-fit <- lm(primary2006 ~ messages, data = social)
-fit
+resume <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
+model1 <- lm(call ~ race, data = resume)
+model1
+tapply(resume$call, resume$race, mean)
+# baseline (black) + the effect of having a white-sounding name
+0.06448 + 0.03203
 ```
-* The `lm()` function automatically creates an indicator variable for each level of a factor variable
 ]
 ---
 
-# Social Pressure Experiment Revisited
+# Call Rates and Gender
 
 .font110[
-* The predicted values give the average outcome under each condition
+* Let's add a gender indicator
 
 ```{r soc02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
-unique(social$messages)
-predict(fit, newdata = data.frame(messages = unique(social$messages)))
-tapply(social$primary2006, social$messages, mean)
+model2 <- lm(call ~ sex, data = resume)
+model2
+tapply(resume$call, resume$sex, mean)
 ```
 ]
+---
+
+# Race + Gender
+
+.font120[
+```{r soc02a,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+model3 <- lm(call ~ race + sex, data = resume)
+model3
+# Call rates for a white male
+ 0.066534 + 0.032130 - 0.009128
+```
+* Regression Equation: $Y = 0.066 + 0.032*white - 0.009*male + \epsilon$
+]
+---
+
+# Interpreting Multiple Predictors
+
+.font150[
+* .orange[Ceteris Paribus]: _holding everything else constant_
+
+* Let's interpret the coefficient for _white_ in $Y = 0.066 + 0.032*white - 0.009*male + \epsilon$
+
+* We say: "_all else equal, having a white-sounding name increases the change of getting a job call in about 3%. Candidates with black-sounding names have 6% change of getting a job call, so candidates with white-sounding names are 50% more likely to get a job call_"
+]
+
+---
+
+# Adjusted R-Squared
+
+.font140[
+* When we have more than one independent variable, we need to modify the $R^2$ formula to account for those additional variables
+
+* $R^2$ measures the overall impact of _all_ variables at once, but some might just add noise to the model
+
+* Every predictor added to a model increases $R^2$ and never decreases it
+
+* Adjusted $R^2$ compensates for the addition of variables and only increases _if the new term enhances the model_
+
+* It is usually lower than regular $R^2$ but not much
+]
+---
+
+# Adjusted R-Squared
+
+.font110[
+```{r arsq,fig.align="center",tidy=F,warning=F,message=F,cache=T,highlight.output=18}
+summary(model.cm)
+```
+]
+
 ---
 
 # Merging Data Sets in R
@@ -325,12 +338,12 @@ class: inverse, center, middle
 # Homework
 
 .font150[
-* `swirl()` PREDICTION1
+* `swirl()` PREDICTION2
 ]
 ---
 
 class: inverse, center, middle
 
-# See you on Friday!
+# See you!
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
