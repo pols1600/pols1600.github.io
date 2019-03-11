@@ -269,7 +269,7 @@ model3
 
 * Let's interpret the coefficient for _white_ in $Y = 0.066 + 0.032*white - 0.009*male + \epsilon$
 
-* We say: "_all else equal, having a white-sounding name increases the change of getting a job call in about 3%. Candidates with black-sounding names have 6% change of getting a job call, so candidates with white-sounding names are 50% more likely to get a job call_"
+* We say: "_all else equal, having a white-sounding name increases the change of getting a job call in about 3%. Since candidates with black-sounding names have about 6% job call rates, candidates with white-sounding names are 50% more likely to get a call_"
 ]
 
 ---
