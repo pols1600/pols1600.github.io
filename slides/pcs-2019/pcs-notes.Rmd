@@ -1,0 +1,35 @@
+---
+title: "Notes"
+author: "Danilo Freire"
+date: "3/14/2019"
+font: 12pt
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Slide 1
+
+* Since WWII, about 35 million people died as victims of genocides
+
+* Some of these tragic events have been widely publicised. Cambodian genocide, carried out by Khmer Rouge under the leadership of Pol Pot, killed up to 25% of the country's population in 1975
+
+* Rwandan genocide, where up to a million Tutsi were killed by Hutus in 1994
+    
+# Slide 2
+
+* International community has responded with a series of measures to prevent genocides. Among those initiatives, I would like to highlight that:
+    - the United Nations established a Special Adviser on the Prevention of Genocide
+    - recognised its members’ responsibility to protect civilian populations within and outside their own borders. Summarised in the 2001 report
+ 
+* Yet, these atrocities still occur   
+
+* Although the number of genocides has declined after the end of the Cold War, cases of mass killings are unfortunately not unfrequent
+    - South Sudan's President Salva Kiir
+    - Most famously, the civil war in Syria, which many scholars now describe as a genocide
+    
+# Slide 4
+
+* Despite our
