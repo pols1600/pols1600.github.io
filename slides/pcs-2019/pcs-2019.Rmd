@@ -83,12 +83,12 @@ background-image: url(syria.jpg)
 # Our study
 
 .font140[
-* _Out-of-sample predictions_
+* Proposed solution: _Out-of-sample predictions_
 ]
 --
 .font140[
 * Goals: 
-  - Produce accurate out-of-sample predictions of mass killings
+  - Produce accurate predictions of mass killings
   - Use prediction heuristics to test existing theories 
   - Reduce model heterogeneity
 ]
