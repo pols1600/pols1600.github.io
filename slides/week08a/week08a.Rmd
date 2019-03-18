@@ -1,6 +1,6 @@
 ---
 title: "Week 08 - Regression"
-subtitle: "Multivariate Models and Heterogeneous Causal Effects<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+subtitle: "Multivariate Models, Statistical Control and Standardised Coefficients<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
 date: "11th March 2019"
 output: 
@@ -60,7 +60,7 @@ set.seed(12345)
 
 * Statistical controls
 
-* Heterogeneous causal effects
+* Standardised coefficients
 ]
 ---
 
@@ -70,10 +70,6 @@ set.seed(12345)
 * We can include more than one predictor in the regression model: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)`
 
 * Principle of regression model stays the same: to draw the best fitting line through a cloud of points (now in multiple dimensions)
-
-* We can use the multiple regression to .orange[control for confounders]
-
-* We measure the effect of $X$ on $Y$ .orange[holding constant all remaining variables]
 ]
 ---
 
@@ -81,34 +77,40 @@ set.seed(12345)
 
 .font150[
 * $Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + ... + \beta_n X_n + \epsilon$
-  - $\alpha =$ intercept, the value of $Y$ when _all_ $X$ variables are zero
-  - $\beta_n =$ the slope of predictor $X_n$
-  - $\beta_n =$ predicted change in $\hat{Y}$ when $X_n$ increases by 1 unit _and all other predictors are held constant_
   
-* Example: impact of race when gender is not changing
+* $\alpha =$ intercept, the value of $Y$ when _all_ $X$ variables are zero
+
+* $\beta_n =$ the slope of predictor $X_n$
+
+* $\beta_n =$ predicted change in $\hat{Y}$ when $X_n$ increases by 1 unit _and all other predictors are held constant_
 ]
 ---
 
-# Race and Jobs Revisited
+# Statistical Control
 
-.font120[
-```{r race01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
-resume <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
-lm(call ~ race + sex, data = resume)
-```
+.font150[
+* We include more variables in a regression also because we want to .orange[control for confounders]
+
+* We hold constant factors that we believe are also associated with $Y$
+
+* We can then _dissociate_ what can be explained by $X_1$ from what can be explained by $X_2$
+
+* We have "more realistic" estimates
+ 
+* Example: impact of GDP on child mortality when political regime doesn't change
 ]
 ---
 
 # Child Mortality
 
 .font120[
-* Effect of Log GDP per capita on child mortality when we hold political regime constant
 ```{r mort,fig.align="center",tidy=F,warning=F,message=F,cache=T}
 mortality <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
 mortality <- subset(mortality, subset = Year == 2010)
-model.cm <- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
-coef(model.cm)
-summary(model.cm)$r.squared
+bivar <- lm(Child.Mortality ~ log(GDP), data = mortality)
+multiple <- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
+coef(bivar)
+coef(multiple)
 ```
 ]
 ---
@@ -116,113 +118,89 @@ summary(model.cm)$r.squared
 # Adjusted R-Squared
 
 .font150[
-* In multiple regression models we want to adjust the goodness of fit statistic by the number of variables included
+* As we saw last week, $R^2$ is not a very good measure of model fit
 
-* This is done via the degrees of freedom (DF) adjustment:
+* The more predictors you add to the model, the higher the $R^2$
 
-$$\textsf{adjusted} R^{2} = 1 - \frac{SSR /(n-p-1)}{TSS/(n-1)}$$
-]
-.font110[
-```{r adj,fig.align="center",tidy=F,warning=F,message=F,cache=T}
-summary(model.cm)$r.squared
-summary(model.cm)$adj.r.squared
-```
+* Adjusted $R^2$ will equal $R^2$ for one predictor variable, but lower if you add more
+
+* Adjusted $R^2$ "penalises" you for adding the extra predictor variables that don't improve the existing model
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Adjusted R-Squared
 
 .font150[
-* In randomised experiments, we can explore _heterogeneous treatment effects_ using variable interactions
-
-* .orange[Drastically changes the interpretation of all the coefficients]
-
-* Plotting or predictions usually necessary
-
-* Equation: $Y = \alpha + \beta_1X_1 + \beta_2X_2 + \beta_3X_1X_2 + \epsilon$
-
-* $\beta_1$ is _not_ the unique effect of $X_1$ on $Y$; the interaction means the effect of $\beta_1$ _depends_ on $\beta_2$ and $X_2$. Vice-versa for $\beta_2$.
+```{r adj01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+summary(bivar)$r.squared
+summary(multiple)$r.squared
+summary(multiple)$adj.r.squared
+```
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
 .font150[
-* As interactions are hard to interpret, one suggestion is to use predictions and plot graphs
+* Regression coefficients cannot be directly compared as independent variables have different scales (dollars, years, etc)
 
-* Considering that $X_1$ is a numeric variable and $X_2$ is a factor and denotes treatment condition:
-  - `object01 <- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Control"))`
-  - `object02 <- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Treatment"))`
-  
-* The difference between both predictions is the average treatment effect
+* One way to make them more comparable is to standardise the variables
+
+* You already know how to standardise variables: _z-score_
+
+* (value - mean)/standard deviation
+
+* So the variables would have a mean of zero and a standard deviation of 1
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
 .font150[
-* It is .orange[strongly] advised to visualise heterogeneous effects with plots
+* When continuous variables are standardised, the coefficients indicate _one standard deviation change_
 
-* I also .orange[strongly] recommend the following articles:
-  - Brambor, Thomas; Clark, William; Golder, Matt. 2006. [Understanding Interaction Models: Improving Empirical Analyses](https://www.jstor.org/stable/25791835?seq=1#metadata_info_tab_contents). _Political Analysis_, 14:1, 63-82.
-  - Hainmueller, Jens; Mummolo, Jonathan; Xu, Yiqing. 2018. [How Much Should We Trust Estimates from Multiplicative Interaction Models? Simple Tools to Improve Empirical Practice](https://doi.org/10.1017/pan.2018.46). _Political Analysis_, first view, 1-30.
+* We can compare 1 sd in all factors
+
+* We use the `scale()` command to standardise factors
+
+* The intercept _is still_ the value of $\hat{Y}$ when all predictors equal zero
+
+* .orange[But now zero is the mean value of the predictors]
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
-.font110[
-```{r inter,fig.align="center",tidy=F,warning=F,message=F,cache=T}
-social <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/social.csv")
-# subset Neighbours and Control groups
-social.neighbour <- subset(social,
-                           (messages == "Control") |
-                             (messages == "Neighbors"))
-# create new variable "age"
-social.neighbour$age <- 2008 - social.neighbour$yearofbirth
-summary(social.neighbour$age)
+.font120[
+```{r mortsd,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+mean(mortality$PolityIV, na.rm = TRUE)
+sd(mortality$PolityIV, na.rm = TRUE)
+mean(mortality$GDP, na.rm = TRUE)
+sd(mortality$GDP, na.rm = TRUE)
 ```
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
-.font110[
-```{r inter02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
-# fit model
-model.inter <- lm(primary2006 ~ age + I(age^2) +
-                    messages + age:messages + I(age^2):messages,
-                  data = social.neighbour)
-model.inter
+.font120[
+```{r}
+mortality$sd.polity.iv <- scale(mortality$PolityIV)
+mortality$sd.gdp <- scale(mortality$GDP)
+summary(mortality$sd.gdp)
+sd(mortality$sd.gdp, na.rm = TRUE)
 ```
 ]
 ---
 
-# Predictions
+# Standardised Coefficients
 
-.font110[
-```{r inter03,fig.align="center",tidy=F,warning=F,message=F,cache=F}
-# predicted turnout rate under the Neighbours treatment condition
-yT.hat <- predict(model.inter,
-                  newdata = data.frame(age = 25:85, messages = "Neighbors"))
-
-# predicted turnout rate under the Control condition
-yC.hat <- predict(model.inter,
-                  newdata = data.frame(age = 25:85, messages = "Control"))
-
-# average treatment effect
-ate.age <- yT.hat - yC.hat
-```
-]
----
-
-# Plot
-
-.font110[
-```{r inter04,fig.align="center",tidy=F,warning=F,message=F,cache=T,fig.height=6}
-plot(x = 25:85, y = ate.age, type = "l", 
-     main = "Average Treatment Effects According to Age",
-     xlab = "Age", ylab = "Estimated ATE")
+.font120[
+```{r}
+unstd <- lm(Child.Mortality ~ GDP + PolityIV, data = mortality)
+std <- lm(Child.Mortality ~ sd.gdp + sd.polity.iv, data = mortality)
+coef(unstd)
+coef(std)
 ```
 ]
 ---

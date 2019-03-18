@@ -13,7 +13,7 @@
 class: center, middle, inverse, title-slide
 
 # Week 08 - Regression
-## Multivariate Models and Heterogeneous Causal Effects
+## Multivariate Models, Statistical Control and Standardised Coefficients
 <html>
 <div style="float:left">
 
@@ -60,7 +60,7 @@ class: center, middle, inverse, title-slide
 
 * Statistical controls
 
-* Heterogeneous causal effects
+* Standardised coefficients
 ]
 ---
 
@@ -70,10 +70,6 @@ class: center, middle, inverse, title-slide
 * We can include more than one predictor in the regression model: `lm(Y ~ X1 + X2 + ... + Xn, data = yourdataset)`
 
 * Principle of regression model stays the same: to draw the best fitting line through a cloud of points (now in multiple dimensions)
-
-* We can use the multiple regression to .orange[control for confounders]
-
-* We measure the effect of `\(X\)` on `\(Y\)` .orange[holding constant all remaining variables]
 ]
 ---
 
@@ -81,58 +77,54 @@ class: center, middle, inverse, title-slide
 
 .font150[
 * `\(Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + ... + \beta_n X_n + \epsilon\)`
-  - `\(\alpha =\)` intercept, the value of `\(Y\)` when _all_ `\(X\)` variables are zero
-  - `\(\beta_n =\)` the slope of predictor `\(X_n\)`
-  - `\(\beta_n =\)` predicted change in `\(\hat{Y}\)` when `\(X_n\)` increases by 1 unit _and all other predictors are held constant_
   
-* Example: impact of race when gender is not changing
+* `\(\alpha =\)` intercept, the value of `\(Y\)` when _all_ `\(X\)` variables are zero
+
+* `\(\beta_n =\)` the slope of predictor `\(X_n\)`
+
+* `\(\beta_n =\)` predicted change in `\(\hat{Y}\)` when `\(X_n\)` increases by 1 unit _and all other predictors are held constant_
 ]
 ---
 
-# Race and Jobs Revisited
+# Statistical Control
 
-.font120[
+.font150[
+* We include more variables in a regression also because we want to .orange[control for confounders]
 
-```r
-resume &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
-lm(call ~ race + sex, data = resume)
-```
+* We hold constant factors that we believe are also associated with `\(Y\)`
 
-```
-## 
-## Call:
-## lm(formula = call ~ race + sex, data = resume)
-## 
-## Coefficients:
-## (Intercept)    racewhite      sexmale  
-##    0.066534     0.032130    -0.009128
-```
+* We can then _dissociate_ what can be explained by `\(X_1\)` from what can be explained by `\(X_2\)`
+
+* We have "more realistic" estimates
+ 
+* Example: impact of GDP on child mortality when political regime doesn't change
 ]
 ---
 
 # Child Mortality
 
 .font120[
-* Effect of Log GDP per capita on child mortality when we hold political regime constant
 
 ```r
 mortality &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
 mortality &lt;- subset(mortality, subset = Year == 2010)
-model.cm &lt;- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
-coef(model.cm)
+bivar &lt;- lm(Child.Mortality ~ log(GDP), data = mortality)
+multiple &lt;- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
+coef(bivar)
+```
+
+```
+## (Intercept)    log(GDP) 
+##   276.58162   -26.12717
+```
+
+```r
+coef(multiple)
 ```
 
 ```
 ## (Intercept)    log(GDP)    PolityIV 
 ##  277.845620  -25.641789   -1.029062
-```
-
-```r
-summary(model.cm)$r.squared
-```
-
-```
-## [1] 0.6113747
 ```
 ]
 ---
@@ -140,16 +132,30 @@ summary(model.cm)$r.squared
 # Adjusted R-Squared
 
 .font150[
-* In multiple regression models we want to adjust the goodness of fit statistic by the number of variables included
+* As we saw last week, `\(R^2\)` is not a very good measure of model fit
 
-* This is done via the degrees of freedom (DF) adjustment:
+* The more predictors you add to the model, the higher the `\(R^2\)`
 
-`$$\textsf{adjusted} R^{2} = 1 - \frac{SSR /(n-p-1)}{TSS/(n-1)}$$`
+* Adjusted `\(R^2\)` will equal `\(R^2\)` for one predictor variable, but lower if you add more
+
+* Adjusted `\(R^2\)` "penalises" you for adding the extra predictor variables that don't improve the existing model
 ]
-.font110[
+---
+
+# Adjusted R-Squared
+
+.font150[
 
 ```r
-summary(model.cm)$r.squared
+summary(bivar)$r.squared
+```
+
+```
+## [1] 0.586953
+```
+
+```r
+summary(multiple)$r.squared
 ```
 
 ```
@@ -157,7 +163,7 @@ summary(model.cm)$r.squared
 ```
 
 ```r
-summary(model.cm)$adj.r.squared
+summary(multiple)$adj.r.squared
 ```
 
 ```
@@ -166,126 +172,128 @@ summary(model.cm)$adj.r.squared
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
 .font150[
-* In randomised experiments, we can explore _heterogeneous treatment effects_ using variable interactions
+* Regression coefficients cannot be directly compared as independent variables have different scales (dollars, years, etc)
 
-* .orange[Drastically changes the interpretation of all the coefficients]
+* One way to make them more comparable is to standardise the variables
 
-* Plotting or predictions usually necessary
+* You already know how to standardise variables: _z-score_
 
-* Equation: `\(Y = \alpha + \beta_1X_1 + \beta_2X_2 + \beta_3X_1X_2 + \epsilon\)`
+* (value - mean)/standard deviation
 
-* `\(\beta_1\)` is _not_ the unique effect of `\(X_1\)` on `\(Y\)`; the interaction means the effect of `\(\beta_1\)` _depends_ on `\(\beta_2\)` and `\(X_2\)`. Vice-versa for `\(\beta_2\)`.
+* So the variables would have a mean of zero and a standard deviation of 1
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
 .font150[
-* As interactions are hard to interpret, one suggestion is to use predictions and plot graphs
+* When continuous variables are standardised, the coefficients indicate _one standard deviation change_
 
-* Considering that `\(X_1\)` is a numeric variable and `\(X_2\)` is a factor and denotes treatment condition:
-  - `object01 &lt;- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Control"))`
-  - `object02 &lt;- predict(nameofyourmodel, newdata = data.frame(X1 = value01:value02, X2 = "Treatment"))`
-  
-* The difference between both predictions is the average treatment effect
+* We can compare 1 sd in all factors
+
+* We use the `scale()` command to standardise factors
+
+* The intercept _is still_ the value of `\(\hat{Y}\)` when all predictors equal zero
+
+* .orange[But now zero is the mean value of the predictors]
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
-.font150[
-* It is .orange[strongly] advised to visualise heterogeneous effects with plots
-
-* I also .orange[strongly] recommend the following articles:
-  - Brambor, Thomas; Clark, William; Golder, Matt. 2006. [Understanding Interaction Models: Improving Empirical Analyses](https://www.jstor.org/stable/25791835?seq=1#metadata_info_tab_contents). _Political Analysis_, 14:1, 63-82.
-  - Hainmueller, Jens; Mummolo, Jonathan; Xu, Yiqing. 2018. [How Much Should We Trust Estimates from Multiplicative Interaction Models? Simple Tools to Improve Empirical Practice](https://doi.org/10.1017/pan.2018.46). _Political Analysis_, first view, 1-30.
-]
----
-
-# Heterogeneous Effects/Interactions
-
-.font110[
+.font120[
 
 ```r
-social &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/social.csv")
-# subset Neighbours and Control groups
-social.neighbour &lt;- subset(social,
-                           (messages == "Control") |
-                             (messages == "Neighbors"))
-# create new variable "age"
-social.neighbour$age &lt;- 2008 - social.neighbour$yearofbirth
-summary(social.neighbour$age)
+mean(mortality$PolityIV, na.rm = TRUE)
 ```
 
 ```
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##   22.00   43.00   52.00   51.82   61.00  108.00
+## [1] 3.858025
+```
+
+```r
+sd(mortality$PolityIV, na.rm = TRUE)
+```
+
+```
+## [1] 6.263239
+```
+
+```r
+mean(mortality$GDP, na.rm = TRUE)
+```
+
+```
+## [1] 18189.2
+```
+
+```r
+sd(mortality$GDP, na.rm = TRUE)
+```
+
+```
+## [1] 19058.94
 ```
 ]
 ---
 
-# Heterogeneous Effects/Interactions
+# Standardised Coefficients
 
-.font110[
+.font120[
 
 ```r
-# fit model
-model.inter &lt;- lm(primary2006 ~ age + I(age^2) +
-                    messages + age:messages + I(age^2):messages,
-                  data = social.neighbour)
-model.inter
+mortality$sd.polity.iv &lt;- scale(mortality$PolityIV)
+mortality$sd.gdp &lt;- scale(mortality$GDP)
+summary(mortality$sd.gdp)
 ```
 
 ```
-## 
-## Call:
-## lm(formula = primary2006 ~ age + I(age^2) + messages + age:messages + 
-##     I(age^2):messages, data = social.neighbour)
-## 
-## Coefficients:
-##                (Intercept)                         age  
-##                 -9.700e-02                   1.172e-02  
-##                   I(age^2)           messagesNeighbors  
-##                 -7.389e-05                  -5.275e-02  
-##      age:messagesNeighbors  I(age^2):messagesNeighbors  
-##                  4.804e-03                  -3.961e-05
+##        V1         
+##  Min.   :-0.9246  
+##  1st Qu.:-0.7402  
+##  Median :-0.3485  
+##  Mean   : 0.0000  
+##  3rd Qu.: 0.4939  
+##  Max.   : 5.4221  
+##  NA's   :9
+```
+
+```r
+sd(mortality$sd.gdp, na.rm = TRUE)
+```
+
+```
+## [1] 1
 ```
 ]
 ---
 
-# Predictions
+# Standardised Coefficients
 
-.font110[
-
-```r
-# predicted turnout rate under the Neighbours treatment condition
-yT.hat &lt;- predict(model.inter,
-                  newdata = data.frame(age = 25:85, messages = "Neighbors"))
-
-# predicted turnout rate under the Control condition
-yC.hat &lt;- predict(model.inter,
-                  newdata = data.frame(age = 25:85, messages = "Control"))
-
-# average treatment effect
-ate.age &lt;- yT.hat - yC.hat
-```
-]
----
-
-# Plot
-
-.font110[
+.font120[
 
 ```r
-plot(x = 25:85, y = ate.age, type = "l", 
-     main = "Average Treatment Effects According to Age",
-     xlab = "Age", ylab = "Estimated ATE")
+unstd &lt;- lm(Child.Mortality ~ GDP + PolityIV, data = mortality)
+std &lt;- lm(Child.Mortality ~ sd.gdp + sd.polity.iv, data = mortality)
+coef(unstd)
 ```
 
-&lt;img src="week08a_files/figure-html/inter04-1.png" style="display: block; margin: auto;" /&gt;
+```
+##  (Intercept)          GDP     PolityIV 
+## 68.029245081 -0.001215594 -1.715946970
+```
+
+```r
+coef(std)
+```
+
+```
+##  (Intercept)       sd.gdp sd.polity.iv 
+##     39.29839    -23.16794    -10.74739
+```
 ]
 ---
 
