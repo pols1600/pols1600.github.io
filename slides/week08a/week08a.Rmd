@@ -117,6 +117,7 @@ set.seed(12345)
 ```{r mort,fig.align="center",tidy=F,warning=F,message=F,cache=T}
 mortality <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
 mortality <- subset(mortality, subset = Year == 2010)
+names(mortality)
 bivar <- lm(Child.Mortality ~ log(GDP), data = mortality)
 multiple <- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
 coef(bivar)

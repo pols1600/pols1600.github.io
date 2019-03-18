@@ -118,6 +118,15 @@ class: center, middle, inverse, title-slide
 ```r
 mortality &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/bivariate_data.csv")
 mortality &lt;- subset(mortality, subset = Year == 2010)
+names(mortality)
+```
+
+```
+## [1] "X"               "Entity"          "Year"            "Country.code"   
+## [5] "GDP"             "PolityIV"        "Child.Mortality"
+```
+
+```r
 bivar &lt;- lm(Child.Mortality ~ log(GDP), data = mortality)
 multiple &lt;- lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality)
 coef(bivar)
