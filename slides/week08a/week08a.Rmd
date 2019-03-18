@@ -73,6 +73,16 @@ set.seed(12345)
 ]
 ---
 
+# Credit Limit, Balance and Income
+
+.center[![:scale 100%](2numxplot1-1.png)]
+---
+
+# Multivariate Linear Model
+
+.center[![:scale 90%](newplot.png)]
+---
+
 # Interpretation
 
 .font150[
