@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 09 - Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <link href="week09b_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week09b_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week09b_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 09 - Regression
+## In Class Exercise
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 20th March 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# QSS 4.5.2 (pp. 184)
+
+.font150[
+In this exercise, we analyse the data from a study that seeks to estimate the electoral impact of *Progresa*, Mexico's *conditional cash transfer programme* (CCT programme). 
+]
+---
+
+# QSS 4.5.2 (pp. 184)
+
+.font150[
+The original study relied on a randomised evaluation of the CCT program in which eligible villages were randomly assigned to receive the program either 21 (Early *Progresa*) or 6 months (Late *Progresa*) before the 2000 Mexican presidential election. The author of the original study hypothesised that the CCT program would mobilise voters, leading to an increase in turnout and support for the incumbent party (PRI, or _Partido Revolucionario Institucional_, in this case). 
+]
+---
+
+# Data and Dependent Variables
+
+.font120[
+The data we analyse are available as the CSV file [progresa.csv](https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/progresa.csv). The names and descriptions of variables we will use in this exercise are:
+
+Dependent variables: 
+
+| Name       | Description                                                               |
+| :--------- | :------------------------------------------------------------------------ |
+| `t2000`    | Turnout in the 2000 election as a share of precinct population above 18   |
+| `pri2000s` | PRI votes in the 2000 election as a share of precinct population above 18 |
+]
+---
+
+# Independent Variables
+
+.font120[
+| Name         | Description                                                                                 |
+| :----------- | :------------------------------------------------------------------------------------------ |
+| `treatment`  | Whether an electoral precinct contains a village where households received Early *Progresa* |
+| `avgpoverty` | Precinct Avg of Village Poverty Index                                                       |
+| `pobtot1994` | Total Population in the precinct                                                            |
+| `votos1994`  | Total votes cast in the 1994 presidential election                                          |
+| `pri1994`    | Total PRI votes in the 1994 presidential election                                           |
+| `pan1994`    | Total PAN votes in the 1994 presidential election                                           |
+| `prd1994`    | Total PRD votes in the 1994 presidential election                                           |
+]
+---
+
+# Independent Variables
+
+.font120[
+| Name       | Description                                                                      |
+| :--------- | :------------------------------------------------------------------------------- |
+| `pri1994s` | Total PRI votes in the 1994 election as a share of  precinct population above 18 |
+| `pan1994s` | Total PAN votes in the 1994 election as a share of  precinct population above 18 |
+| `prd1994s` | Total PRD votes in the 1994 election as a share of  precinct population above 18 |
+]
+---
+
+# Question 1
+
+.font150[
+* Estimate the impact of the CCT program on turnout (`t2000`) and support for the incumbent party (`pri2000s`) by comparing the average electoral outcomes in the treated (Early *Progresa*) precincts versus the ones observed in control (Late *Progresa*) precincts. They are coded as 1 and 0 in `treatment` 
+
+* Next, estimate these effects by regressing the outcome variable on the treatment variable
+]
+---
+
+# Answer 1 - tapply
+
+.font110[
+
+```r
+progresa &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/progresa.csv")
+names(progresa)
+```
+
+```
+##  [1] "treatment"  "pri2000s"   "pri2000v"   "t2000"      "t2000r"    
+##  [6] "pri1994"    "pan1994"    "prd1994"    "pri1994s"   "pri1994v"  
+## [11] "pan1994s"   "pan1994v"   "prd1994s"   "prd1994v"   "t1994"     
+## [16] "t1994r"     "votos1994"  "avgpoverty" "pobtot1994" "villages"
+```
+
+```r
+tapply(progresa$t2000, progresa$treatment, mean)
+```
+
+```
+##        0        1 
+## 63.81483 68.08451
+```
+
+```r
+tapply(progresa$pri2000s, progresa$treatment, mean)
+```
+
+```
+##        0        1 
+## 34.48895 38.11145
+```
+]
+---
+
+# Answer 1 - LM
+
+.font110[
+
+```r
+lm(t2000 ~ treatment, data = progresa)
+```
+
+```
+## 
+## Call:
+## lm(formula = t2000 ~ treatment, data = progresa)
+## 
+## Coefficients:
+## (Intercept)    treatment  
+##       63.81         4.27
+```
+
+```r
+lm(pri2000s ~ treatment, data = progresa)
+```
+
+```
+## 
+## Call:
+## lm(formula = pri2000s ~ treatment, data = progresa)
+## 
+## Coefficients:
+## (Intercept)    treatment  
+##      34.489        3.622
+```
+]
+---
+
+# Question 2
+
+.font130[
+* Now, we fit a similar model for each outcome that includes the treament (`treatment`), the average poverty level in a precinct (`avgpoverty`), the total precinct population in 1994 (`pobtot1994`), the total number of voters who turned out in the previous election (`votos1994`), and the total number of votes cast for each of the three main competing parties in the previous election (`pri1994` for PRI, `pan1994` for _Partido Acción Nacional_ or PAN, and `prd1994` for Partido de la Revolución Democrática or PRD).  
+
+* Use the same outcome variables as in the original analysis (`t2000` and `pri2000s`)
+
+* Are these results different from what you obtained in the previous question?
+  
+]
+---
+
+# Answer 2
+
+.font120[
+
+```r
+## effect on turnout under original analysis
+org.turn &lt;- lm(t2000 ~ treatment + avgpoverty + pobtot1994 + 
+                 votos1994 + pri1994 + pan1994 + prd1994,
+               data = progresa)
+org.turn
+```
+
+```
+## 
+## Call:
+## lm(formula = t2000 ~ treatment + avgpoverty + pobtot1994 + votos1994 + 
+##     pri1994 + pan1994 + prd1994, data = progresa)
+## 
+## Coefficients:
+## (Intercept)    treatment   avgpoverty   pobtot1994    votos1994  
+##   64.011735     4.549445     0.310255    -0.001213    -0.026152  
+##     pri1994      pan1994      prd1994  
+##    0.036055     0.026538     0.017575
+```
+]
+---
+
+# Answer 2
+
+.font120[
+
+```r
+## effect on PRI support under original analysis
+org.pri &lt;- lm(pri2000s ~ treatment + avgpoverty + pobtot1994 + 
+                votos1994 + pri1994 + pan1994 + prd1994,
+              data = progresa)
+org.pri
+```
+
+```
+## 
+## Call:
+## lm(formula = pri2000s ~ treatment + avgpoverty + pobtot1994 + 
+##     votos1994 + pri1994 + pan1994 + prd1994, data = progresa)
+## 
+## Coefficients:
+## (Intercept)    treatment   avgpoverty   pobtot1994    votos1994  
+##  37.9500862    2.9277395    0.5329801   -0.0004996   -0.0417278  
+##     pri1994      pan1994      prd1994  
+##   0.0624589   -0.0487349   -0.0287363
+```
+]
+---
+
+# Question 3
+
+.font130[
+* Next, we consider an alternative, and more natural, model specification. 
+
+* We will use the original outcome variables as in the previous question (`t2000`, `pri2000s`) and `treatment` 
+
+* However, our model should include the previous election outcome variables measured as shares of the voting age population (`t1994`, `pri1994s`, `pan1994s`, and `prd1994s`) 
+
+* As in the original model, our model includes the average poverty index (`avgpoverty`)
+
+* Also include the _natural logarithm_ of the population in 1994 (`pobtot1994`)
+]
+---
+
+# Answer 3
+
+.font120[
+
+```r
+## effect on Turnout (previous outcome in ratio; log population)
+turn.ratio &lt;-  lm(t2000 ~ treatment + avgpoverty + log(pobtot1994) + 
+                    t1994 + pri1994s + pan1994s + prd1994s,
+                  data = progresa)
+turn.ratio
+```
+
+```
+## 
+## Call:
+## lm(formula = t2000 ~ treatment + avgpoverty + log(pobtot1994) + 
+##     t1994 + pri1994s + pan1994s + prd1994s, data = progresa)
+## 
+## Coefficients:
+##     (Intercept)        treatment       avgpoverty  log(pobtot1994)  
+##         19.7984          -0.1530           2.8621          -3.2471  
+##           t1994         pri1994s         pan1994s         prd1994s  
+##          0.6605           0.1943           0.6374           0.3065
+```
+]
+---
+
+# Answer 3
+
+.font120[
+
+```r
+## effect on Turnout (previous outcome in ratio; log population)
+pri.ratio &lt;-  lm(pri2000s ~ treatment + avgpoverty + log(pobtot1994) +
+                   t1994 + pri1994s + pan1994s + prd1994s,
+                  data = progresa)
+pri.ratio 
+```
+
+```
+## 
+## Call:
+## lm(formula = pri2000s ~ treatment + avgpoverty + log(pobtot1994) + 
+##     t1994 + pri1994s + pan1994s + prd1994s, data = progresa)
+## 
+## Coefficients:
+##     (Intercept)        treatment       avgpoverty  log(pobtot1994)  
+##        35.85174          0.23547          2.47163         -4.62934  
+##           t1994         pri1994s         pan1994s         prd1994s  
+##         0.03257          0.51047         -0.18384         -0.05293
+```
+]
+---
+
+# Model Fit
+
+.font110[
+
+```r
+## original turnout model
+summary(org.turn)$adj.r.squared
+```
+
+```
+## [1] 0.06273301
+```
+
+```r
+## turnout model with previous turnout in ratio
+summary(turn.ratio)$adj.r.squared
+```
+
+```
+## [1] 0.6868331
+```
+
+```r
+## original PRI support model 
+summary(org.pri)$adj.r.squared
+```
+
+```
+## [1] 0.2072516
+```
+
+```r
+## PRI support model with previous support for parties in ratios
+summary(pri.ratio)$adj.r.squared
+```
+
+```
+## [1] 0.5721621
+```
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+class: inverse, center, middle
+
+# Thank You!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

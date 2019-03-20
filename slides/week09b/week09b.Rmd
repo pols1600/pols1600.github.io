@@ -1,0 +1,248 @@
+---
+title: "Week 09 - Regression"
+subtitle: "In Class Exercise<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "20th March 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# QSS 4.5.2 (pp. 184)
+
+.font150[
+In this exercise, we analyse the data from a study that seeks to estimate the electoral impact of *Progresa*, Mexico's *conditional cash transfer programme* (CCT programme). 
+]
+---
+
+# QSS 4.5.2 (pp. 184)
+
+.font150[
+The original study relied on a randomised evaluation of the CCT program in which eligible villages were randomly assigned to receive the program either 21 (Early *Progresa*) or 6 months (Late *Progresa*) before the 2000 Mexican presidential election. The author of the original study hypothesised that the CCT program would mobilise voters, leading to an increase in turnout and support for the incumbent party (PRI, or _Partido Revolucionario Institucional_, in this case). 
+]
+---
+
+# Data and Dependent Variables
+
+.font120[
+The data we analyse are available as the CSV file [progresa.csv](https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/progresa.csv). The names and descriptions of variables we will use in this exercise are:
+
+Dependent variables: 
+
+| Name       | Description                                                               |
+| :--------- | :------------------------------------------------------------------------ |
+| `t2000`    | Turnout in the 2000 election as a share of precinct population above 18   |
+| `pri2000s` | PRI votes in the 2000 election as a share of precinct population above 18 |
+]
+---
+
+# Independent Variables
+
+.font120[
+| Name         | Description                                                                                 |
+| :----------- | :------------------------------------------------------------------------------------------ |
+| `treatment`  | Whether an electoral precinct contains a village where households received Early *Progresa* |
+| `avgpoverty` | Precinct Avg of Village Poverty Index                                                       |
+| `pobtot1994` | Total Population in the precinct                                                            |
+| `votos1994`  | Total votes cast in the 1994 presidential election                                          |
+| `pri1994`    | Total PRI votes in the 1994 presidential election                                           |
+| `pan1994`    | Total PAN votes in the 1994 presidential election                                           |
+| `prd1994`    | Total PRD votes in the 1994 presidential election                                           |
+]
+---
+
+# Independent Variables
+
+.font120[
+| Name       | Description                                                                      |
+| :--------- | :------------------------------------------------------------------------------- |
+| `pri1994s` | Total PRI votes in the 1994 election as a share of  precinct population above 18 |
+| `pan1994s` | Total PAN votes in the 1994 election as a share of  precinct population above 18 |
+| `prd1994s` | Total PRD votes in the 1994 election as a share of  precinct population above 18 |
+]
+---
+
+# Question 1
+
+.font150[
+* Estimate the impact of the CCT program on turnout (`t2000`) and support for the incumbent party (`pri2000s`) by comparing the average electoral outcomes in the treated (Early *Progresa*) precincts versus the ones observed in control (Late *Progresa*) precincts. They are coded as 1 and 0 in `treatment` 
+
+* Next, estimate these effects by regressing the outcome variable on the treatment variable
+]
+---
+
+# Answer 1 - tapply
+
+.font110[
+```{r q01a,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+progresa <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/progresa.csv")
+names(progresa)
+tapply(progresa$t2000, progresa$treatment, mean)
+tapply(progresa$pri2000s, progresa$treatment, mean)
+```
+]
+---
+
+# Answer 1 - LM
+
+.font110[
+```{r q01b,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+lm(t2000 ~ treatment, data = progresa)
+lm(pri2000s ~ treatment, data = progresa)
+```
+]
+---
+
+# Question 2
+
+.font130[
+* Now, we fit a similar model for each outcome that includes the treament (`treatment`), the average poverty level in a precinct (`avgpoverty`), the total precinct population in 1994 (`pobtot1994`), the total number of voters who turned out in the previous election (`votos1994`), and the total number of votes cast for each of the three main competing parties in the previous election (`pri1994` for PRI, `pan1994` for _Partido Acción Nacional_ or PAN, and `prd1994` for Partido de la Revolución Democrática or PRD).  
+
+* Use the same outcome variables as in the original analysis (`t2000` and `pri2000s`)
+
+* Are these results different from what you obtained in the previous question?
+  
+]
+---
+
+# Answer 2
+
+.font120[
+```{r q02a,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+## effect on turnout under original analysis
+org.turn <- lm(t2000 ~ treatment + avgpoverty + pobtot1994 + 
+                 votos1994 + pri1994 + pan1994 + prd1994,
+               data = progresa)
+org.turn
+```
+]
+---
+
+# Answer 2
+
+.font120[
+```{r q02b,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+## effect on PRI support under original analysis
+org.pri <- lm(pri2000s ~ treatment + avgpoverty + pobtot1994 + 
+                votos1994 + pri1994 + pan1994 + prd1994,
+              data = progresa)
+org.pri
+```
+]
+---
+
+# Question 3
+
+.font130[
+* Next, we consider an alternative, and more natural, model specification. 
+
+* We will use the original outcome variables as in the previous question (`t2000`, `pri2000s`) and `treatment` 
+
+* However, our model should include the previous election outcome variables measured as shares of the voting age population (`t1994`, `pri1994s`, `pan1994s`, and `prd1994s`) 
+
+* As in the original model, our model includes the average poverty index (`avgpoverty`)
+
+* Also include the _natural logarithm_ of the population in 1994 (`pobtot1994`)
+]
+---
+
+# Answer 3
+
+.font120[
+```{r q03a,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+## effect on Turnout (previous outcome in ratio; log population)
+turn.ratio <-  lm(t2000 ~ treatment + avgpoverty + log(pobtot1994) + 
+                    t1994 + pri1994s + pan1994s + prd1994s,
+                  data = progresa)
+turn.ratio
+```
+]
+---
+
+# Answer 3
+
+.font120[
+```{r q03b,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+## effect on Turnout (previous outcome in ratio; log population)
+pri.ratio <-  lm(pri2000s ~ treatment + avgpoverty + log(pobtot1994) +
+                   t1994 + pri1994s + pan1994s + prd1994s,
+                  data = progresa)
+pri.ratio 
+```
+]
+---
+
+# Model Fit
+
+.font110[
+```{r q03c,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+## original turnout model
+summary(org.turn)$adj.r.squared
+## turnout model with previous turnout in ratio
+summary(turn.ratio)$adj.r.squared
+
+## original PRI support model 
+summary(org.pri)$adj.r.squared
+## PRI support model with previous support for parties in ratios
+summary(pri.ratio)$adj.r.squared
+```
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
+---
+
+class: inverse, center, middle
+
+# Thank You!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
