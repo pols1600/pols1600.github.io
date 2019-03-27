@@ -33,7 +33,7 @@ Name                Description
 
 ## Question 1
 
-Fraga analyzes turnout data for four different racial and ethnic groups, but for this analysis we will focus on the data for black voters. Load  `blackturnout.csv`. Which years are included in the dataset?  How many different states are included in the dataset? 
+Fraga analyzes turnout data for four different racial and ethnic groups, but for this analysis we will focus on the data for black voters. Load  [`blackturnout.csv`](https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/prediction/blackturnout.csv). Which years are included in the dataset?  How many different states are included in the dataset? 
 
 ## Answer 1
 
