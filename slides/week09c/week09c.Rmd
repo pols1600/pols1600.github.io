@@ -244,10 +244,10 @@ $$\Omega = \{HHH,HHT,HTH,THH, HTT, THT, TTH, TTT\}$$
 What is the event space we are interested in?]
 --
 .font140[
-$$\{HHH, HTH, THH\}$$]
+$$\{HHH, HTH, THH, HHT\}$$]
 --
 .font140[
-$$P(2 H) = \frac{3}{8}$$ 
+$$P(2 H) = \frac{4}{8}$$ 
 ]
 ---
 
