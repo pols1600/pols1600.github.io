@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 10 - Probability</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <meta name="date" content="2019-04-01" />
+    <link href="week10a_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week10a_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week10a_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 10 - Probability
+## Conditional Probabilities
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 1 April 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Conditional Probability
+
+.center[![:scale 80%](xkcd.png)]
+---
+
+# Conditional Probability
+
+.font130[
+* Sometimes information about one event can help inform us aboutlikelihood of another event
+
+* Examples?
+]
+--
+.font130[
+* What is the probability of rolling a 5 and then a 6?
+
+* What is the probability of rolling a 5 and then a 6 given that we rolled a 5 first?
+
+* If it is cloudy outside, gives us additional information about likelihood of rain
+
+* If we know that one party will win the House, makes it more likely that party will win certain Senate races
+]
+---
+
+# Independence
+
+.font150[
+* If the occurrence of one event (A) gives us information about the likelihood of another event, then the two events are .orange[not independent]
+
+* .orange[Independence] of two events implies that information about one event does not help us in knowing whether the second event will occur
+
+* For many real world examples, independence does not hold
+
+* Knowledge about other events allows us to improve guesses/probability calculations
+]
+---
+
+# Independence
+
+.font150[
+* When two events are independent, the probability of both happening is equal to the individual probabilities multiplied together
+
+* And what is the probability of one event when it is conditional to each another?
+]
+---
+
+# Conditional Probability
+
+.font150[
+* `\(P(A | B)\)`
+
+* _Probability of A given/conditional that B has happened_
+]
+--
+.font150[
+* `\(P(A | B) = \frac{P(A and B)}{P(B)}\)`
+
+* _Probability of A and B happening (joint) divided by probability of B happening (marginal)_
+]
+--
+.font150[
+* Definitions:
+
+  - `\(P(A and B)\)` - joint probability
+
+  - `\(P(A)\)` - marginal probability
+]
+---
+
+# Conditional Probability
+
+.font150[
+* P(rolled 5 then 6) = ?
+]
+--
+.font150[
+* P(rolled 5 then 6) = `\(\frac{1}{36}\)`
+
+* P(rolled 5 then 6 | 5 first) =  `\(\frac{P(5 then 6)}{P(5)}\)`
+]
+--
+.font150[
+* `\(\frac{\frac{1}{36}}{\frac{1}{6}} = \frac{1}{6}\)`
+]
+---
+
+# Conditional Probability
+
+.font150[
+* The probability that it is Friday and that a student is absent is 0.03. What is the probability that student is absent, given that it is Friday?
+
+* `\(P(absent | Friday) = ?\)`
+]
+--
+.font150[
+* `\(P(absent | Friday) = \frac{0.03}{0.2} = 0.15\)`
+]
+---
+
+# Conditional Probability
+
+.font150[
+* `\(P(A | B) = \frac{P(A and B)}{P(B)}\)`
+
+* Also means:
+
+* `\(P(A and B) = P(A | B) P(B)\)`
+
+* Just multiply both sides by `\(P(B)\)` to get rid of the denominator
+]
+---
+
+# Independence
+
+.font150[
+* If A and B are independent, then
+  - `\(P(A | B) = P(A) \&amp;  P(B | A) = P(B)\)`
+  
+  - `\(P(A and B) = P(A) \times P(B)\)`
+
+* If `\(A|C\)` and `\(B|C\)` are independent, then
+  - `\(P(A and B | C) = P(A |C) \times P(B | C)\)`
+]
+---
+
+# Actually, You Know All That Already! 
+
+.font150[
+* Let's again use our `resume` dataset
+]
+--
+.font130[
+
+```r
+resume &lt;- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
+names(resume)
+```
+
+```
+## [1] "firstname" "sex"       "race"      "call"
+```
+
+```r
+head(resume)
+```
+
+```
+##   firstname    sex  race call
+## 1   Allison female white    0
+## 2   Kristen female white    0
+## 3   Lakisha female black    0
+## 4   Latonya female black    0
+## 5    Carrie female white    0
+## 6       Jay   male white    0
+```
+]
+---
+
+# Resume
+
+.font130[
+* Now please tell me what the two commands below do, and what the results mean
+
+```r
+mean(resume$call)
+```
+
+```
+## [1] 0.08049281
+```
+
+```r
+tapply(resume$call, resume$race, mean)
+```
+
+```
+##      black      white 
+## 0.06447639 0.09650924
+```
+]
+--
+.font130[
+* First result: getting a phone call overall
+
+* Second result: getting a phone call .orange[conditional on race]
+]
+---
+
+# Subset
+
+.font140[
+* The `subset` function in `R` is nothing but a tool to get conditional probabilities
+
+
+```r
+black &lt;- subset(x = resume$call,
+                subset = resume$race == "black")
+mean(black)
+```
+
+```
+## [1] 0.06447639
+```
+]
+--
+.font140[
+* Compare:
+
+```r
+tapply(resume$call, resume$race, mean)
+```
+
+```
+##      black      white 
+## 0.06447639 0.09650924
+```
+]
+---
+
+# Prop.table and joint probability
+
+.font150[
+* We can easily calculate joint probabilities with `prop.table(table())`
+
+```r
+prop.table(table(call = resume$call, resume$race))
+```
+
+```
+##     
+## call      black      white
+##    0 0.46776181 0.45174538
+##    1 0.03223819 0.04825462
+```
+]
+---
+
+# Prop.table and joint probability
+
+.font120[
+
+```r
+prop.table(table(call = resume$sex, resume$race))
+```
+
+```
+##         
+## call         black     white
+##   female 0.3872690 0.3819302
+##   male   0.1127310 0.1180698
+```
+
+```r
+prop.table(table(resume$sex))
+```
+
+```
+## 
+##    female      male 
+## 0.7691992 0.2308008
+```
+
+```r
+prop.table(table(resume$race))
+```
+
+```
+## 
+## black white 
+##   0.5   0.5
+```
+]
+---
+
+# Another Example
+
+.font130[
+| Annual income     | Didn't Take POLS1600 | Took POLS1600 | TOTAL |
+| :---------------- | :------------------- | :------------ | :---- |
+| Under 50,00       | 36                   | 24            | 60    |
+| 50,000 to 100,000 | 109                  | 56            | 165   |
+| Over 100,000      | 35                   | 40            | 75    |
+| Total             | 180                  | 120           | 300   |
+
+* What is the probability of any student making over $100,000?
+]
+--
+.font130[
+* What is the probability of a student making over $100,000, conditional that she took POLS1600?
+]
+--
+.font130[
+* What is the probability of a having taken POLS1600, conditional on  making over $100,000?
+]
+---
+
+# The Monty Hall Problem
+
+.center[![:scale 80%](monty.png)]
+---
+
+# The Monty Hall Problem!
+
+.center[![:scale 100%](door.png)]
+---
+
+# The Monty Hall Problem
+
+.font140[
+"Many readers of vos Savant's column refused to believe switching is beneficial despite her explanation. After the problem appeared in Parade, approximately 10,000 readers, including nearly 1,000 with PhDs, wrote to the magazine, most of them claiming vos Savant was wrong (Tierney 1991). Even when given explanations, simulations, and formal mathematical proofs, many people still do not accept that switching is the best strategy (vos Savant 1991a). _Paul Erdős, one of the most prolific mathematicians in history, remained unconvinced until he was shown a computer simulation demonstrating the predicted result_ (Vazsonyi 1999)."
+
+&lt;https://en.wikipedia.org/wiki/Monty_Hall_problem&gt;
+]
+---
+
+# The Monty Hall Problem
+
+.center[
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/_X5erR9LKUs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
+]
+
+.font150[Probability: The Monty Hall Problem: &lt;https://youtu.be/_X5erR9LKUs&gt;]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

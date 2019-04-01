@@ -280,7 +280,7 @@ $$P(A\ \textsf{or}\ B) \ = \ P(A) + P(B)$$
 # Useful Rules of Probability
 
 .font150[
-What is the probability of having at least one tail in 3 coin flips?]
+What is the probability of having at least one tails in 3 coin flips?]
 --
 .font150[
 $$\Omega = \{HHH,HHT,HTH,THH, HTT, THT, TTH, TTT\}$$]
@@ -365,7 +365,7 @@ $$_{n}P_{k} = n \times (n-1) \times (n-2) \times ... \times (n-k + 1) = \frac{n!
 
 # Combinations
 
-.font130[
+.font140[
 * Combinations are similar to permutations, except that the ordering doesn't matter
 
 * So with respect to combinations of 3 out of 26 letters, ABC, BAC, CAB, etc are the same 
@@ -375,12 +375,12 @@ $$_{n}P_{k} = n \times (n-1) \times (n-2) \times ... \times (n-k + 1) = \frac{n!
 * Draw 2 out of letters ABC. Permutations:
 ]
 --
-.font130[
+.font140[
 * AB, AC, BA, BC, CA, CB =  $\frac{3!}{1!}$
 
 * Combinations:]
 --
-.font130[
+.font140[
 * AB, AC, BC
 ]
 ---
