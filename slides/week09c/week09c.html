@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 10 - Probability</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <meta name="date" content="2019-04-01" />
+    <link href="week09c_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week09c_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week09c_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 10 - Probability
+## Axioms, Permutations and Combinations
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 1 April 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Chapter 6 - Probability
+
+.font150[
+* Probability axioms
+
+* Conditional probability
+
+* Bayes' theorem
+
+* Law of large numbers
+
+* Probability distributions
+]
+---
+
+# Today's Agenda
+
+.font150[
+* Frequentist and Bayesian probability frameworks
+
+* The three probability axioms
+
+* Permutations
+
+* Combinations
+]
+---
+
+# Why Probability?
+
+.font150[
+* .orange[Probability rules our lives]
+]
+--
+.font150[
+* It is everywhere
+]
+--
+.font150[
+* However, humans are _really bad_ at interpreting probabilities
+
+* Even worse at calculating (estimating) probabilities
+]
+---
+
+# Why Probability?
+
+.center[![:scale 100%](media.png)]
+---
+
+# Why Probability?
+
+.center[![:scale 100%](media02.png)]
+
+.font150[
+More at &lt;https://fivethirtyeight.com/features/the-media-has-a-probability-problem/&gt;
+]
+---
+
+# Why Probability?
+
+.font150[
+* What are the chances it rains tomorrow?
+
+* What are the chances you win the lottery?
+
+* What is the probabilty of getting an A in POLS1600?
+]
+---
+
+# What Is Probability
+
+.font150[
+* A mathematical model of uncertainty (chance)
+
+* Preview: later we will use probability to make statements about uncertainty in data analysis (chapter 7)
+]
+---
+
+# Two Concepts of Probability
+
+.font150[
+* .orange[Frequentist]: long-run frequency of events
+  - Ratio between the number of times the event occurs and the number of trials
+  - Example: coin flips
+]
+--
+.font150[
+* .orange[Bayesian]: subjective belief about the likelihood of event occurrence
+  - Evidence based belief
+  - Often more sensible philosophy in political world
+]
+---
+
+# Thomas Bayes
+
+.center[![:scale 50%](bayes.jpg)]
+
+.font150[
+&lt;https://en.wikipedia.org/wiki/Thomas_Bayes&gt;
+]
+---
+
+# The Theory That Would Not Die
+
+.center[![:scale 50%](book.png)]
+---
+
+# Egon Pearson
+
+.center[![:scale 40%](pearson.jpeg)]
+
+.font150[
+&lt;https://en.wikipedia.org/wiki/Egon_Pearson&gt;
+]
+---
+
+# Ronald Fisher
+
+.center[![:scale 40%](fisher.JPG)]
+.font150[
+&lt;https://en.wikipedia.org/wiki/Ronald_Fisher&gt;
+]
+
+---
+
+# Important Terms
+
+.font150[
+* .orange[Experiment]: an action or a set of actions that producestochastic events of interest
+  - coin toss, rolling a die, voting in an election
+  
+* .orange[Sample Space] `\((\Omega)\)`: all possible outcomes of the experiment
+  - {heads, tails}, {1,2,3,4,5,6}, {abstain, Clinton, Trump}
+  
+* .orange[Event]: subset of sample space
+  - tails, 1, vote for Trump
+]
+---
+
+# Example
+
+.font150[
+What is the experiment, sample space, and one event for coin flips or pulling a single card out of a deck of 52? 
+]
+---
+
+# Example
+
+.font140[
+Probability of event A `\(= P(A) = \frac{\text{number of elements in A}}{\text{number of elements in sample space}}\)`
+
+Probability of heads `\(= P(H) = \frac{heads}{heads + tails} = \frac{1}{2}\)`
+]
+--
+.font140[
+What is the probability of 3 heads in 3 flips?
+
+Sample space?]
+--
+.font140[
+`$$\Omega = \{HHH,HHT,HTH,THH, HTT, THT, TTH, TTT\}$$`
+What is the event space we are interested in?]
+--
+.font150[
+`$$\{HHH\}$$`
+]
+---
+
+# Example
+
+.font140[
+What is the probability of 3 heads in 3 flips?
+
+`$$P(3 H) = \frac{\{HHH\}}{\{HHH,HHT,HTH,THH, HTT, THT, TTH, TTT\}}$$`
+`$$P(3 H) = \frac{1}{8}$$`
+]
+---
+
+# Another Example
+
+.font140[
+What is the probability of at least 2 heads in 3 flips?
+
+Sample space?]
+--
+.font140[
+`$$\Omega = \{HHH,HHT,HTH,THH, HTT, THT, TTH, TTT\}$$`
+What is the event space we are interested in?]
+--
+.font140[
+`$$\{HHH, HTH, THH\}$$`]
+--
+.font140[
+`$$P(2 H) = \frac{3}{8}$$` 
+]
+---
+
+# Axioms (Rules) of Probability
+
+.font140[
+From 3 axioms, the entire probability theory can be built
+]
+.font140[
+* Probability of any event is non-negative:
+ `$$P(A) \ge 0$$`
+ 
+* Prob. that one of the outcomes in the sample space occurs is 1
+`$$P(\Omega) = 1$$`
+
+* .orange[Addition Rule:] If events A and B are mutually exclusive (_meaning only one can happen at a time_), then
+`$$P(A\ \textsf{or}\ B) \ = \ P(A) + P(B)$$`
+]
+---
+
+# Useful Rules of Probability
+
+.font150[
+* `\(A^c\)` - complement to A, i.e. part of sample space not in A
+
+* Sometimes it is easier to calculate the probability of an event by using its complement
+]
+---
+
+# Useful Rules of Probability
+
+.font150[
+What is the probability of having at least one tail in 3 coin flips?]
+--
+.font150[
+`$$\Omega = \{HHH,HHT,HTH,THH, HTT, THT, TTH, TTT\}$$`]
+--
+.font150[
+P(at least one T) = `\(\frac{7}{8}\)`
+
+P(at least one T) = `\(1 - P(HHH) = 1 - \frac{1}{8}\)`
+]
+---
+
+# Example
+
+.font150[
+What is the probability of getting a Queen as the first card from a full deck?
+
+`$$\Omega = ?$$`]
+--
+.font150[
+`$$P(Queen) = \frac{4}{52} = \frac{1}{13}$$`
+]
+---
+
+# Permutation: When Order Matters
+
+.font150[
+* Often we do not want to or can't write out all possible combinations by hand
+
+* How many possibilities are there to arrange letters A,B,C?]
+--
+.font150[
+* Three outcomes: A, B, C and three draws]
+--
+.font150[
+* First draw: A, B, or C
+
+* Second draw: two possibilities
+
+* Third draw: one left
+
+* 3 x 2 x 1 possibilities 
+]
+---
+
+# Permutation
+
+.font150[
+* Permutations count many ways we can .orange[order] _k_ objects out of a set of _n_ unique objects
+
+`$$_{n}P_{k} = n \times (n-1) \times (n-2) \times ... \times (n-k + 1) = \frac{n!}{(n-k)!}$$`
+
+* What does _n!_ stand for?]
+--
+.font150[
+* n! = n-factorial = `\(n \times (n-1) \times (n-2) \times ... \times (n-n+1)\)`
+
+* `\(3! = 3 \times 2 \times 1\)`
+
+* .orange[Note:] `\(0! = 1\)`
+]
+---
+
+# Permutation Example
+
+.font150[
+* How many ways can we arrange four cards out of the 13 spades in our card deck?
+]
+--
+.font150[
+* first draw = ?
+]
+--
+.font150[
+* `\(13 \times 12 \times 11 \times 10\)`]
+--
+.font150[
+* `\(\frac{13!}{(13-4)!} = \frac{13!}{9!} = \frac{13 \times 12 \times 11 \times ... \times 2 \times 1}{9 \times 8 \times ... \times 2 \times 1} =\)`
+
+* `\(13 \times 12 \times 11 \times 10 = 17,160\)`
+]
+---
+
+# Combinations
+
+.font130[
+* Combinations are similar to permutations, except that the ordering doesn't matter
+
+* So with respect to combinations of 3 out of 26 letters, ABC, BAC, CAB, etc are the same 
+
+* There are .orange[always] fewer combinations than permutations
+
+* Draw 2 out of letters ABC. Permutations:
+]
+--
+.font130[
+* AB, AC, BA, BC, CA, CB =  `\(\frac{3!}{1!}\)`
+
+* Combinations:]
+--
+.font130[
+* AB, AC, BC
+]
+---
+
+# How to Calculate Combinations
+
+.font150[
+* Calculate permutations and then account for the fact that we overcounted due to ordering
+
+* Get rid of counts of different arrangements of same combination: divide by `\(k!\)`
+
+* `\(_{n}C_{k} = {n \choose k} = \frac{_{n}P_{k}}{k!} = \frac{n!}{k!(n-k)!}\)`]
+--
+.font150[
+* Why divide by `\(k!\)` ?]
+--
+.font150[
+* for two sampled elements, we have `\(2!(= 2×1 = 2): A, B = AB, BA\)`
+]
+---
+
+# Combination Example: Winning the Lottery
+
+.font150[
+* What is the probability of winning (simplified) Mega Millions?
+
+* Pick five numbers between 1 and 70
+
+* Probability of getting 5 correct?
+
+* Size of the sample space?
+]
+--
+.font120[
+`$${70 \choose 5} = \frac{70!}{5! \times (70-5)!} =  \frac{70!}{5! \times 65!}$$`
+]
+--
+.font120[$$12,103,014$$]
+---
+
+# How To Solve in R
+
+.font150[
+* Just use the `choose()` function:
+
+
+```r
+choose(70, 5) # from 70 numbers, choose 5
+```
+
+```
+## [1] 12103014
+```
+]
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+class: inverse, center, middle
+
+# See you in a bit!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
