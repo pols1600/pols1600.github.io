@@ -185,7 +185,7 @@ class: inverse, center, middle
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
 ---
 
-# You Knew All That 
+# You Already Know All That 
 
 .font150[
 * Let's again use our `resume` dataset
