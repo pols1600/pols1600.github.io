@@ -178,7 +178,14 @@ set.seed(12345)
 ]
 ---
 
-# Actually, You Know All That Already! 
+class: inverse, center, middle
+
+# You Already Know All That!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
+---
+
+# You Knew All That 
 
 .font150[
 * Let's again use our `resume` dataset
