@@ -53,11 +53,6 @@ set.seed(12345)
 }
 </style>
 
-# Conditional Probability
-
-.center[![:scale 80%](xkcd.png)]
----
-
 # Today's Agenda
 
 .font150[
@@ -78,7 +73,7 @@ set.seed(12345)
  
 * The probability that at least one of all the possible outcomes of a process (such as rolling a die) will occur is 1 
 
-* If two events A and B are mutually exclusive, then the probability of either A or B occurring is the probability of A occurring plus the probability of B occurring 
+* If two events $A$ and $B$ are mutually exclusive, then the probability of either $A$ or $B$ occurring is the probability of $A$ occurring plus the probability of B occurring 
 ]
 ---
 
@@ -87,7 +82,7 @@ set.seed(12345)
 .font140[
 * Permutation is just a fancy name for _the number of ways we can arrange things_
 
-* Example: in how many ways we can arrange 3 people?
+* Example: in how many ways can we arrange 3 people?
 ]
 --
 .font140[
@@ -112,11 +107,11 @@ set.seed(12345)
 ]
 --
 .font150[
-* _Five factorial_: 120
+* $5! = 5 \times 4 \times 3 \times 2 \times 1 = 120$
 ]
 --
 .font150[
-* 5 people can sit in chair 1, 4 in chair 2, 3 in chair 3, 2 in chair 2, 1 in chair 1
+* 5 people can sit in chair #1, 4 in chair #2, 3 in chair #3, 2 in chair #2, 1 in chair #1
 
 * That's where we get 120 from!
 ]
@@ -129,10 +124,10 @@ set.seed(12345)
 ]
 --
 .font150[
-* Let's say we have 5 people and only 3 chairs. How many ways can 5 people sit in 3 chairs?
+* Let's say we have 5 people and only 3 chairs. In how many ways can 5 people sit in 3 chairs?
 ]
 .font150[
-* 5 in the first chair, 4 in the second, 3 in the third _and that's all_: $5 \times 4 \times 3$
+* 5 in the first chair, 4 in the second, 3 in the third... _and that's all_: $5 \times 4 \times 3$
  $$\frac{5 \times 4 \times 3 \times 2 \times 1}{2 \times 1} = \frac{5!}{2!}$$
  
 * Formula = $\frac{n!}{(n - k)!}$, where $n$ is the number of people and $k$ is the number of places/seats 
@@ -141,12 +136,93 @@ set.seed(12345)
 
 # Review: Permutation
 
+.font140[
+* The formula is useful, _but personally I never use it_]
+--
+.font140[
+* Tip: _think about the question first_, then you don't need to memorise anything]
+--
+.font140[
+* Question: _A club of 9 people wants to choose a board of 3 officers: a President, a Vice-President, and a Secretary. How many ways are there to choose the board from the 9 people? Assume one person cannot hold more than one office._ 
+]
+--
+.font140[
+* We can choose 9 people for President, 8 for VP, 7 for Secretary.
+
+* $9 \times 8 \times 7 = 504$
+]
+---
+
+# Review: Combinations
+
 .font150[
-* The formula is useful, _but personally I never use it_
+* Combinations are similar to permutations, but in this case _the ordering doesn't matter_
 
-* Tip: _think about the question first_, then you don't need to memorise anything
+* So ABC, ACB, BAC, BCA, CAB, CBA are 6 permutations but _only one combination_
 
-* 
+* To calculate how many combinations one can get, we can .orange[take the number of permutations then divide by the possible combinations]
+
+* We do that to _discount the fact we're counting the same group in different ways_
+]
+---
+
+# Example: Combinations
+
+.font150[
+* We have 6 people and 3 chairs. How many permutations are there? And how many combinations?
+]
+--
+.font150[
+* Permutations: $6 \times 5 \times 4 = 120$
+]
+--
+.font150[
+* Combinations: We can arrange the same 3 people in 6 different ways
+* ABC / ACB / BAC / BCA / CAB / CBA
+* So we can just divide the total of permutations to the ways we can pick 3 people to discount the excess counting: $\frac{120}{6} = 20$ combinations
+]
+---
+
+# Review: Combinations
+
+.font140[
+* This reasoning works generally too:
+
+* Formula: $\frac{n!}{k!(n-k)!}$
+
+* Think why that is the case: We take $\frac{n!}{(n-k)!}$, which are permutations, then divide by $k!$, the number of repeated permutations
+
+* In this case, `R` has a very useful command to compute combinations: 
+```{r comb01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+choose(6, 3)
+```
+]
+---
+
+# Review: Last Question About Chairs!
+
+.font150[
+* If we have to put 6 people in 4 chairs, how many combinations do we get?
+]
+--
+.font150[
+* Permutations: $6 \times 5 \times 4 \times 3 = 360$
+]
+--
+.font150[
+* Combinations: $\frac{n!}{k!(n-k)!} = \frac{6!}{4!(2!)}$
+$$\frac{6 \times 5 \times 4 \times 3 \times 2 \times 1}{(4 \times 3 \times 2 \times 1) \times (2 \times 1)} = 15$$
+
+* We have 360 permutations but only 15 combinations
+
+* The number of combinations is .orange[always smaller] than the number of permutations
+]
+---
+
+# Review: Conditional Probability
+
+.font150[
+* If we have prior information about something, this can change the probability of a future event
 ]
 
 ---
