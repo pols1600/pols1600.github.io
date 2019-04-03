@@ -57,23 +57,11 @@ set.seed(12345)
 
 .font150[
 * Brief review:
-  - Axioms
   - Permutations
   - Combinations
   - Conditional probabilities
   
-* Bayes' theorem
-]
----
-
-# Review: Axioms
-
-.font150[
-* The probability of an event is a real number greater than or equal to 0
- 
-* The probability that at least one of all the possible outcomes of a process (such as rolling a die) will occur is 1 
-
-* If two events $A$ and $B$ are mutually exclusive, then the probability of either $A$ or $B$ occurring is the probability of $A$ occurring plus the probability of B occurring 
+* Bayes' theorem/rule
 ]
 ---
 
@@ -87,7 +75,7 @@ set.seed(12345)
 --
 .font140[
 * We can count:
-* ABC / ACB / BAC / BCA / CAB / CBA
+* ABC / ACB / BAC / BCA / CAB / CBA -- _6 ways_
 ]
 --
 .font140[
@@ -103,29 +91,9 @@ set.seed(12345)
 # Review: Permutation
 
 .font150[
-* What if we have 5 people? In how many ways can they be arranged?
+* In how many ways can 5 people sit in 3 chairs?
 ]
 --
-.font150[
-* $5! = 5 \times 4 \times 3 \times 2 \times 1 = 120$
-]
---
-.font150[
-* 5 people can sit in chair #1, 4 in chair #2, 3 in chair #3, 2 in chair #2, 1 in chair #1
-
-* That's where we get 120 from!
-]
----
-
-# Review: Permutation
-
-.font150[
-* What if we still have the same 5 people but we don't have 5 chairs?
-]
---
-.font150[
-* Let's say we have 5 people and only 3 chairs. In how many ways can 5 people sit in 3 chairs?
-]
 .font150[
 * 5 in the first chair, 4 in the second, 3 in the third... _and that's all_: $5 \times 4 \times 3$
  $$\frac{5 \times 4 \times 3 \times 2 \times 1}{2 \times 1} = \frac{5!}{2!}$$
@@ -134,35 +102,16 @@ set.seed(12345)
 ]
 ---
 
-# Review: Permutation
-
-.font140[
-* The formula is useful, _but personally I never use it_]
---
-.font140[
-* Tip: _think about the question first_, then you don't need to memorise anything]
---
-.font140[
-* Question: _A club of 9 people wants to choose a board of 3 officers: a President, a Vice-President, and a Secretary. How many ways are there to choose the board from the 9 people? Assume one person cannot hold more than one office._ 
-]
---
-.font140[
-* We can choose 9 people for President, 8 for VP, 7 for Secretary.
-
-* $9 \times 8 \times 7 = 504$
-]
----
-
 # Review: Combinations
 
 .font150[
-* Combinations are similar to permutations, but in this case _the ordering doesn't matter_
+* Combinations are similar to permutations, except that _the ordering doesn't matter_
 
 * So ABC, ACB, BAC, BCA, CAB, CBA are 6 permutations but _only one combination_
 
 * To calculate how many combinations one can get, we can .orange[take the number of permutations then divide by the possible combinations]
 
-* We do that to _discount the fact we're counting the same group in different ways_
+* We do that to _because we're counting the same group in different ways_
 ]
 ---
 
@@ -177,7 +126,7 @@ set.seed(12345)
 ]
 --
 .font150[
-* Combinations: We can arrange the same 3 people in 6 different ways
+* Combinations: We know can arrange the same 3 people in 6 different ways
 * ABC / ACB / BAC / BCA / CAB / CBA
 * So we can just divide the total of permutations to the ways we can pick 3 people to discount the excess counting: $\frac{120}{6} = 20$ combinations
 ]
@@ -185,45 +134,175 @@ set.seed(12345)
 
 # Review: Combinations
 
-.font140[
-* This reasoning works generally too:
-
+.font150[
 * Formula: $\frac{n!}{k!(n-k)!}$
 
-* Think why that is the case: We take $\frac{n!}{(n-k)!}$, which are permutations, then divide by $k!$, the number of repeated permutations
+* We take $\frac{n!}{(n-k)!}$, the permutations, then divide by $k!$, the number of repeated permutations (the formula multiplies the fraction by $k!$ to cancel the denominator)
 
-* In this case, `R` has a very useful command to compute combinations: 
+* In `R`:
 ```{r comb01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
 choose(6, 3)
 ```
 ]
 ---
 
-# Review: Last Question About Chairs!
-
-.font150[
-* If we have to put 6 people in 4 chairs, how many combinations do we get?
-]
---
-.font150[
-* Permutations: $6 \times 5 \times 4 \times 3 = 360$
-]
---
-.font150[
-* Combinations: $\frac{n!}{k!(n-k)!} = \frac{6!}{4!(2!)}$
-$$\frac{6 \times 5 \times 4 \times 3 \times 2 \times 1}{(4 \times 3 \times 2 \times 1) \times (2 \times 1)} = 15$$
-
-* We have 360 permutations but only 15 combinations
-
-* The number of combinations is .orange[always smaller] than the number of permutations
-]
----
-
 # Review: Conditional Probability
 
 .font150[
-* If we have prior information about something, this can change the probability of a future event
+* If we have prior information about something, this changes the way we calculate events
+
+* Many real world events are conditional to one another
+
+$$P(A|B) = \frac{P(A \operatorname{and} B)}{P(B)}$$
+
+* $P(A \operatorname{and} B)$ probability of $A$ and $B$ happening together
+
+* $P(B)$ marginal probability of $B$
 ]
+---
+
+# Example: Conditional Probability
+
+.font120[
+* Researchers surveyed 100 students on which superpower they would most like to have. This two-way table displays data for the respondents: 
+
+| Superpower   | Male | Female | **Total** |
+| :----------- | :--- | :----- | :-------- |
+| Fly          | 26   | 12     | 38        |
+| Invisibility | 12   | 32     | 44        |
+| Other        | 10   | 8      | 18        |
+| **Total**    | 48   | 52     | 100       |
+
+* Find the probability that the student was male, given the student chose to fly as their superpower]
+--
+.font120[
+* $P(Male|Fly) = \frac{P(MaleAndFly)}{P(Fly)} = \frac{26}{38} \approx 0.68$
+]
+---
+
+# A Slightly Harder Example
+
+.font140[
+* John's two favourite foods are bagels and pizza. $A$ represents the event he eats bagel for breakfast and $B$ represents the event that he eats pizza for lunch.
+
+* On a random day, the probability John will eat a bagel, $P(A)$, is $0.6$, the probability he will eat pizza is $P(B) = 0.5$, and the conditional probability that he eats a bagel for breakfast, given that he eats pizza for lunch is $P(A|B) = 0.7$
+
+* Based on this information, what is $P(B|A)$, that is, the probability that John will eats pizza for lunch given that he eats a bagel for breakfast?
+]
+---
+
+# Step-by-step
+
+.font150[
+* P(A) = 0.6; P(B) = 0.5; P(A|B) = 0.7
+* P(B|A)?
+]
+--
+.font110[$$P(A|B) = \frac{P(A \operatorname{and} B)}{P(B)}$$]
+--
+.font110[$$P(B|A) = \frac{P(A \operatorname{and} B)}{P(A)}$$]
+--
+.font110[$$P(A|B) \times P(B) = P(A \operatorname{and} B)$$]
+--
+.font110[$$P(B|A) \times P(A) = P(A \operatorname{and} B)$$]
+--
+.font110[$$P(A|B) \times P(B) = P(A \operatorname{and} B) = P(B|A) \times P(A)$$]
+--
+.font110[$$0.7 \times 0.5 = 0.35 = P(A \operatorname{and} B) = P(B|A) \times 0.6$$]
+--
+.font110[$$\frac{0.35}{0.6} = P(B|A) \approx 0.58$$]
+---
+
+# Let's See that Again
+
+.font150[
+$$P(A|B) = \frac{P(A \operatorname{and} B)}{P(B)}$$
+$$P(B|A) = \frac{P(A \operatorname{and} B)}{P(A)}$$
+$$P(A|B) \times P(B) = P(A \operatorname{and} B) = P(B|A) \times P(A)$$
+$$P(A|B) = \frac{P(B|A) \times P(A)}{P(B)}$$
+]
+---
+
+# Bayes' Theorem
+
+.center[![:scale 100%](theorem.jpg)]
+---
+
+# Bayes' Theorem
+
+.font150[
+* $P(A)$ = prior probability
+
+* $P(A | B)$: posterior probability of event $A$ given observed data $B$
+
+* $P(B | A)$: probability of observing $B$ given $A$
+
+* $P(B)$: probability of observing $B$.... including both true and false positives!
+]
+---
+
+# False Positive
+
+.center[![:scale 100%](falsepositive.png)]
+---
+
+# Bayes' Theorem
+
+.center[![:scale 100%](theorem2.png)]
+---
+
+# Medical Test
+
+.font150[
+* Imagine you have a serious disease. It is a rare disease, it happens only to 0.1% of the population. The test identifies the disease correctly in 99% of the cases, but incorrectly in 1% of them. If your test is positive, what is the probability you actually have the disease?
+]
+---
+
+# Medical Test
+
+.font150[
+$$P(H|E) = \frac{P(E|H) \times P(H)}{P(E)}$$
+$$P(H|E) = \frac{P(E|H) \times P(H)}{P(E|H) \times P(H) + P(E|H^c) \times P(H^c)}$$
+$$P(disease|test+) = \frac{P(test+|disease) \times Prior(disease)}{P(test+) = \operatorname{true and false positives}}$$
+]
+---
+
+# Medical Test
+
+.font150[
+* Imagine you have a serious disease. It is a rare disease, it happens only to 0.1% of the population. The test identifies the disease correctly in 99% of the cases, but incorrectly in 1% of them. If your test is positive, what is the probability you actually have the disease?
+
+$$P(H|E) = \frac{.99 \times .001}{.001 \times .99 + .999 \times .01} \approx .09 \approx 9\%$$
+]
+---
+
+# Medical Test
+
+.font150[
+* Out of 1,000 people, 1 will actually have the disease
+
+* But 10 people will be tested positive _and will not have the disease_
+
+* Which means that 11 people will be tested positive overall
+
+* So we have $\frac{1}{11} \approx .09 \approx 9\%$
+]
+---
+
+# Will the Sun Rise Tomorrow?
+
+.center[![:scale 100%](rio.jpg)]
+
+---
+
+# Bayesian Updating
+
+.center[![:scale 100%](update.png)]
+---
+
+# xkcd
+
+.center[![:scale 50%](frequentists_vs_bayesians.png)]
 
 ---
 
@@ -236,6 +315,6 @@ class: inverse, center, middle
 
 class: inverse, center, middle
 
-# See you on Wednesday!
+# See you next week!
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
