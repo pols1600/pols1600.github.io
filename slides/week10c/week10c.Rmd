@@ -83,9 +83,9 @@ set.seed(12345)
 # Question 1: Frequentist x Bayesian Prob.
 
 .font150[
-* .orange[Frequentist/objective probability:] the ratio between the number of times the event occurs and the number of trials, in repeated trials under the same conditions. 
+* .orange[Frequentist/objective probability:] the ratio between the number of times the event occurs and the number of trials, in repeated trials under the same conditions
 
-* .orange[Bayesian/subjective probability:] measure of one's subjective belief aboutthe likelihood of an event occurring.
+* .orange[Bayesian/subjective probability:] measure of one's subjective belief about the likelihood of an event occurring
 ]
 ---
 
