@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 10 - Probability</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <meta name="date" content="2019-04-05" />
+    <link href="week10c_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week10c_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week10c_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 10 - Probability
+## In Class Exercise
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 5 April 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# In Class Exercise
+
+.font150[
+* Four quick questions: 
+    - Objective and subjective probability
+	- Permutations
+	- Combinations
+	- Conditional probability
+]
+---
+
+# Question 1: Frequentist x Bayesian Prob.
+
+.font130[
+* Identify the following as _frequentist_ (objective) and _Bayesian_ (subjective) probability claims:
+
+    - Using her old gradebooks, Professor Lindström determines that the likelihood that one of her students earns an A is 0.18.
+    - Professor Turan suspects that today few of his students have arrived to class well prepared.
+    - Professor Long learns that over the past five years, 79% of his students have given him “Very Good” or “Excellent” ratings.
+    - Professor Lee tells her students that nuclear war between Pakistan and India is unlikely.
+    
+.orange[5 minutes to answer, 5 minutes for discussion]
+]
+---
+
+# Question 1
+
+.font150[
+* .orange[Frequentist/objective probability:] the ratio between the number of times the event occurs and the number of trials, in repeated trials under the same conditions. 
+
+* .orange[Bayesian/subjective probability:] measure of one's subjective belief aboutthe likelihood of an event occurring.
+]
+---
+
+# Answers to Question 1
+
+.font150[
+1) Using her old gradebooks, Professor Lindström determines that the likelihood that one of her students earns an A is 0.18.]
+--
+.font150[
+A: .orange[Frequentist.] the professor counts similar events (grades) in repeated trials (courses)
+]
+--
+.font150[
+2) Professor Turan suspects that today few of his students have arrived to class well prepared.]
+--
+.font150[
+A: .orange[Bayesian.] Turan assumes this is the case based on one single observation (students' performance today) and his prior beliefs about the students' level of effort 
+]
+---
+
+# Answers to Question 1
+
+.font150[
+3) Professor Long learns that over the past five years, 79% of his students have given him “Very Good” or “Excellent” ratings.]
+--
+.font150[
+A: .orange[Frequentist.] Ratio of comparable events over time
+]
+--
+.font150[
+2) Professor Lee tells her students that nuclear war between Pakistan and India is unlikely.]
+--
+.font150[
+A: .orange[Bayesian.] Unique event that cannot be repeated under the same conditions
+]
+---
+
+# Question 2: Permutations
+
+.font150[
+*  Compute each of the following permutations (ordering matters):
+
+1) How many ways there are to put 12 people in 5 chairs?
+
+2) And 10 people in 10 chairs?
+
+3) A zip code contains 5 digits. How many different zip codes can be made with the digits 0–9 if no digit is used more than once and the first digit is not 0? 
+
+
+.orange[5-10 minutes to answer, 5 for discussion]
+]
+---
+
+# Answer2 to Question 2
+
+.font150[
+1) How many ways there are to put 12 people in 5 chairs?
+]
+--
+.font150[
+A: `\(\frac{12!}{(12-5)!} = 12 \times 11 \times 10 \times 9 \times 8 = 95,040\)`
+]
+--
+.font150[
+2) And 10 people in 10 chairs?
+]
+--
+.font150[
+
+```r
+factorial(10) # New R command!
+```
+
+```
+## [1] 3628800
+```
+]
+---
+
+# Answers to Question 2
+
+.font140[
+* A zip code contains 5 digits. How many different zip codes can be made with the digits 0–9 if no digit is used more than once and the first digit is not 0? 
+]
+--
+.font140[
+A: For the first position, there are 9 possible choices (since 0 is not allowed). After that number is chosen, there are 9 possible choices (since 0 is now allowed). Then, there are 8 possible choices, 7 possible choices and 6 possible choices.
+
+`$$9 \times 9 \times 8 \times 7 \times 6 = 27,216$$`
+
+Why 9 first? We can’t include the first digit in the formula _because 0 is not allowed_. .orange[Think about the problem first, then apply the formula!]
+]
+---
+
+# Question 3: Combinations
+
+.font150[
+* To win a particular lottery game, a player chooses 4 numbers from 1 to 60. Each number can only be chosen once. If all numbers match the 4 winning numbers, regardless of order, the player wins. What is the probability that the winning numbers are 35, 2, 28, and 59?
+
+* .orange[Do not use R to answer this question.]
+
+* .orange[5-10 minutes to write the answer, 5-10 minutes for discussion]
+]
+---
+
+# Answer to Question 3
+
+.font140[
+* We choose 4 numbers from 60. As _we don't care about the order_, we're talking about combinations
+]
+--
+.font140[
+* Formula: `\(\frac{n!}{(n-k)! k!}\)`
+]
+--
+.font140[
+* `\(\frac{60!}{(60-4)!4!} = \frac{60 \times 59 \times 58 \times 57 \times 56 ... \times 2 \times 1}{56! \times 4! }\)`
+]
+--
+.font140[
+* We cancel everything from `\(56 \times 55 .... \times 1\)` in the nominator and `\(56!\)` in the denominator
+]
+--
+.font140[
+* We're left with `\(\frac{60 \times 59 \times 58 \times 57}{4 \times 3 \times 2 \times 1} = 487,635\)` 
+
+* So the chance of having 35, 2, 28, and 59 as the winning numbers are `\(\frac{1}{487635}\)`
+]
+---
+
+# Question 4: Conditional Probabilities
+
+.font140[
+* Researchers asked graduate students in Rhode Island about what they thought was the coolest idea in economics: signalling, supply and demand, or opportunity costs. Students of political science, sociology and economics were surveyed. Here are the results:
+
+|                   | Political Science | Sociology | Economics | All |
+| :---------------- | :---------------- | :-------- | :-------- | :-- |
+| Signalling        | 57                | 87        | 103       | 247 |
+| Supply and demand | 50                | 42        | 49        | 141 |
+| Opportunity costs | 42                | 22        | 26        | 90  |
+| All               | 149               | 151       | 178       | 478 |
+]
+---
+
+# Question 4: Conditional Probabilities
+
+.font140[
+
+|                   | Political Science | Sociology | Economics | All |
+| :---------------- | :---------------- | :-------- | :-------- | :-- |
+| Signalling        | 57                | 87        | 103       | 247 |
+| Supply and demand | 50                | 42        | 49        | 141 |
+| Opportunity costs | 42                | 22        | 26        | 90  |
+| **All**           | 149               | 151       | 178       | 478 |
+
+* What is the probability that someone is a political scientist given that he thinks supply and demand is the coolest idea in economics?
+
+* What is the probabily that someone likes signalling theory given that she studies economics?
+
+]
+---
+
+# Answer 4
+
+.font120[
+
+|                   | Political Science | Sociology | Economics | All |
+| :---------------- | :---------------- | :-------- | :-------- | :-- |
+| Signalling        | 57                | 87        | 103       | 247 |
+| Supply and demand | 50                | 42        | 49        | 141 |
+| Opportunity costs | 42                | 22        | 26        | 90  |
+| **All**           | 149               | 151       | 178       | 478 |
+
+* What is the probability that someone is a political scientist given that he thinks supply and demand is the coolest idea in economics?
+]
+--
+.font120[
+* `\(\frac{50}{141} \approx 35\%\)`
+]
+--
+.font120[
+* What is the probabily that someone likes signalling theory given that she studies economics?
+]
+--
+.font120[
+* `\(\frac{103}{178} \approx 58\%\)`
+]
+---
+
+# Answer 4 - Signalling
+
+.font150[
+* Answer: _most economists think signalling is the coolest idea in their field_
+
+* ... and indeed it is!
+
+* Congratulations if you've answered all questions correctly!
+
+* .orange[But before you leave...]
+
+* Professor Skarbek knows a lot about signalling and he has great stories to tell. Take a look at the picture on the next slide and think what is the signal being sent and to whom. 
+]
+---
+
+class: clear
+
+background-image: url(mara.jpg)
+
+---
+
+class: inverse, center, middle
+
+# See you next week!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
