@@ -1,0 +1,138 @@
+---
+title: "Week 11 - Probability"
+subtitle: "Large Sample Theorems<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "10 April 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Two large sample theorems:
+
+    - The Law of Large Numbers
+    - The Central Limit Theorem
+]
+
+---
+
+class: inverse, center, middle
+
+# But before that...
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
+
+---
+
+# News on the Taleb/Silver Debate
+
+.center[![:scale 100%](taleb01.png)]
+---
+
+# News on the Taleb/Silver Debate
+
+.center[![:scale 70%](taleb02.png)]
+---
+
+# Taleb/Pinker
+
+.center[![:scale 80%](vox.png)]
+
+.font150[
+.center[<https://www.vox.com/2015/5/21/8635369/pinker-taleb>]
+]
+
+---
+
+# Recommended: Fooled by Randomness
+
+.center[![:scale 45%](randomness.png)]
+---
+
+# Recommended: Black Swan
+
+.center[![:scale 45%](black-swan.png)]
+
+---
+
+# Taleb on Pinker
+
+.center[![:scale 100%](taleb-pinker.png)]
+
+---
+
+# Taleb on Krugman
+
+.center[![:scale 100%](taleb-krugman.png)]
+---
+
+# Law of Large Numbers
+
+.font130[
+* In many probabilistic models, certain patterns emerge as the sample size increases
+
+* .orange[Law of Large Numbers:] If we have a sample of i.i.d. observations from random variable $X$ with expectation $\mathbb{E}(X)$, then
+
+$$\bar{X}_{{n}} = \frac{1}{N} \sum_{i = 1}^{N} X_{i} \rightarrow \mathbb{E}(X)$$]
+--
+.font130[
+* .orange[i.i.d.:] independent and identically distributed random variable. 
+
+* In English: As the number of draws increases, the sample mean $\bar{X}_{{n}}$ approaches $\rightarrow$ the variable's distribution expectation $\mathbb{E}(X)$
+]
+
+---
+
+class: inverse, center, middle
+
+# See you on Friday!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
