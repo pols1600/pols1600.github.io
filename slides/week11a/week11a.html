@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Week 11 - Probability</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Danilo Freire" />
+    <meta name="date" content="2019-04-08" />
+    <link href="week11a_files/remark-css/default.css" rel="stylesheet" />
+    <link href="week11a_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="week11a_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Week 11 - Probability
+## Random Variables and Probability Distributions
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=800px>
+</html>
+### Danilo Freire
+### 8 April 2019
+
+---
+
+
+
+
+&lt;style&gt;
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+&lt;/style&gt;
+
+# Today's Agenda
+
+.font150[
+* Random variables
+* Binomial and normal distributions
+* Expectation and variance
+]
+---
+
+# Random Variables
+
+.font130[
+* What is a random variable? We assign a number to an event
+    - Coin flip: tail = 0; heads = 1
+    - Senate election: Ted Cruz = 0; Beto O'Rourke = 1
+    - Voting: vote = 1; not vote = 0
+    
+* The values of random variables must represent _mutually exclusive and exhaustive events_
+    
+* Probability distribution: Probability that a random variable takes a certain value
+    - P(coin = 1); P(coin = 0)
+    - P(election = 1); P(election = 0)
+]
+---
+
+# Random Variables and Probability Distributions
+
+.font130[
+* .orange[Probability density function (PDF):] `\(f(x)\)` 
+    - Probability that a random variable `\(X\)` takes a particular value. 
+    - Associated with continuous variables, must be integrated over an interval
+    
+* .orange[Probability mass function (PMF):] when `\(X\)` is discrete, `\(f(x) = P(X = x)\)`. Only discrete random variables have PMFs
+
+* .orange[Cumulative distribution function (CDF):] `\(f(x) = P(X \leq x)\)`
+    - What is the probability that a random variable `\(X\)` takes a value equal to or less than `\(x\)`?
+    - Area under the density curve (we use `\(\sum\)` or `\(\int\)`)
+
+]
+---
+
+class: inverse, center, middle
+
+# Binomial Distribution
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+---
+
+# Binomial / Bernoulli Distribution
+
+.font150[
+* The binomial distribution shows the number of successes in repeated trials
+
+* It is also known as the Bernoulli distribution
+
+.center[![:scale 40%](bernoulli.jpg)]
+]
+
+---
+
+# Binomial Distribution
+
+.font150[
+*  .orange[PMF:] for `\(x \in \{0, 1, \dots, n\}\)`,
+
+    `$$f(x) \ = \ P(X = x) \ = \ {n \choose x} p^x (1-p)^{n-x}$$` 
+
+* .orange[PMF] tells us what is the probability of `\(x\)` _successes_ given `\(n\)` trials with with `\(P(x) = p\)`
+
+* In `R`:
+
+
+```r
+# prob of 2 successes in 4 trials
+dbinom(2, size = 4, prob = 0.5) 
+```
+
+```
+## [1] 0.375
+```
+]
+---
+
+# Binomial Distribution
+
+.font150[
+* .orange[CDF:] for `\(x \in \{0, 1, \dots, n\}\)`
+    `$$f(x) \ = \ P(X \le x) \ = \ \sum_{k = 0}^x {n\choose k} p^k (1-p)^{n-k}$$`
+
+* .orange[CDF] tells us what is the probability of _x or fewer successes_ given `\(n\)` trials with `\(P(x) = p\)`
+
+* In `R`:
+
+
+```r
+# prob of 2 or fewer (= 0,1,2) successes in 4 trials
+pbinom(2, size = 4, prob = 0.1)
+```
+
+```
+## [1] 0.9963
+```
+]
+---
+
+# PMF and CDF
+
+.font150[
+* CDF of `\(F(x)\)` is equal to the sum of the results from calculating the PMF for all values smaller and equal to `\(x\)`
+
+* In `R`
+
+
+```r
+pbinom(2, size = 4, prob = 0.1) # CDF
+```
+
+```
+## [1] 0.9963
+```
+
+```r
+sum(dbinom(c(0, 1, 2), 4, 0.1)) # summing up the PDFs
+```
+
+```
+## [1] 0.9963
+```
+]
+---
+
+# Binomial Distribution
+
+.font150[
+* Example: flip a fair coin 3 times
+
+    `$$f(x) \ = \ P(X = x) \ = \ {n \choose x} p^x (1-p)^{n-x}$$` 
+    
+    `$$f(x) \ = \ P(X = 1) \ = \ {3 \choose 1} 0.5^1 (1-0.5)^{3-1} = 0.375$$`
+    
+
+```r
+dbinom(1, 3, 0.5)
+```
+
+```
+## [1] 0.375
+```
+]
+---
+
+# Binomial Distribution
+
+.font120[
+
+```r
+x &lt;- 0:3
+barplot(dbinom(x, size = 3, prob = 0.5), ylim = c(0, 0.4), 
+        names.arg = x, xlab = "x", 
+        ylab = "Density", main = "Probability mass function")
+```
+
+&lt;img src="week11a_files/figure-html/binom05-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Binomial Distribution
+
+.font120[
+
+```r
+x &lt;- -1:4
+pb &lt;- pbinom(x, size = 3, prob = 0.5)
+
+plot(x[1:2], rep(pb[1], 2), ylim = c(0, 1), type = "s", 
+     xlim = c(-1, 4), xlab = "x",ylab = "Probability",
+     main = "Cumulative distribution function")
+
+for (i in 2:(length(x)-1)) {
+    lines(x[i:(i+1)], rep(pb[i], 2))
+}
+
+points(x[2:(length(x)-1)], pb[2:(length(x)-1)], pch = 19)
+points(x[2:(length(x)-1)], pb[1:(length(x)-2)])
+```
+]
+---
+
+# Binomial Distribution
+
+.font120[
+&lt;img src="week11a_files/figure-html/binom07-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+class: inverse, center, middle
+
+# Normal Distribution
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;  
+---
+
+# Normal Distribution
+
+.font150[
+* The .orange[normal distribution] is also called the .orange[Gaussian distribution]
+
+.center[![:scale 45%](gauss.jpeg)]
+]
+---
+
+# Normal Distribution
+
+.font150[
+* Takes on values from `\(-\infty\)` to `\(\infty\)`
+
+* Defined by two parameters: `\(\mu\)` and `\(\sigma^2\)`
+    - Mean and variance (standard deviation squared)
+
+* Mean defines the location of the distribution
+
+* Variance defines the spread
+]
+---
+
+# Normal Distribution
+
+.font150[
+* .orange[Normal distribution] with mean `\(\mu\)` and standard deviation `\(\sigma\)`
+
+* .orange[PDF:] `\(f(x) \ = \ \frac{1}{\sqrt{2\pi} \sigma}\exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)\)` 
+
+* In `R`:
+
+
+```r
+# prob of x = 2 with a normally-distributed variable
+# with mean = 4 and standard deviation = 3
+dnorm(2, mean = 4, sd = 3)
+```
+
+```
+## [1] 0.1064827
+```
+]
+---
+
+# Normal Distribution
+
+.font150[
+* .orange[CDF:] `\(F(x) \ = \ P(X \le x) \ = \ \int_{-\infty}^x \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(t - \mu)^2}{2\sigma^2}\right) dt\)`
+
+* Use `R` to compute it
+
+* What will be `\(F(x = 2)\)` for `\(\mathcal{N}(2,4)\)`?
+
+
+```r
+pnorm(2, mean = 2, sd = 4)
+```
+
+```
+## [1] 0.5
+```
+]
+---
+
+# Normal Distribution
+
+.font150[
+* Normal distribution is symmetric around the mean
+
+* Mean = Median
+]
+---
+
+# Normal Distribution 
+
+.font150[
+
+```r
+# Different types of normal distributions
+x &lt;- seq(from = -7, to = 7, by = 0.01)
+plot(x, dnorm(x), xlab = "x", ylab = "density",
+     type = "l",main = "Probability density function",
+     ylim = c(0, 0.9))
+lines(x, dnorm(x, sd = 2), col = "red")
+lines(x, dnorm(x, mean = 1, sd = 0.5), col = "blue")
+```
+]
+---
+
+# Normal Distribution 
+
+.font150[
+&lt;img src="week11a_files/figure-html/norm04-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Normal Distribution
+
+.font150[
+* Curve of .orange[any] normal distribution:
+
+* Symmetric around the mean
+
+* Total area under the curve is 100%
+
+* Area between -1SD and +1SD is ~68%
+
+* Area between -2SD and +2SD is ~95%
+
+* Area between -3SD and +3SD is ~99.7%
+]
+---
+
+# Normal Distribution
+
+.font150[
+
+```r
+x &lt;- seq(from = -7, to = 7, by = 0.01)
+lwd &lt;- 1.5
+plot(x, dnorm(x), xlab = "x", ylab = "density",
+     type = "l",main = "Probability density function",
+     ylim = c(0, 0.9))
+abline(v = -1, col = "red")
+abline(v = 1, col = "red")
+abline(v = -2, col = "blue")
+abline(v = 2, col = "blue")
+abline(v = -3, col = "black")
+abline(v = 3, col = "black")
+```
+]
+---
+
+# Normal Distribution
+
+.font150[
+&lt;img src="week11a_files/figure-html/norm06-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Expectations, Means, and Variances
+
+.font150[
+* For probability distributions, means _should not be confused with sample means_
+
+* Expectations or means of a random variable have specific meaning for the probability distribution
+]
+---
+
+# Means and Expectation
+
+.font150[
+* A sample mean varies from sample to sample
+
+* Mean of a probability distribution is a theoretical construct and constant
+
+* Example: Age of undergraduate body at Brown
+]
+---
+
+# Means and Expectation
+
+.font150[
+* The expectation of a random variable is equal to the sum of all possibilities weighted by the probabilities
+
+* Example: expectation of rolling one die
+
+`$$\mathbb{E}(X) = \frac{1}{6} \times 1 + \frac{1}{6} \times 2 + \frac{1}{6} \times 3 + \frac{1}{6} \times 4 \frac{1}{6} \times 5 \frac{1}{6} \times 6$$` 
+`$$\mathbb{E}(X)= 3.5$$`]
+--
+.font150[
+* Note that this is .orange[not a possible value!]
+
+* `\(\mathbb{E}(X)\)` is the _theoretical mean_ based on the _distribution_ of the variable, not its sample mean
+]
+---
+
+# Means and Expectation
+
+.font150[
+* What is `\(\mathbb{E}(X)\)` for the number of heads in 100 coin flips?
+]
+--
+.font150[
+* `\(\mathbb{E}(X) = 0.5\times 1 + 0.5\times 1+ ... + 0.5\times 1 = 0.5*100 = 50\)`
+]
+---
+
+# Variance
+
+.font150[
+* Variance is standard deviation squared = `\(\sigma^2\)`
+
+* `\(\mathbb{V}(X)\)` is the difference between the expectation of `\(X^2\)` and the expectation of `\(X\)`
+
+* `\(\mathbb{V}(X) = \mathbb{E}[\{X - \mathbb{E}(X)\}^2]\)`
+
+* Variance in a probability distribution indicates how much uncertainty exists
+
+* Like `\(\mathbb{E}(X)\)`, `\(\mathbb{V}(X)\)` is a theoretical construct, not exactly the sample variance
+]
+
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"ratio": "4:3",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

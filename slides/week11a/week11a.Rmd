@@ -1,0 +1,458 @@
+---
+title: "Week 11 - Probability"
+subtitle: "Random Variables and Probability Distributions<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "8 April 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Random variables
+* Binomial and normal distributions
+* Expectation and variance
+]
+---
+
+# Random Variables
+
+.font130[
+* What is a random variable? We assign a number to an event
+    - Coin flip: tail = 0; heads = 1
+    - Senate election: Ted Cruz = 0; Beto O'Rourke = 1
+    - Voting: vote = 1; not vote = 0
+    
+* The values of random variables must represent _mutually exclusive and exhaustive events_
+    
+* Probability distribution: Probability that a random variable takes a certain value
+    - P(coin = 1); P(coin = 0)
+    - P(election = 1); P(election = 0)
+]
+---
+
+# Random Variables and Probability Distributions
+
+.font130[
+* .orange[Probability density function (PDF):] $f(x)$ 
+    - Probability that a random variable $X$ takes a particular value. 
+    - Associated with continuous variables, must be integrated over an interval
+    
+* .orange[Probability mass function (PMF):] when $X$ is discrete, $f(x) = P(X = x)$. Only discrete random variables have PMFs
+
+* .orange[Cumulative distribution function (CDF):] $f(x) = P(X \leq x)$
+    - What is the probability that a random variable $X$ takes a value equal to or less than $x$?
+    - Area under the density curve (we use $\sum$ or $\int$)
+
+]
+---
+
+class: inverse, center, middle
+
+# Binomial Distribution
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+---
+
+# Binomial / Bernoulli Distribution
+
+.font150[
+* The binomial distribution shows the number of successes in repeated trials
+
+* It is also known as the Bernoulli distribution
+
+.center[![:scale 40%](bernoulli.jpg)]
+]
+
+---
+
+# Binomial Distribution
+
+.font150[
+*  .orange[PMF:] for $x \in \{0, 1, \dots, n\}$,
+
+    $$f(x) \ = \ P(X = x) \ = \ {n \choose x} p^x (1-p)^{n-x}$$ 
+
+* .orange[PMF] tells us what is the probability of $x$ _successes_ given $n$ trials with with $P(x) = p$
+
+* In `R`:
+
+```{r binom01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+# prob of 2 successes in 4 trials
+dbinom(2, size = 4, prob = 0.5) 
+```
+]
+---
+
+# Binomial Distribution
+
+.font150[
+* .orange[CDF:] for $x \in \{0, 1, \dots, n\}$
+    $$f(x) \ = \ P(X \le x) \ = \ \sum_{k = 0}^x {n\choose k} p^k (1-p)^{n-k}$$
+
+* .orange[CDF] tells us what is the probability of _x or fewer successes_ given $n$ trials with $P(x) = p$
+
+* In `R`:
+
+```{r binom02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+# prob of 2 or fewer (= 0,1,2) successes in 4 trials
+pbinom(2, size = 4, prob = 0.1)
+```
+]
+---
+
+# PMF and CDF
+
+.font150[
+* CDF of $F(x)$ is equal to the sum of the results from calculating the PMF for all values smaller and equal to $x$
+
+* In `R`
+
+```{r binom03,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+pbinom(2, size = 4, prob = 0.1) # CDF
+sum(dbinom(c(0, 1, 2), 4, 0.1)) # summing up the PDFs
+```
+]
+---
+
+# Binomial Distribution
+
+.font150[
+* Example: flip a fair coin 3 times
+
+    $$f(x) \ = \ P(X = x) \ = \ {n \choose x} p^x (1-p)^{n-x}$$ 
+    
+    $$f(x) \ = \ P(X = 1) \ = \ {3 \choose 1} 0.5^1 (1-0.5)^{3-1} = 0.375$$
+    
+```{r binom04,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+dbinom(1, 3, 0.5)
+```
+]
+---
+
+# Binomial Distribution
+
+.font120[
+```{r binom05,fig.align="center",tidy=F,warning=F,message=F,cache=T,fig.height=6}
+x <- 0:3
+barplot(dbinom(x, size = 3, prob = 0.5), ylim = c(0, 0.4), 
+        names.arg = x, xlab = "x", 
+        ylab = "Density", main = "Probability mass function")
+```
+]
+---
+
+# Binomial Distribution
+
+.font120[
+```{r binom06,fig.align="center",tidy=F,warning=F,message=F,cache=T,eval=FALSE}
+x <- -1:4
+pb <- pbinom(x, size = 3, prob = 0.5)
+
+plot(x[1:2], rep(pb[1], 2), ylim = c(0, 1), type = "s", 
+     xlim = c(-1, 4), xlab = "x",ylab = "Probability",
+     main = "Cumulative distribution function")
+
+for (i in 2:(length(x)-1)) {
+    lines(x[i:(i+1)], rep(pb[i], 2))
+}
+
+points(x[2:(length(x)-1)], pb[2:(length(x)-1)], pch = 19)
+points(x[2:(length(x)-1)], pb[1:(length(x)-2)])
+```
+]
+---
+
+# Binomial Distribution
+
+.font120[
+```{r binom07,fig.align="center",tidy=F,warning=F,message=F,cache=T,echo=FALSE,fig.height=8}
+x <- -1:4
+pb <- pbinom(x, size = 3, prob = 0.5)
+
+plot(x[1:2], rep(pb[1], 2), ylim = c(0, 1), type = "s", 
+     xlim = c(-1, 4), xlab = "x",ylab = "Probability",
+     main = "Cumulative distribution function")
+
+for (i in 2:(length(x)-1)) {
+    lines(x[i:(i+1)], rep(pb[i], 2))
+}
+
+points(x[2:(length(x)-1)], pb[2:(length(x)-1)], pch = 19)
+points(x[2:(length(x)-1)], pb[1:(length(x)-2)])
+```
+]
+---
+
+class: inverse, center, middle
+
+# Normal Distribution
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
+---
+
+# Normal Distribution
+
+.font150[
+* The .orange[normal distribution] is also called the .orange[Gaussian distribution]
+
+.center[![:scale 45%](gauss.jpeg)]
+]
+---
+
+# Normal Distribution
+
+.font150[
+* Takes on values from $-\infty$ to $\infty$
+
+* Defined by two parameters: $\mu$ and $\sigma^2$
+    - Mean and variance (standard deviation squared)
+
+* Mean defines the location of the distribution
+
+* Variance defines the spread
+]
+---
+
+# Normal Distribution
+
+.font150[
+* .orange[Normal distribution] with mean $\mu$ and standard deviation $\sigma$
+
+* .orange[PDF:] $f(x) \ = \ \frac{1}{\sqrt{2\pi} \sigma}\exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)$ 
+
+* In `R`:
+
+```{r norm01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+# prob of x = 2 with a normally-distributed variable
+# with mean = 4 and standard deviation = 3
+dnorm(2, mean = 4, sd = 3)
+```
+]
+---
+
+# Normal Distribution
+
+.font150[
+* .orange[CDF:] $F(x) \ = \ P(X \le x) \ = \ \int_{-\infty}^x \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{(t - \mu)^2}{2\sigma^2}\right) dt$
+
+* Use `R` to compute it
+
+* What will be $F(x = 2)$ for $\mathcal{N}(2,4)$?
+
+```{r norm02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+pnorm(2, mean = 2, sd = 4)
+```
+]
+---
+
+# Normal Distribution
+
+.font150[
+* Normal distribution is symmetric around the mean
+
+* Mean = Median
+]
+---
+
+# Normal Distribution 
+
+.font150[
+```{r norm03,fig.align="center",tidy=F,warning=F,message=F,cache=T,eval=FALSE}
+# Different types of normal distributions
+x <- seq(from = -7, to = 7, by = 0.01)
+plot(x, dnorm(x), xlab = "x", ylab = "density",
+     type = "l",main = "Probability density function",
+     ylim = c(0, 0.9))
+lines(x, dnorm(x, sd = 2), col = "red")
+lines(x, dnorm(x, mean = 1, sd = 0.5), col = "blue")
+```  
+]
+---
+
+# Normal Distribution 
+
+.font150[
+```{r norm04,fig.align="center",tidy=F,warning=F,message=F,cache=T,echo=FALSE,fig.height=8}
+# Different types of normal distributions
+x <- seq(from = -7, to = 7, by = 0.01)
+plot(x, dnorm(x), xlab = "x", ylab = "density",
+     type = "l",main = "Probability density function",
+     ylim = c(0, 0.9))
+lines(x, dnorm(x, sd = 2), col = "red")
+lines(x, dnorm(x, mean = 1, sd = 0.5), col = "blue")
+```  
+]
+---
+
+# Normal Distribution
+
+.font150[
+* Curve of .orange[any] normal distribution:
+
+* Symmetric around the mean
+
+* Total area under the curve is 100%
+
+* Area between -1SD and +1SD is ~68%
+
+* Area between -2SD and +2SD is ~95%
+
+* Area between -3SD and +3SD is ~99.7%
+]
+---
+
+# Normal Distribution
+
+.font150[
+```{r norm05,fig.align="center",tidy=F,warning=F,message=F,cache=T, eval=FALSE}
+x <- seq(from = -7, to = 7, by = 0.01)
+lwd <- 1.5
+plot(x, dnorm(x), xlab = "x", ylab = "density",
+     type = "l",main = "Probability density function",
+     ylim = c(0, 0.9))
+abline(v = -1, col = "red")
+abline(v = 1, col = "red")
+abline(v = -2, col = "blue")
+abline(v = 2, col = "blue")
+abline(v = -3, col = "black")
+abline(v = 3, col = "black")
+```
+]
+---
+
+# Normal Distribution
+
+.font150[
+```{r norm06,fig.align="center",tidy=F,warning=F,message=F,cache=T, echo=FALSE,fig.height=8}
+x <- seq(from = -7, to = 7, by = 0.01)
+lwd <- 1.5
+plot(x, dnorm(x), xlab = "x", ylab = "density",
+     type = "l",main = "Probability density function",
+     ylim = c(0, 0.9))
+abline(v= -1, col = "red")
+abline(v= 1, col = "red")
+abline(v= -2, col = "blue")
+abline(v= 2, col = "blue")
+abline(v = -3, col = "black")
+abline(v = 3, col = "black")
+```
+]
+---
+
+# Expectations, Means, and Variances
+
+.font150[
+* For probability distributions, means _should not be confused with sample means_
+
+* Expectations or means of a random variable have specific meaning for the probability distribution
+]
+---
+
+# Means and Expectation
+
+.font150[
+* A sample mean varies from sample to sample
+
+* Mean of a probability distribution is a theoretical construct and constant
+
+* Example: Age of undergraduate body at Brown
+]
+---
+
+# Means and Expectation
+
+.font150[
+* The expectation of a random variable is equal to the sum of all possibilities weighted by the probabilities
+
+* Example: expectation of rolling one die
+
+$$\mathbb{E}(X) = \frac{1}{6} \times 1 + \frac{1}{6} \times 2 + \frac{1}{6} \times 3 + \frac{1}{6} \times 4 \frac{1}{6} \times 5 \frac{1}{6} \times 6$$ 
+$$\mathbb{E}(X)= 3.5$$]
+--
+.font150[
+* Note that this is .orange[not a possible value!]
+
+* $\mathbb{E}(X)$ is the _theoretical mean_ based on the _distribution_ of the variable, not its sample mean
+]
+---
+
+# Means and Expectation
+
+.font150[
+* What is $\mathbb{E}(X)$ for the number of heads in 100 coin flips?
+]
+--
+.font150[
+* $\mathbb{E}(X) = 0.5\times 1 + 0.5\times 1+ ... + 0.5\times 1 = 0.5*100 = 50$
+]
+---
+
+# Variance
+
+.font150[
+* Variance is standard deviation squared = $\sigma^2$
+
+* $\mathbb{V}(X)$ is the difference between the expectation of $X^2$ and the expectation of $X$
+
+* $\mathbb{V}(X) = \mathbb{E}[\{X - \mathbb{E}(X)\}^2]$
+
+* Variance in a probability distribution indicates how much uncertainty exists
+
+* Like $\mathbb{E}(X)$, $\mathbb{V}(X)$ is a theoretical construct, not exactly the sample variance
+]
+
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
