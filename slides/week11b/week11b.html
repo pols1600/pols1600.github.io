@@ -59,8 +59,11 @@ class: center, middle, inverse, title-slide
 .font150[
 * Two large sample theorems:
 
-    - The Law of Large Numbers
-    - The Central Limit Theorem
+* The Law of Large Numbers
+  - Gambler's Fallacy
+  - Infinite Monkey Theorem
+    
+* The Central Limit Theorem
 ]
 
 ---
@@ -129,9 +132,195 @@ class: inverse, center, middle
 
 * In English: As the number of draws increases, the sample mean `\(\bar{X}_{{n}}\)` approaches `\(\rightarrow\)` the variable's distribution expectation `\(\mathbb{E}(X)\)`
 ]
+---
+
+# Law of Large Numbers
+
+.font150[
+* Examples
+
+	- Rolling a die, 1000 times
+	- Flipping a coin
+	- Drawing respondents from a population of supporters and non-supporters for politician A
+	- Statistical simulations
+]
+---
+
+# Simulation: Coin Tossing
+
+.font150[
+
+```r
+draws &lt;- seq(from = 1, to = 500)  # coin tosses
+
+avgs &lt;- rep(NA, length(draws))    # empty vector
+
+for(i in 1:length(draws)){
+    samp &lt;- sample(c(0, 1), draws[i], replace = T)
+    avgs[i] &lt;- mean(samp) # sampling w/ replacement
+}
+
+plot(draws, avgs, type = "l", ylim = c(0, 1),
+     main = "Bernoulli with Prob. 0.5") # plot
+abline(h = 0.5, col = "red", lwd = 2)  # expectation 
+```
+]
+---
+
+# Simulation: Coin Tossing
+
+.font130[
+&lt;img src="week11b_files/figure-html/coin02-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Simulation: Rolling a Die 
+
+.font130[
+
+```r
+draws &lt;- seq(from = 1, to = 500) # number of draws
+
+avgs &lt;- rep(NA, length(draws))   # empty vector 
+
+for(i in 1:length(draws)){       
+    samp &lt;- sample(c(1:6), draws[i], replace = T)
+    avgs[i] &lt;- mean(samp)  # sampling w/ replacement
+}
+
+plot(draws, avgs, type = "l", ylim = c(0, 6),
+     main = "Uniform [1, 6]") # plot
+abline(h = 3.5, col = "red", lwd = 2)         # expectation
+```
+]
+---
+
+# Simulation: Rolling a Die 
+
+.font150[
+&lt;img src="week11b_files/figure-html/die02-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Gambler's Fallacy
+
+.font150[
+* The Law of Large Numbers, as the name implies, is only valid for .orange[large samples]
+
+* There is _no principle_ that supports the idea that after a few positive draws a negative draw must appear to "balance" the results
+
+* Example: after 10 heads, _another head can come up_. Why?
+]
+--
+.font150[
+* .orange[Because the events are independent]
+]
+---
+
+# Monte Carlo Casino
+
+.center[![:scale 65%](bbc.png)]
+
+.center[&lt;http://www.bbc.com/future/story/20150127-why-we-gamble-like-monkeys&gt;]
 
 ---
 
+# Jorge Luis Borges
+
+.center[![:scale 100%](borges.jpg)]
+
+.font150[.center[https://en.wikipedia.org/wiki/Jorge_Luis_Borges]]
+---
+
+# Infinite Monkey Theorem
+
+.center[![:scale 50%](monkey.jpg)]
+
+.font150[
+* "...a half-dozen monkeys provided with typewriters would, in a few eternities, produce all the books in the British Museum. Strictly speaking, one immortal monkey would suffice." (La Biblioteca Total, 1939)
+]
+---
+
+# The Total Library
+
+.font130[
+"Everything would be in the Library's blind volumes. Everything: the detailed history of the future, Aeschylus' _The Egyptians_, the exact number of times that the waters of the Ganges have reflected the flight of a falcon, the secret and true nature of Rome, the encyclopedia Novalis would have constructed, my dreams and half-dreams at dawn on August 14, 1934, the proof of Pierre Fermat's theorem, [...] the song the sirens sang, the complete catalog of the Library, the proof of the inaccuracy of that catalog. Everything: but for every sensible line or accurate fact there would be millions of meaningless cacophonies, verbal farragoes, and babblings. Everything: but all the generations of mankind could pass before the dizzying shelves—shelves that obliterate the day and on which chaos lies—ever reward them with a tolerable page."
+]
+---
+
+# The Library of Babel
+
+.center[![:scale 60%](babel.jpg)]
+
+.font150[
+.center[&lt;https://en.wikipedia.org/wiki/The_Library_of_Babel&gt;]
+]
+
+---
+
+# Central Limit Theory
+
+.font140[
+* In practice we observe only the sample mean and _do not know the expectation_
+
+* .orange[The central limit theorem] shows that the distribution of the sample mean approaches the normal distribution as the sample size increases
+
+* Again, not the sample itself approaches the normal distribution, .orange[but only the sample means]
+
+* Z-score of the sample mean converges in distribution to the standard normal distribution or `\(\mathcal{N}(0,1)\)` as the sample size increases
+
+* Interestingly the result is true .orange[for almost any distribution!]
+]
+---
+
+# Central Limit Theory
+
+.font150[
+* Experiment: flip a coin 10 times and record the number of heads
+
+* Repeat experiment above 1000 times
+]
+---
+
+# Central Limit Theorem
+
+.font110[
+
+```r
+avgs &lt;- rep(NA, 1000)
+for(i in 1:1000){
+  samp &lt;- rbinom(1000, 10, p=0.5)
+  avgs[i] &lt;- mean(samp)
+}
+plot(density(avgs))
+```
+
+&lt;img src="week11b_files/figure-html/clt01-1.png" style="display: block; margin: auto;" /&gt;
+]
+---
+
+# Centra Limit Theorem
+
+.font150[
+* Visualisation: &lt;https://seeing-theory.brown.edu/probability-distributions/index.html&gt;
+]
+---
+
+# Central Limit Theorem
+
+.font150[
+* _Why do we care about it?_
+
+* Hypothetically repeated polls with sample size `\(N\)`
+
+* As the number of polls increase, we get closer and closer to the true population mean, _regardless of the distribution of the each particular poll_
+
+* Since we are taking the means of each poll, rare events become even more rare
+
+* It is really hard to get a "weird average" versus to get a "weird individual." That difficulty in getting a weird average is what pulls the plot into a nice tight bell curve 
+]
+
+---
 class: inverse, center, middle
 
 # See you on Friday!
