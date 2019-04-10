@@ -117,6 +117,12 @@ class: inverse, center, middle
 .center[![:scale 100%](taleb-krugman.png)]
 ---
 
+# But if you criticise him...
+
+.center[![:scale 60%](block.jpg)]
+
+---
+
 # Law of Large Numbers
 
 .font130[
@@ -138,8 +144,8 @@ $$\bar{X}_{{n}} = \frac{1}{N} \sum_{i = 1}^{N} X_{i} \rightarrow \mathbb{E}(X)$$
 .font150[
 * Examples
 
-	- Rolling a die, 1000 times
-	- Flipping a coin
+	- Rolling a die, 500 times
+	- Flipping a coin, also many times
 	- Drawing respondents from a population of supporters and non-supporters for politician A
 	- Statistical simulations
 ]
