@@ -55,12 +55,14 @@ set.seed(12345)
 
 # Final Project
 
-.font150[
+.font130[
 * Deadline: .orange[29th of April]
 
-* 3,000-4,000 words (`R` code and graphs _do not count_)
+* 3,000-4,000 words (excluding `R` code and graphs)
 
-* RMarkdown format 
+* PDF format. You can write the main text in Word, LaTeX or RMarkdown, whichever you find easier to use
+
+* You must provide an RMarkdown appendix file with complete R code and graphs
 
 * RStudio add-in to count words: <https://github.com/benmarwick/wordcountaddin>
 
@@ -75,13 +77,13 @@ set.seed(12345)
 .font150[
 * Introduction (1-1.5 pages)
     - What the paper is about
-    - Why is it important
+    - Why the topic is important today
     - What are the main results and conclusions
 
 * Data (1 page)
     - Where did you get the data
-    - In what format were the data available
-    - How did you import them into R
+    - In what format the data were available
+    - How you imported the dataset into R
 ]
 
 ---
@@ -92,15 +94,25 @@ set.seed(12345)
 * Descriptive Statistics (2-3 pages)
     - Show graphs and correlations _for main variables only_ 
     - Again: _just the most important variables_
-    - Did you transform them? 
+    - What do the descriptive statistics indicate regarding the main question of the paper?
     
 * Replication (3-4 pages)
+    - Describe the paper's main results
+    - Stay as closely as possible to the original findings
+    - Report the coefficients, standard errors, and significance levels
+]
+---
+
+# Format
     
+.font150[
 * Extension (2 pages)
     - Add a new analysis to the paper. Maybe delete some control variables, transform them, add new ones?
     - Do the main results hold or change?
     
 * Discussion and Conclusion (1-1.5 page)
+    - How could the authors improve the paper?
+    - Any future research you would recommend?
 ]
 ---
 
@@ -126,7 +138,7 @@ set.seed(12345)
 .center[![:scale 100%](fearon-laitin.png)]
 
 .font130[
-* Article: <https://sci-hub.tw/https://www.cambridge.org/core/journals/american-political-science-review/article/ethnicity-insurgency-and-civil-war/B1D5D0E7C782483C5D7E102A61AD6605>
+* Article: <https://www.cambridge.org/core/journals/american-political-science-review/article/ethnicity-insurgency-and-civil-war/B1D5D0E7C782483C5D7E102A61AD6605>
 
 * Replicate table 1 (5 logit models)
 
@@ -139,7 +151,7 @@ set.seed(12345)
 .center[![:scale 100%](oil.png)]
 
 .font150[
-* Article: <https://sci-hub.tw/https://doi.org/10.1017/S0003055408080040>
+* Article: <https://doi.org/10.1017/S0003055408080040>
 * Replicate table 2 (with standardised coefficients)
 ]
 ---
@@ -149,7 +161,7 @@ set.seed(12345)
 .center[![:scale 90%](brother.png)]
 
 .font130[
-* Article: <https://sci-hub.tw/https://www.cambridge.org/core/journals/political-science-research-and-methods/article/brother-or-burden-an-experiment-on-reducing-prejudice-toward-syrian-refugees-in-turkey/3801D8A794F0EE37A7528ABD677F33CA>
+* Article: <https://www.cambridge.org/core/journals/political-science-research-and-methods/article/brother-or-burden-an-experiment-on-reducing-prejudice-toward-syrian-refugees-in-turkey/3801D8A794F0EE37A7528ABD677F33CA>
 * Replicate table 1
 ]
 
@@ -160,7 +172,7 @@ set.seed(12345)
 .center[![:scale 100%](severity.png)]
 
 .font130[
-* Article: <https://sci-hub.tw/https://journals.sagepub.com/doi/10.1177/0022002705284828>
+* Article: <https://journals.sagepub.com/doi/10.1177/0022002705284828>
 * Replicate table 2
 ]
 ---
@@ -190,13 +202,15 @@ set.seed(12345)
 # Tips
 
 .font150[
-* Don't worry if your coefficients are not exactly the same
+* Don't worry if your coefficients are not exactly the same as the authors'
 
-* Check if they are similar and remain positive or negative
+* Check if your findings are similar and if they remain positive or negative
 
 * Also don't worry about clustered standard errors, fixed effects, or any other terms you don't know
 
-* Most datasets are available on the [Harvard Dataverse](https://dataverse.harvard.edu/) or on the article's website. Let me know if you cannot find yours after 2 days
+* Most datasets are available on the [Harvard Dataverse](https://dataverse.harvard.edu/) or on the article's website. You have access to all of them through Brown
+
+* Let me know if you cannot find your article after 2 days
 ]
 ---
 
@@ -218,7 +232,7 @@ set.seed(12345)
 .font150[
 * Send me a pdf of your slides along with your assignment on the .orange[29th of April]
 
-* _Late submissions will be penalised_
+* Late submissions will be penalised
 
 * If you use Powerpoint, please bring your computer to class
 
