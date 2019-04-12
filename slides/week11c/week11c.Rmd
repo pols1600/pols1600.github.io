@@ -1,0 +1,236 @@
+---
+title: "Week 11 - Final Project"
+subtitle: "Guidelines<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "12 April 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Final Project
+
+.font150[
+* Deadline: .orange[2nd of May] (more time for you!)
+
+* 3,000-4,000 words (`R` code and graphs _do not count_)
+
+* RMarkdown format 
+
+* RStudio add-in to count words: <https://github.com/benmarwick/wordcountaddin>
+
+* 10-minute presentation
+
+* 50% of your final grade
+]
+---
+
+# Format
+
+.font150[
+* Introduction (1-1.5 pages)
+    - What the paper is about
+    - Why is it important
+    - What are the main results and conclusions
+
+* Data (1 page)
+    - Where did you get the data
+    - In what format were the data available
+    - How did you import them into R
+]
+
+---
+
+# Format
+
+.font130[
+* Descriptive Statistics (2-3 pages)
+    - Show graphs and correlations _for main variables only_ 
+    - Again: _just the most important variables_
+    - Did you transform them? 
+    
+* Replication (3-4 pages)
+    
+* Extension (2 pages)
+    - Add a new analysis to the paper. Maybe delete some control variables, transform them, add new ones?
+    - Do the main results hold or change?
+    
+* Discussion and Conclusion (1-1.5 page)
+]
+---
+
+# Suggested Topics
+
+.font150[
+* "Ethnicity, Insurgency, and Civil War"
+
+* "Oil, Islam, and Women"
+
+* "Brother or Burden: An Experiment on Reducing Prejudice Toward Syrian Refugees in Turkey"
+
+* "Explaining the Severity of Civil Wars"
+
+* "Punishing Personal and Electoral Corruption: Experimental Evidence from India"
+
+* "The Gendered Effects of Violence on Political Engagement"
+]
+---
+
+# Ethnicity, Insurgency, and Civil War
+
+.center[![:scale 100%](fearon-laitin.png)]
+
+.font130[
+* Article: <https://sci-hub.tw/https://www.cambridge.org/core/journals/american-political-science-review/article/ethnicity-insurgency-and-civil-war/B1D5D0E7C782483C5D7E102A61AD6605>
+
+* Replicate table 1 (5 logit models)
+
+* `model <- glm(dependent ~ independent1 + independent2 + ... + independentX, data = dataset, family = "binomial")`
+]
+---
+
+# Oil, Islam, and Women
+
+.center[![:scale 100%](oil.png)]
+
+.font150[
+* Article: <https://sci-hub.tw/https://doi.org/10.1017/S0003055408080040>
+* Replicate table 2 (with standardised coefficients)
+]
+---
+
+# Brother or Burden
+
+.center[![:scale 90%](brother.png)]
+
+.font130[
+* Article: <https://sci-hub.tw/https://www.cambridge.org/core/journals/political-science-research-and-methods/article/brother-or-burden-an-experiment-on-reducing-prejudice-toward-syrian-refugees-in-turkey/3801D8A794F0EE37A7528ABD677F33CA>
+* Replicate table 1
+]
+
+---
+
+# Explaining the Severity of Civil Wars 
+
+.center[![:scale 100%](severity.png)]
+
+.font130[
+* Article: <https://sci-hub.tw/https://journals.sagepub.com/doi/10.1177/0022002705284828>
+* Replicate table 2
+]
+---
+
+# Personal and Electoral Corruption
+
+.font140[
+* Article: <https://journals.sagepub.com/doi/full/10.1177/2053168016645136>
+* Replicate table 1
+]
+
+---
+
+# The Gendered Effects of Violence on Political Engagement
+
+.center[![:scale 100%](bosnia.png)]
+
+.font130[
+* Article: <https://sci-hub.tw/https://www.journals.uchicago.edu/doi/full/10.1086/701764>
+* Replicate table 1
+* Interaction models: `lm(dependent ~ ind01 + ind02 + I(ind1*ind2), data = dataset)`
+]
+---
+
+# Tips
+
+.font150[
+* Don't worry if your coefficients are not exactly the same
+
+* Check if they are similar and remain positive or negative
+
+* Also don't worry about clustered standard errors, fixed effects, or any other terms you don't know
+
+* Most datasets are available on the [Harvard Dataverse](https://dataverse.harvard.edu/) or on the article's website. Let me know if you cannot find yours after 2 days
+]
+---
+
+# Tips
+
+.font150[
+* Some models were estimated with Stata, another statistical software. Stata commands _won't work_ in R, but you should be able to translate them into R code
+
+* To create tables in Markdown, use:
+    - <https://help.github.com/en/articles/organizing-information-with-tables> 
+    - Or <https://www.tablesgenerator.com/markdown_tables>
+
+* _Replications take time_: start early and share the work with your colleagues
+]
+---
+
+# Presentations
+
+.font150[
+* Send me a pdf of your slides along with your assignment on the .orange[2nd of April]
+
+* _Late submissions will be penalised_
+
+* If you use Powerpoint, please bring your computer to class
+
+* Presentations should be short and straight to the point: .orange[10 minutes per group]
+
+* No more than .orange[10 slides]: focus on the issues you encountered and on your main results
+
+* Let me know if you need any help!
+]
+
+---
+
+class: inverse, center, middle
+
+# Good luck!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
