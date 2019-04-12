@@ -56,7 +56,7 @@ set.seed(12345)
 # Final Project
 
 .font150[
-* Deadline: .orange[2nd of May] (more time for you!)
+* Deadline: .orange[29th of April]
 
 * 3,000-4,000 words (`R` code and graphs _do not count_)
 
@@ -216,7 +216,7 @@ set.seed(12345)
 # Presentations
 
 .font150[
-* Send me a pdf of your slides along with your assignment on the .orange[2nd of April]
+* Send me a pdf of your slides along with your assignment on the .orange[29th of April]
 
 * _Late submissions will be penalised_
 
