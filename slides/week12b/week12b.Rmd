@@ -2,7 +2,7 @@
 title: "Week 12 - Uncertainty"
 subtitle: "Standard Errors and P-Values<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
-date: "15 April 2019"
+date: "17 April 2019"
 output: 
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts]
