@@ -187,12 +187,12 @@ summary(lm(Child.Mortality ~ log(GDP) + PolityIV, data = mortality))
 .font150[
 * To recap:
 
-* When you're reading articles or writing your own, there's an easy way to see if the effect is statistically significant with $p-value < 0.05$
+* When you're reading articles or writing your own, there's an easy way to see if the effect is statistically significant with $pvalue < 0.05$
 
 * Only three steps:
 
   - Check the model coefficient
-  - Check the standard errors and multiply it by two
+  - Check the standard error and multiply it by two
   - Sum and subtract the value from the coefficient. If it gives you zero, it's not significant. If it doesn't include zero, it is statistically significant
 ]
 ---
