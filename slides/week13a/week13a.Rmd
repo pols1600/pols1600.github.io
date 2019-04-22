@@ -1,0 +1,312 @@
+---
+title: "Week 13 - Uncertainty"
+subtitle: "Hypothesis Testing<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+author: "Danilo Freire"
+date: "22 April 2019"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      ratio: 4:3
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.cnr.berkeley.edu/"
+options(repos = r)
+set.seed(12345)
+```
+
+<style>
+
+.remark-slide-number {
+  position: inherit;
+}
+
+.remark-slide-number .progress-bar-container {
+  position: absolute;
+  bottom: 0;
+  height: 6px;
+  display: block;
+  left: 0;
+  right: 0;
+}
+
+.remark-slide-number .progress-bar {
+  height: 100%;
+  background-color: #EB811B;
+}
+
+.orange {
+  color: #EB811B;
+}
+</style>
+
+# Today's Agenda
+
+.font150[
+* Null and alternative hypothesis
+
+* One-sample tests
+
+* Two-sample tests
+
+* Final project
+]
+---
+
+# Hypothesis Testing
+
+.font150[
+* Goal: Try to determine whether result is due to chance or not
+
+* Method: "Proof" by contradiction
+
+* We try to reject the _null hypothesis_
+
+  - _X_ is uncorrelated with/has no effect on _Y_
+  - _X_ is no different from _Y_
+]
+---
+
+# Proof by Contradiction
+
+.font140[
+* Formulated by Aristotle
+
+* Starts with the _law of the excluded middle_: either a preposition is true, or its opposite is true
+
+* $\forall P \vdash (P \lor \lnot P)$ 
+]
+--
+
+.font140[
+* First, we make a statement _P_, which we believe is true
+
+* Then, we assume _P_ is false
+
+* Lastly, we prove _P_ cannot be false given our data/reasoning
+
+* Thus, _P_ must be true
+]
+---
+
+# Hypothesis Testing
+
+.font150[
+* With statistics, we can reject the null hypothesis with 100% confidence
+
+* Why? Because statistics is _probabilistic_
+
+* So we use a probabilistic version of proof by contradiction
+]
+---
+
+# Hypothesis Testing
+
+.font150[
+* We construct the _null hypothesis_ $\rightarrow H_0$ (what we want to refute), and the _alternative hypothesis_ $\rightarrow H_1$
+ 
+* We select a test statistic $T$
+
+* Figure out the sampling distribution of $T$ under $H_0$
+
+* Is the observed value of $T$ likely to occur under $H_0$?
+
+  - Yes - fail to reject $H_0$
+  - No - reject $H_0$
+]
+---
+
+# Paul the Octopus
+
+.center[![:scale 90%](paul.png)]
+---
+
+# Paul the Octopus
+
+.font150[
+* 2010 World Cup
+  - Group: .orange[Germany] vs Australia
+  - Group: Germany vs .orange[Serbia]
+  - Group: Ghana vs .orange[Germany]
+  - Round of 16: .orange[Germany] vs England
+  - Quarter-final: Argentina vs .orange[Germany]
+  - Semi-final: Germany vs .orange[Spain]
+  - 3rd place: Uruguay vs .orange[Germany]
+  - Final: Netherlands vs .orange[Spain]
+]
+---
+
+# Paul the Octopus
+
+.font150[
+* Question: Did Paul the Octopus get lucky?
+
+* Null hypothesis: Paul is randomly choosing winner
+
+* Test statistics: Number of correct answers
+
+* Reference distribution: `Binomial(8, 0.5)`
+
+* The probability that Paul gets them all correct: $\frac{1}{2^8} \approx 0.004$
+]
+---
+
+# More Data about Paul
+
+.font150[
+* UEFA Euro 2008
+  - Group: .orange[Germany] vs Poland
+  - Group: Croatia vs .orange[Germany] (wrong)
+  - Group: Austria vs .orange[Germany]
+  - Quarter-final: Portugal vs .orange[Germany]
+  - Semi-final: .orange[Germany] vs Turkey
+  - Final: .orange[Germany] vs Spain (wrong)
+  
+* A total of 14 matches
+
+* 12 correct guesses
+]
+---
+
+# More Data about Paul
+
+.font150[
+* .orange[p-value:] Probability that under the null you observe something at least as extreme as what you actually observed
+
+* $Pr({12,13,14}) \approx 0.001$
+
+```{r paul01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+pbinom(12, size = 14, prob = 0.5, lower.tail = FALSE)
+```
+]
+---
+
+# P-Value
+
+.font140[
+* .orange[p-value] is the probability, computed under $H_0$, of observing a value ofthe test statistic at least as extreme as its observed value
+
+* A smaller p-value presents stronger evidence against $H_0$
+
+* p-value less than $\alpha$ indicates statistical significance
+
+* $\alpha$ is usually 0.05
+
+* .orange[Remember:] p-value is NOT the probability that $H_0$ $(H_1)$ is true (false)
+
+* Statistical significance does not necessarily imply scientific significance
+]
+---
+
+# One-Sample Test - Continuous Variable
+
+.font150[
+* We can also test if $\mu$ from a sample corresponds to a value we are interested in
+
+* For example: you run a factory and want to try a new machine. Does the machine actually improve your results, or are the results just due to chance?
+
+* R function: `t.test()`
+]
+---
+
+# One-Sample Test - Continuous Variable
+
+.font150[
+* Example: 
+
+* A bottle filling machine is set to fill bottles with soft drink to a volume of 500 ml. The actual volume is known to follow a normal distribution. The manufacturer believes the machine is under-filling bottles. A sample of 20 bottles is taken and the volume of liquid inside is measured.
+]
+---
+
+# One-Sample Test - Continuous Variable
+
+.font110[
+```{r bottles01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+bottles <- c(484.11, 459.49, 471.38, 512.01, 494.48, 528.63, 493.64,
+             485.03, 473.88, 501.59, 502.85, 538.08, 465.68, 495.03,
+             475.32, 529.41, 518.13, 464.32, 449.08, 489.27)
+
+mean(bottles)
+
+t.test(bottles, mu = 500)
+```
+]
+---
+
+# Two-Sample Test - Continuous Variable 
+
+.font150[
+* We can also test whether two different samples have the same $\mu$
+
+* This is particularly useful for randomised experiments
+
+* We test whether the treatment and control groups have similar means
+
+* If so, then we conclude the treatment likely doesn't have any effect
+
+* We use the same `t.test()` function 
+]
+---
+
+# Two-Sample Test - Continuous Variable 
+
+.font120[
+```{r two01,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+resume <- read.csv("https://raw.githubusercontent.com/pols1600/pols1600.github.io/master/datasets/causality/resume.csv")
+
+call_blacks <- subset(resume$call, resume$race == "black") 
+call_whites <- subset(resume$call, resume$race == "white") 
+
+t.test(call_blacks, call_whites)
+```
+]
+---
+
+# t.test() or lm()?
+
+.font110[
+```{r two02,fig.align="center",tidy=F,warning=F,message=F,cache=T}
+summary(lm(call ~ race, data = resume))
+```
+]
+---
+
+# t.test() or lm()?
+
+.font150[
+* Both produce exactly the same results
+
+* The intercept in the linear model is the mean of the control group (when all other variables are zero)
+
+* The coefficient is the average for the treatment group
+
+* I suggest you to use `lm()`: you can add control variables, interactions, etc
+]
+
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
+---
+
+class: inverse, center, middle
+
+# See you on Wednesday!
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html>  
