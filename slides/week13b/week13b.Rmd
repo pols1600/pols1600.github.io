@@ -1,6 +1,6 @@
 ---
 title: "Week 13 - Uncertainty"
-subtitle: "Regression with Uncertainty<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+subtitle: "OLS Assumptions, Robust Standard Errors, Logit<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
 date: "24 April 2019"
 output: 
@@ -66,6 +66,17 @@ set.seed(12345)
 
 * Logistic regression
 ]
+---
+
+# Model Assumptions
+
+.center[![:scale 100%](tweet.png)]
+---
+
+# Model Assumptions
+
+.center[![:scale 100%](box.jpg)]
+
 ---
 
 # Regression with Uncertainty
