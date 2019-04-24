@@ -367,7 +367,7 @@ summary(lm_robust(ethonset ~ lgdpenl1 + polity2l, cluster = country, civilwars))
 # Logistic or Linear Regression?
 
 .font150[
-* If you run a linear model with robust standard errors, the results are similar
+* If you run a linear model with robust standard errors, the results are similar to those from the logistic regression
 
 * Varies according to the discipline: 
     - In statistics and political science, researchers prefer logistic regressions
