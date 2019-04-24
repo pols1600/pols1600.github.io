@@ -122,7 +122,7 @@ class: center, middle, inverse, title-slide
 
 * Why? Because of _omitted variable bias_
 
-* .orange[Omitted variable bias:] when there is another factor that causes the dependent variable, but we didn't include them in our model
+* .orange[Omitted variable bias:] when there is another factor that causes the independent variables, but we didn't include them in our model
   - We didn't think of it
   - Hard to measure
 ]
@@ -352,7 +352,7 @@ summary(lm_robust(Child.Mortality ~ log(GDP) + PolityIV, clusters = Country.code
 
 * Two solutions:
     - Robust/Clustered standard errors
-    - .orange[Logistic regression]
+    - _Logistic regression_
 ]
 ---
 
