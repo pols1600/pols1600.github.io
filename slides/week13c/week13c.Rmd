@@ -1,6 +1,6 @@
 ---
 title: "Week 13 - Uncertainty"
-subtitle: "Review of Regression<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
+subtitle: "Review<html><div style='float:left'></div><hr color='#EB811B' size=1px width=800px></html>"
 author: "Danilo Freire"
 date: "26 April 2019"
 output: 
