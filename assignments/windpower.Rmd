@@ -1,10 +1,3 @@
----
-title: "Windpower and NIMBYism"
-author: "Your name"
-date: \today
-output: pdf_document
----
-
 This exercise is based on the following article:
 
 Stokes, Leah C. (2016). ["Electoral Backlash against Climate Policy: A Natural Experiment on Retrospective Voting and Local Resistance to Public Policy Authors"](https://doi.org/10.1111/ajps.12220) *American Journal of Political Science*, Vol. 60, No. 4, pp. 958-974.  
@@ -58,7 +51,7 @@ Your answer here.
 
 ## Question 4
 
-Now we are going to explore whether districts that had proposed windfarms decreased their support for the Liberal Party.  Run a regression where the outcome is the percentage of votes for the Liberal Party and the predictors are whether a wind farm was proposed.  Your model should also include fixed effects for each precincts and each year (that is, a dummy variable indicating each precinct and another dummy variable for each year).  What is the estimated coefficient on the variable `prop`?  What do you conclude? 
+Now we are going to explore whether districts that had proposed windfarms decreased their support for the Liberal Party.  Run a regression where the outcome is the percentage of votes for the Liberal Party and the predictors are whether a wind farm was proposed.  What is the estimated coefficient on the variable `prop`?  What do you conclude? 
 
 ## Answer 4
 
