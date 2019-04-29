@@ -133,11 +133,11 @@ class: inverse, center, middle
     - Modules on (pre-)calculus, linear algebra and probability
     
 * Any maths course from the Econ department
-    - List of coureses [here](https://bulletin.brown.edu/the-college/concentrations/mtec/)
+    - List of courses [here](https://bulletin.brown.edu/the-college/concentrations/mtec/)
 ]
 ---
 
-# More experiments
+# More Experiments
 
 .center[![:scale 30%](green.jpg)]
 
